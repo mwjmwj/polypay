@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.polypay.platform.dao.MerchantVerifyMapper">
+	<resultMap id="BaseResultMap"
+		type="com.polypay.platform.bean.MerchantVerify">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="mobile_number" property="mobileNumber"
+			jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="avaliable_time" property="avaliableTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, mobile_number, email, code, type, avaliable_time
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_verify
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from merchant_verify
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert"
+		parameterType="com.polypay.platform.bean.MerchantVerify">
+		insert into merchant_verify (id, mobile_number, email,
+		code, type, avaliable_time
+		)
+		values (#{id,jdbcType=INTEGER}, #{mobileNumber,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{code,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{avaliableTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.polypay.platform.bean.MerchantVerify"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into merchant_verify
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="mobileNumber != null">
+				mobile_number,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="code != null">
+				code,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="avaliableTime != null">
+				avaliable_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="mobileNumber != null">
+				#{mobileNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="avaliableTime != null">
+				#{avaliableTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.polypay.platform.bean.MerchantVerify">
+		update merchant_verify
+		<set>
+			<if test="mobileNumber != null">
+				mobile_number = #{mobileNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				code = #{code,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="avaliableTime != null">
+				avaliable_time = #{avaliableTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.polypay.platform.bean.MerchantVerify">
+		update merchant_verify
+		set mobile_number = #{mobileNumber,jdbcType=VARCHAR},
+		email = #{email,jdbcType=VARCHAR},
+		code = #{code,jdbcType=VARCHAR},
+		type = #{type,jdbcType=VARCHAR},
+		avaliable_time = #{avaliableTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<select id="queryMerchantVerifyCode"
+		parameterType="com.polypay.platform.bean.MerchantVerify"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_verify
+		where
+		mobile_number = #{mobileNumber,jdbcType=VARCHAR}
+		and type = #{type,jdbcType=VARCHAR}
+	</select>
+
+</mapper>
