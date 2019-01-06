@@ -26,6 +26,8 @@ public class MerchantAccountInfo {
     private Integer payLevel;
     
     private String token;
+    
+    private Integer roleId;
 
     public Integer getId() {
         return id;
@@ -121,5 +123,13 @@ public class MerchantAccountInfo {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 }

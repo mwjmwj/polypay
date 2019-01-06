@@ -20,7 +20,15 @@
     <!--<aop:aspectj-autoproxy />-->
     <context:annotation-config/>
     <task:annotation-driven />
-
+   
+	<mvc:resources location="/resources/" mapping="/resources/**" />
+	<mvc:resources location="/upload/" mapping="/upload/**" />
+	<mvc:view-controller path="/" view-name="adminlogin" />
+	<bean id="InternalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
    
     <!-- 使用Annotation自动注册Bean,扫描@Controller和@ControllerAdvice-->
     <context:component-scan base-package="com.polypay.platform.controller,com.polypay.platform.advice,com.polypay.platform.aspect" use-default-filters="false">
@@ -55,7 +63,17 @@
             </list>
         </property>
     </bean>
+    
+    
+		<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />
+		</bean>
+		</mvc:message-converters>
+		</mvc:annotation-driven>
 
+	
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="50000000"/>
         <property name="maxUploadSizePerFile" value="5000000"/>

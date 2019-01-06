@@ -74,7 +74,7 @@ public class BaseController<T> {
         //页数
         int defalutPage = 1;
 
-        String rows = getRequest().getParameter("rows");
+        String rows = getRequest().getParameter("limit");
         String page = getRequest().getParameter("page");
         if (!Tools.isEmpty(rows))
             defaultRows = new Integer(rows);

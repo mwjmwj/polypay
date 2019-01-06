@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,12 +14,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
+import com.polypay.platform.bean.Menu;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantLoginLog;
@@ -38,7 +41,7 @@ import com.polypay.platform.utils.RegexUtil;
 import com.polypay.platform.utils.UUIDUtils;
 import com.polypay.platform.vo.MerchantAccountInfoVO;
 
-@RestController
+@Controller
 public class MerchantLoginController {
 
 	private Logger log = LoggerFactory.getLogger(MerchantLoginController.class);
@@ -56,7 +59,8 @@ public class MerchantLoginController {
 	private IMerchantFinanceService merchantFinanceService;
 
 	@RequestMapping("/merchant/register")
-	public ServiceResponse registerMerchant(@RequestBody MerchantAccountInfoVO requestMerchantInfo)
+	@ResponseBody
+	public ServiceResponse registerMerchant(MerchantAccountInfoVO requestMerchantInfo)
 			throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
@@ -145,7 +149,8 @@ public class MerchantLoginController {
 	 * @return
 	 */
 	@RequestMapping("/merchant/check")
-	public ServiceResponse checkTbUser(@RequestBody MerchantAccountInfoVO merchantAccountInfoVO)
+	@ResponseBody
+	public ServiceResponse checkMerchant(MerchantAccountInfoVO merchantAccountInfoVO)
 			throws ServiceException {
 		ServiceResponse response = new ServiceResponse();
 		try {
@@ -172,43 +177,42 @@ public class MerchantLoginController {
 	}
 
 	@RequestMapping("/merchant/login")
-	public ServiceResponse login(@RequestBody MerchantAccountInfoVO requestMerchantInfo,
+	@ResponseBody
+	public String login(MerchantAccountInfoVO requestMerchantInfo,
 			HttpServletResponse httpResponse, HttpServletRequest request) throws ServiceException, IOException {
-		ServiceResponse response = new ServiceResponse();
 		MerchantAccountInfo merchantAccountInfo;
 
 		if (StringUtils.isEmpty(requestMerchantInfo.getMobileNumber())) {
-			ResponseUtils.exception(response, "手机号不能为空！", RequestStatus.FAILED.getStatus());
-			return response;
+			return "手机号不能为空！";
 		}
 		merchantAccountInfo = merchantAccountInfoService.getMerchantInfo(requestMerchantInfo);
 
 		// 根据手机账号查询商户是否存在
 		if (null == merchantAccountInfo) {
-			ResponseUtils.exception(response, "该用户不存在！", RequestStatus.FAILED.getStatus());
-			return response;
+			return "该用户不存在！";
 		}
 
 		// 密码登录
 		if (!StringUtils.isEmpty(requestMerchantInfo.getPassWord())) {
 			if (!requestMerchantInfo.getPassWord().equals(merchantAccountInfo.getPassWord())) {
-				ResponseUtils.exception(response, "密码不正确！", RequestStatus.FAILED.getStatus());
-				return response;
+				return "密码不正确！";
 			}
 		} else {
 			if (StringUtils.isEmpty(requestMerchantInfo.getVerifyCode())) {
-				ResponseUtils.exception(response, "请输入验证码或密码！", RequestStatus.FAILED.getStatus());
-				return response;
+				return "请输入验证码或密码！";
 			}
 
 			// 验证码登录
 			requestMerchantInfo.setVerifyType(VerifyTypeEnum.LOGIN);
-			boolean checkVerifyCodeFlag = checkVerifyCode(requestMerchantInfo, response);
-			if (!checkVerifyCodeFlag) {
-				return response;
+			String checkVerifyCodeFlag = checkVerifyCode(requestMerchantInfo);
+			if (StringUtils.isNotEmpty(checkVerifyCodeFlag)) {
+				return checkVerifyCodeFlag;
 			}
 		}
-
+		
+		List<Menu> merchantMenu = merchantAccountInfoService.getMerchantMenu(merchantAccountInfo.getRoleId());
+		
+		
 		// 登录成功后 保存新的登录信息
 		MerchantLoginLog merchantLoginLog = new MerchantLoginLog();
 		merchantLoginLog.setLoginTime(new Date());
@@ -220,25 +224,28 @@ public class MerchantLoginController {
 
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.TOKEN, token);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.USER, merchantAccountInfo);
+		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU, merchantMenu);
 		merchantAccountInfo.setToken(token);
 		merchantAccountInfo.setPassWord(null);
-		response.setData(merchantAccountInfo);
-		response.setMessage("登录成功！");
-		return response;
+	
+		return "success";
 
 	}
 	
 	@RequestMapping("/merchant/exit")
-	public ServiceResponse exit(HttpServletRequest request)
+	public String exit(HttpServletRequest request)
 	{
 		ServiceResponse response = new ServiceResponse();
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.USER, null);
+		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU,null);
+		request.getSession().setAttribute(MerchantGlobaKeyConsts.TOKEN, null);
 		response.setMessage("退出成功!");
-		return response;
+		return "adminlogin";
 	}
 
 	@RequestMapping("/merchant/verifycode")
-	public ServiceResponse getVeriryCode(@RequestBody MerchantAccountInfoVO merchantAccountInfoVO)
+	@ResponseBody
+	public ServiceResponse getVeriryCode(MerchantAccountInfoVO merchantAccountInfoVO)
 			throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
@@ -354,8 +361,9 @@ public class MerchantLoginController {
 		}
 		
 		// 查看验证码是否正确
-		checkVerifyCode(merchantInfo,response);
-		if (response.getStatus() != RequestStatus.SUCCESS.getStatus()) {
+		String checkVerifyCode = checkVerifyCode(merchantInfo);
+		if (StringUtils.isNotEmpty(checkVerifyCode)) {
+			//TODO checkVerifyCode
 			return response;
 		}
 		String newPassword = merchantInfo.getNewPassword();
@@ -432,9 +440,8 @@ public class MerchantLoginController {
 		ResponseUtils.exception(response, "请输入手机号", RequestStatus.FAILED.getStatus());
 	}
 
-	private boolean checkVerifyCode(MerchantAccountInfoVO merchantAccountInfo, ServiceResponse response)
+	private String checkVerifyCode(MerchantAccountInfoVO merchantAccountInfo)
 			throws ServiceException {
-
 		MerchantVerify tbVerifycodeVO = new MerchantVerify();
 		tbVerifycodeVO.setMobileNumber(merchantAccountInfo.getMobileNumber());
 		tbVerifycodeVO.setType(merchantAccountInfo.getVerifyType());
@@ -442,21 +449,18 @@ public class MerchantLoginController {
 		MerchantVerify merchantVerify = merchantVerifyService.queryMerchantVerifyCode(tbVerifycodeVO);
 
 		if (null == merchantVerify) {
-			ResponseUtils.exception(response, "验证码无效请重新获取！", RequestStatus.FAILED.getStatus());
-			return false;
+			return "验证码无效请重新获取！";
 		}
 
 		boolean comperDate = DateUtils.comperDate(new Date(), merchantVerify.getAvaliableTime());
 		if (!comperDate) {
-			ResponseUtils.exception(response, "验证码过期,请重新获取！", RequestStatus.FAILED.getStatus());
-			return false;
+			return "验证码过期,请重新获取！";
 		}
 		
 		if (!merchantVerify.getCode().equals(merchantAccountInfo.getVerifyCode())) {
-			ResponseUtils.exception(response, "验证码不正确！", RequestStatus.FAILED.getStatus());
-			return false;
+			return "验证码不正确！";
 		}
-		return true;
+		return null;
 	}
 
 	private boolean rexCheckPassword(String input) {

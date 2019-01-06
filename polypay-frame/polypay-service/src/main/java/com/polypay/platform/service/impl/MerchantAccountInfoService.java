@@ -2,6 +2,8 @@ package com.polypay.platform.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.polypay.platform.bean.Menu;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantApi;
 import com.polypay.platform.bean.MerchantFinance;
@@ -19,6 +24,7 @@ import com.polypay.platform.consts.MerchantHelpPayConsts;
 import com.polypay.platform.consts.MerchantPayLevelConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.SystemConstans;
+import com.polypay.platform.dao.MenuMapper;
 import com.polypay.platform.dao.MerchantAccountInfoMapper;
 import com.polypay.platform.dao.MerchantApiMapper;
 import com.polypay.platform.dao.MerchantFinanceMapper;
@@ -43,6 +49,9 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 
 	@Autowired
 	private SystemConstsMapper systemConstsMapper;
+
+	@Autowired
+	private MenuMapper menuMapper;
 
 	@Override
 	public int deleteByPrimaryKey(Integer id) throws ServiceException {
@@ -174,6 +183,34 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 		}
 	}
 
+	@Override
+	public List<Menu> getMerchantMenu(Integer roleId) throws ServiceException {
+		try {
 
+			List<Menu> menus = menuMapper.getMenusByRoleId(roleId);
+
+			Map<Integer, List<Menu>> menuMaps = Maps.newHashMap();
+
+			List<Menu> listM;
+			List<Menu> pMenus = Lists.newArrayList();
+			for (Menu menu : menus) {
+				if (null == menu.getMenuPid() && !menuMaps.containsKey(menu.getMenuId())) {
+					listM = Lists.newArrayList();
+					menuMaps.put(menu.getMenuId(), listM);
+					pMenus.add(menu);
+					continue;
+				}
+				menuMaps.get(menu.getMenuPid()).add(menu);
+			}
+
+			for (Menu menu : pMenus) {
+				menu.setChildMenu(menuMaps.get(menu.getMenuId()));
+			}
+
+			return pMenus;
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
 
 }

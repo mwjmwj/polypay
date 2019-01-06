@@ -56,6 +56,7 @@ public class MerchantApiController {
 		if (!StringUtils.isEmpty(merchantApi.getSecretKey())) {
 			oldMerchantApi.setMd5Key(merchantApi.getSecretKey());
 		}
+		
 		oldMerchantApi.setUpdateTime(new Date());
 		merchantApiService.updateByPrimaryKeySelective(oldMerchantApi);
 		response.setMessage("修改成功");

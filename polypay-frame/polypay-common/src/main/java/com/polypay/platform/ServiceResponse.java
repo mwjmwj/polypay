@@ -2,8 +2,6 @@ package com.polypay.platform;
 
 
 
-import java.util.UUID;
-
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.utils.UUIDUtils;
 
@@ -14,6 +12,7 @@ public class ServiceResponse {
 	private String message = "";
 	private Object data;
 	private String requestId;
+	private Long count;
 	
 	public ServiceResponse()
 	{
@@ -48,6 +47,12 @@ public class ServiceResponse {
 	}
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
+	}
+	public Long getCount() {
+		return count;
+	}
+	public void setCount(Long count) {
+		this.count = count;
 	}
 	
 	

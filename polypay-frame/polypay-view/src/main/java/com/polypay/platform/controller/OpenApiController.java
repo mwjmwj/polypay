@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -189,7 +190,7 @@ public class OpenApiController {
 
 	@RequestMapping("/open/api/recharge/back")
 	public String rechargeOrderBack(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-
+		
 		String success = getParameter(request, "success");
 		String merchantOrderNumber = getParameter(request, "merchant_order_number");
 
@@ -231,7 +232,7 @@ public class OpenApiController {
 		// 冻结金额
 		BigDecimal frezzAmount;
 
-		synchronized (merchantId) {
+		synchronized (merchantId.intern()) {
 			MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchantId);
 
 			if (null == merchantFinance) {
@@ -267,15 +268,6 @@ public class OpenApiController {
 
 		return "success";
 	}
-
-	@GetMapping("/md")
-	public String Md5(HttpServletRequest request) throws Exception {
-		
-		String md = "merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number="+getParameter(request, "text")+"&pay_amount=1&time=1155522&bank_code=ICBC&pay_channel=WY";
-		return MD5Utils.md5(md, getParameter(request, "key"));
-	}
-	
-	
 	
 	private void saveRechargeOrder(MerchantRechargeOrder orderByMerchantOrderNumber, BigDecimal poundage,
 			BigDecimal arrivalAmount) throws ServiceException {

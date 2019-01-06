@@ -29,8 +29,8 @@ public class MD5 {
         return str;
     }
 
-    public static void main(String[] args) {
-        System.out.println(md5("31119@qq.com" + "123456"));
-        System.out.println(md5("mj1"));
+    public static void main(String[] args) throws Exception {
+        String md5 = MD5Utils.md5("123456", "qq12");
+        System.out.println(md5);
     }
 }
