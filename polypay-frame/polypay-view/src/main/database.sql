@@ -27,11 +27,11 @@ CREATE TABLE `menu` (
   `menu_Pid` int(11) DEFAULT NULL,
   `menu_Target` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`menu_Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 /*Data for the table `menu` */
 
-insert  into `menu`(`menu_Id`,`menu_Name`,`menu_Url`,`menu_Pid`,`menu_Target`) values (1,'管理中心',NULL,NULL,NULL),(2,'公告',NULL,NULL,NULL),(3,'账户管理',NULL,NULL,NULL),(4,'财务管理',NULL,NULL,NULL),(5,'结算管理',NULL,NULL,NULL),(6,'订单管理',NULL,NULL,NULL),(7,'API管理',NULL,NULL,NULL),(8,'结算申请',NULL,5,'myframe'),(9,'代付申请',NULL,5,'myframe'),(10,'结算记录','merchant/settle/order/list',5,'myframe'),(11,'代付记录','merchant/place/order/list',5,'myframe'),(12,'顶顶顶顶','1111',5,'myframe');
+insert  into `menu`(`menu_Id`,`menu_Name`,`menu_Url`,`menu_Pid`,`menu_Target`) values (1,'管理中心',NULL,NULL,NULL),(2,'公告',NULL,NULL,NULL),(3,'账户管理',NULL,NULL,NULL),(4,'财务管理',NULL,NULL,NULL),(5,'结算管理',NULL,NULL,NULL),(6,'订单管理',NULL,NULL,NULL),(7,'API管理',NULL,NULL,NULL),(8,'结算申请',NULL,5,'myframe'),(9,'代付申请',NULL,5,'myframe'),(10,'结算记录','merchant/settle/order/list',5,'myframe'),(11,'代付记录','merchant/place/order/list',5,'myframe'),(12,'通道费率','',7,'myframe'),(13,'API开发文档',NULL,7,'myframe'),(14,'充值订单','view/merchantRechargeList',6,'myframe'),(15,'成功订单',NULL,6,'myframe'),(16,'失败订单',NULL,6,'myframe'),(17,'资金记录',NULL,4,'myframe'),(18,'对账单',NULL,4,'myframe'),(19,'基本信息',NULL,3,NULL),(20,'银行卡管理',NULL,3,NULL),(21,'认证信息',NULL,3,NULL),(22,'登录密码',NULL,3,NULL),(23,'支付密码',NULL,3,NULL),(24,'站内公告',NULL,2,NULL),(25,'控制面板',NULL,1,NULL),(26,'顶顶顶顶',NULL,3,NULL);
 
 /*Table structure for table `merchant_account_bindbank` */
 
@@ -77,7 +77,7 @@ CREATE TABLE `merchant_account_info` (
 
 /*Data for the table `merchant_account_info` */
 
-insert  into `merchant_account_info`(`id`,`uuid`,`proxy_id`,`account_name`,`mobile_number`,`pass_word`,`create_time`,`status`,`login_ip`,`helppay_status`,`pay_level`,`role_id`) values (1,'2222',NULL,'mwj','17666126557','mwj',NULL,0,NULL,0,1,1),(5,'141b6ccb8bde4b10b1d0c4a5db91cf52',NULL,'mwj666788','17666126558','123456',NULL,0,NULL,NULL,NULL,NULL),(6,'501b880cbaef4247b17e72f625c55ea7',NULL,NULL,'17666126559','2ff09cb743b3398510935a2bc3c003de',NULL,1,NULL,1,1,NULL),(7,'a3565fbfb32b4da7a7cf580c2dbe4da5',NULL,NULL,'17666126555','2ff09cb743b3398510935a2bc3c003de',NULL,1,NULL,1,1,NULL),(8,'646d165011ea4c6d8a7aeeb714f85735',NULL,NULL,'17666126330','2ff09cb743b3398510935a2bc3c003de',NULL,1,NULL,1,1,NULL);
+insert  into `merchant_account_info`(`id`,`uuid`,`proxy_id`,`account_name`,`mobile_number`,`pass_word`,`create_time`,`status`,`login_ip`,`helppay_status`,`pay_level`,`role_id`) values (1,'2222',NULL,'mwj','17666126557','mwj',NULL,0,NULL,0,1,1),(5,'141b6ccb8bde4b10b1d0c4a5db91cf52',NULL,'mwj666788','17666126558','123456',NULL,0,NULL,NULL,NULL,1),(6,'501b880cbaef4247b17e72f625c55ea7',NULL,NULL,'17666126559','2ff09cb743b3398510935a2bc3c003de',NULL,1,NULL,1,1,NULL),(7,'a3565fbfb32b4da7a7cf580c2dbe4da5',NULL,NULL,'17666126555','2ff09cb743b3398510935a2bc3c003de',NULL,1,NULL,1,1,NULL),(8,'646d165011ea4c6d8a7aeeb714f85735',NULL,NULL,'17666126330','2ff09cb743b3398510935a2bc3c003de',NULL,1,NULL,1,1,NULL);
 
 /*Table structure for table `merchant_api` */
 
@@ -117,6 +117,24 @@ CREATE TABLE `merchant_finance` (
 
 insert  into `merchant_finance`(`id`,`blance_amount`,`fronze_amount`,`merchant_id`,`pay_password`,`create_time`,`status`) values (2,'55.8820','98.0980','141b6ccb8bde4b10b1d0c4a5db91cf52','e10adc3949ba59abbe56e057f20f883e','2018-12-21 15:35:36',0),(3,'0.0000','0.0000','501b880cbaef4247b17e72f625c55ea7','e10adc3949ba59abbe56e057f20f883e','2019-01-02 17:20:56',-1),(4,'0.0000','0.0000','a3565fbfb32b4da7a7cf580c2dbe4da5','5cf9cd00a0c3448002b452177b765859','2019-01-02 17:35:40',-1),(5,'0.0000','0.0000','646d165011ea4c6d8a7aeeb714f85735','a01610228fe998f515a72dd730294d87','2019-01-03 11:12:17',-1);
 
+/*Table structure for table `merchant_frezzon` */
+
+DROP TABLE IF EXISTS `merchant_frezzon`;
+
+CREATE TABLE `merchant_frezzon` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `merchant_id` varchar(32) DEFAULT NULL,
+  `order_number` varchar(40) DEFAULT NULL,
+  `amount` decimal(20,4) DEFAULT NULL,
+  `arrival_time` timestamp NULL DEFAULT NULL,
+  `frezz_time` timestamp NULL DEFAULT NULL,
+  `really_arrival_time` timestamp NULL DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `merchant_frezzon` */
+
 /*Table structure for table `merchant_login_log` */
 
 DROP TABLE IF EXISTS `merchant_login_log`;
@@ -129,11 +147,11 @@ CREATE TABLE `merchant_login_log` (
   `merchant_id` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `merchant_login_log_PK` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 /*Data for the table `merchant_login_log` */
 
-insert  into `merchant_login_log`(`id`,`login_time`,`login_address`,`IP`,`merchant_id`) values (1,'2018-12-19 17:57:27','XX-XX-内网IP','127.0.0.1','2222'),(2,'2018-12-20 10:13:15','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(3,'2018-12-20 10:15:05','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(4,'2018-12-20 10:15:14','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(5,'2018-12-20 10:15:18','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(6,'2018-12-20 10:15:19','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(7,'2018-12-20 10:15:20','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(8,'2018-12-20 10:15:21','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(9,'2018-12-20 10:15:21','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(10,'2018-12-21 15:38:28',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(11,'2018-12-21 15:45:34','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(12,'2018-12-21 16:10:09','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(13,'2018-12-26 11:00:15','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(14,'2018-12-26 11:05:35',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(15,'2018-12-26 11:09:42','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(16,'2018-12-26 11:12:01',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(17,'2018-12-26 11:16:41',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(18,'2018-12-26 11:22:57','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(19,'2018-12-26 11:27:00',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(20,'2018-12-26 11:30:49','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(21,'2018-12-26 11:35:43','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(22,'2018-12-26 11:40:13','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(23,'2018-12-26 11:40:25',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(24,'2018-12-26 16:03:00','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(25,'2018-12-26 16:48:44',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(26,'2018-12-28 16:11:27',NULL,'127.0.0.1','2222'),(27,'2018-12-28 16:11:44',NULL,'127.0.0.1','2222'),(28,'2018-12-28 16:13:33','XX-XX-内网IP','127.0.0.1','2222'),(29,'2019-01-03 14:36:54','XX-XX-内网IP','127.0.0.1','2222'),(30,'2019-01-03 14:37:34','XX-XX-内网IP','127.0.0.1','2222'),(31,'2019-01-03 14:37:44',NULL,'127.0.0.1','2222'),(32,'2019-01-03 15:39:24',NULL,'127.0.0.1','2222'),(33,'2019-01-03 15:53:02','XX-XX-内网IP','127.0.0.1','2222'),(34,'2019-01-03 15:54:54',NULL,'127.0.0.1','2222'),(35,'2019-01-03 15:55:21','XX-XX-内网IP','127.0.0.1','2222'),(36,'2019-01-03 15:59:18','XX-XX-内网IP','127.0.0.1','2222'),(37,'2019-01-03 16:00:34','XX-XX-内网IP','127.0.0.1','2222'),(38,'2019-01-03 16:00:34','XX-XX-内网IP','127.0.0.1','2222'),(39,'2019-01-03 16:02:46','XX-XX-内网IP','127.0.0.1','2222'),(40,'2019-01-04 20:46:16',NULL,'127.0.0.1','2222'),(41,'2019-01-05 12:08:39','XX-XX-内网IP','127.0.0.1','2222');
+insert  into `merchant_login_log`(`id`,`login_time`,`login_address`,`IP`,`merchant_id`) values (1,'2018-12-19 17:57:27','XX-XX-内网IP','127.0.0.1','2222'),(2,'2018-12-20 10:13:15','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(3,'2018-12-20 10:15:05','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(4,'2018-12-20 10:15:14','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(5,'2018-12-20 10:15:18','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(6,'2018-12-20 10:15:19','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(7,'2018-12-20 10:15:20','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(8,'2018-12-20 10:15:21','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(9,'2018-12-20 10:15:21','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(10,'2018-12-21 15:38:28',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(11,'2018-12-21 15:45:34','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(12,'2018-12-21 16:10:09','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(13,'2018-12-26 11:00:15','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(14,'2018-12-26 11:05:35',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(15,'2018-12-26 11:09:42','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(16,'2018-12-26 11:12:01',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(17,'2018-12-26 11:16:41',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(18,'2018-12-26 11:22:57','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(19,'2018-12-26 11:27:00',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(20,'2018-12-26 11:30:49','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(21,'2018-12-26 11:35:43','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(22,'2018-12-26 11:40:13','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(23,'2018-12-26 11:40:25',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(24,'2018-12-26 16:03:00','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(25,'2018-12-26 16:48:44',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(26,'2018-12-28 16:11:27',NULL,'127.0.0.1','2222'),(27,'2018-12-28 16:11:44',NULL,'127.0.0.1','2222'),(28,'2018-12-28 16:13:33','XX-XX-内网IP','127.0.0.1','2222'),(29,'2019-01-03 14:36:54','XX-XX-内网IP','127.0.0.1','2222'),(30,'2019-01-03 14:37:34','XX-XX-内网IP','127.0.0.1','2222'),(31,'2019-01-03 14:37:44',NULL,'127.0.0.1','2222'),(32,'2019-01-03 15:39:24',NULL,'127.0.0.1','2222'),(33,'2019-01-03 15:53:02','XX-XX-内网IP','127.0.0.1','2222'),(34,'2019-01-03 15:54:54',NULL,'127.0.0.1','2222'),(35,'2019-01-03 15:55:21','XX-XX-内网IP','127.0.0.1','2222'),(36,'2019-01-03 15:59:18','XX-XX-内网IP','127.0.0.1','2222'),(37,'2019-01-03 16:00:34','XX-XX-内网IP','127.0.0.1','2222'),(38,'2019-01-03 16:00:34','XX-XX-内网IP','127.0.0.1','2222'),(39,'2019-01-03 16:02:46','XX-XX-内网IP','127.0.0.1','2222'),(40,'2019-01-04 20:46:16',NULL,'127.0.0.1','2222'),(41,'2019-01-05 12:08:39','XX-XX-内网IP','127.0.0.1','2222'),(42,'2019-01-05 16:45:11','XX-XX-内网IP','127.0.0.1','2222'),(43,'2019-01-05 16:46:43','XX-XX-内网IP','127.0.0.1','2222'),(44,'2019-01-05 17:14:44','XX-XX-内网IP','127.0.0.1','2222'),(45,'2019-01-05 17:33:41','XX-XX-内网IP','127.0.0.1','2222'),(46,'2019-01-05 17:33:41',NULL,'127.0.0.1','2222'),(47,'2019-01-05 17:40:03','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(48,'2019-01-05 17:40:27','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(49,'2019-01-05 17:54:33',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(50,'2019-01-05 17:58:41','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(51,'2019-01-05 17:58:37','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(52,'2019-01-05 18:06:36',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(53,'2019-01-05 18:06:34','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(54,'2019-01-05 18:09:11','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(55,'2019-01-05 18:19:14','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(56,'2019-01-05 18:19:18','XX-XX-内网IP','127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(57,'2019-01-05 19:21:08',NULL,'127.0.0.1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(58,'2019-01-06 23:48:11',NULL,'0:0:0:0:0:0:0:1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(59,'2019-01-06 23:48:09',NULL,'0:0:0:0:0:0:0:1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(60,'2019-01-06 23:50:05',NULL,'0:0:0:0:0:0:0:1','141b6ccb8bde4b10b1d0c4a5db91cf52'),(61,'2019-01-06 23:51:35',NULL,'0:0:0:0:0:0:0:1','141b6ccb8bde4b10b1d0c4a5db91cf52');
 
 /*Table structure for table `merchant_place_order` */
 
@@ -247,7 +265,7 @@ CREATE TABLE `mid_role_menu` (
 
 /*Data for the table `mid_role_menu` */
 
-insert  into `mid_role_menu`(`role_id`,`menu_id`) values (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12);
+insert  into `mid_role_menu`(`role_id`,`menu_id`) values (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),(1,13),(1,14),(1,15),(1,16),(1,17),(1,18),(1,19),(1,20),(1,21),(1,22),(1,23),(1,24),(1,25),(1,26);
 
 /*Table structure for table `notice` */
 
