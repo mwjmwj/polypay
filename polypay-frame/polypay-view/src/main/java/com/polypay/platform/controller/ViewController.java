@@ -1,7 +1,6 @@
 package com.polypay.platform.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -31,6 +30,10 @@ public class ViewController {
 	@RequestMapping("index")
 	public String toIndex(){
 		return "index";
+	}
+	@RequestMapping("index1")
+	public String toIndex1(){
+		return "index1";
 	}
 	@RequestMapping("cart")
 	public String toCart(){
@@ -85,9 +88,41 @@ public class ViewController {
 		return "admin/typelist";
 	}
 	@RequestMapping("merchantRechargeList")
-	public String merchantRechargeList(){
+	public String toMerchantRechargeList(){
 		return "admin/merchantrechargelist";
 	}
 	
+	@RequestMapping("merchantSuccessRechargeList")
+	public String toMerchantSuccessRechargeList(){
+		return "admin/merchantsuccessrechargelist";
+	}
 	
+	
+	@RequestMapping("merchantFailRechargeList")
+	public String toMerchantFailRechargeList(){
+		return "admin/merchantfailrechargelist";
+	}
+	
+	@RequestMapping("merchantbindbankList")
+	public String toMerchantBindbankList(){
+		return "admin/merchantbindbanklist";
+	}
+	
+	@RequestMapping("merchantsettleList")
+	public String toMerchantSettleList()
+	{
+		return "admin/merchantsettleorderlist";
+	}
+	
+	@RequestMapping("merchantplaceList")
+	public String toMerchantPlaceList()
+	{
+		return "admin/merchantplaceorderlist";
+	}
+	
+	@RequestMapping("merchantfrezzList")
+	public String toMerchantFrezzList()
+	{
+		return "admin/merchantfrezzlist";
+	}
 }

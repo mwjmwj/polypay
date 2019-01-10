@@ -209,7 +209,7 @@ public class DateUtil {
      * @return
      */
     public static String getCurrentDate() {
-        return fomatDate(Calendar.getInstance().getTime(), "yyyyMMddHH:mm:ss:SSS");
+        return fomatDate(Calendar.getInstance().getTime(), "yyyyMMddHHmmssSSS");
     }
 
 

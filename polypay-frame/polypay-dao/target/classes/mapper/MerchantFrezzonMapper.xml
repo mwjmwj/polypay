@@ -126,4 +126,29 @@
       status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="listMerchantFrezz" parameterType="com.polypay.platform.bean.MerchantFrezzon" resultMap="BaseResultMap" >
+   	select 
+    <include refid="Base_Column_List" />
+    from merchant_frezzon
+    where 
+    merchant_id = #{merchantId}
+     <if test="status != null" >
+        and status = #{status,jdbcType=INTEGER}
+     </if>
+     
+     <if test="orderNumber != null" >
+     <bind name="orderNumber" value="'%'+orderNumber+'%'"/>
+        and order_number like #{orderNumber}
+     </if>
+    
+     <if test="beginTime != null" >
+        and arrival_time <![CDATA[>=]]> #{beginTime}
+     </if>
+     
+      <if test="endTime != null" >
+        and arrival_time <![CDATA[<=]]> #{endTime}
+     </if>
+  
+  </select>
+  
 </mapper>

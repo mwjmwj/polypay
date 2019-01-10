@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%-- <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	String path = request.getContextPath();
@@ -14,12 +14,12 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>主页</title>
-<link rel="stylesheet" href="resources/css/layui.css">
-<link rel="stylesheet" href="resources/css/admin.css">
-<script src="resources/js/jquery.1.12.4.min.js"></script>
-<script src="resources/js/layui.js"></script>
-<script src="resources/js/echarts.js"></script>
-<script src="resources/js/wonderland.js"></script>
+<link rel="stylesheet" href="static/css/layui.css">
+<link rel="stylesheet" href="static/css/admin.css">
+<script src="static/js/jquery.1.12.4.min.js"></script>
+<script src="static/js/layui.js"></script>
+<script src="static/js/echarts.js"></script>
+<script src="static/js/wonderland.js"></script>
 <style type="text/css">
 	.layui-col-xs6{
 		width:220px;
@@ -269,4 +269,4 @@ function showToDo(){
 	});
 }
 </script>
-</html>
+</html> --%>

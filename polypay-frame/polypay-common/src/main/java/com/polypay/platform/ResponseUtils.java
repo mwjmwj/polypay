@@ -11,6 +11,7 @@ public class ResponseUtils {
 		response.setData(rows);
 		page.setRows(null);
 		response.setPage(page);
+		response.setCount(page.getTotal());
 		return response;
 	}
 

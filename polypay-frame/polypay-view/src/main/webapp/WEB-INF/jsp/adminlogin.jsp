@@ -13,13 +13,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>poly-pay</title>
-<link href="resources/css/style.css" rel="stylesheet">
-<link href="resources/css/layui.css" rel="stylesheet">
-<link href="resources/css/admin.css" rel="stylesheet">
-<link href="resources/css/pro.css" rel="stylesheet">
-<link href="resources/css/login.css" rel="stylesheet">
-<script src="resources/js/jquery.min.js" type="text/javascript"></script>
-<script src="resources/js/layui.js" type="text/javascript"></script>
+<link href="lib/css/style.css" rel="stylesheet">
+<link href="lib/css/layui.css" rel="stylesheet">
+<link href="lib/css/admin.css" rel="stylesheet">
+<link href="lib/css/pro.css" rel="stylesheet">
+<link href="lib/css/login.css" rel="stylesheet">
+<script src="lib/js/jquery.min.js" type="text/javascript"></script>
+<script src="lib/js/layui.js" type="text/javascript"></script>
 <style type="text/css">
 </style>
 </head>
@@ -53,13 +53,13 @@
 							lay-verify="required" placeholder="密码" class="layui-input">
 					</div>
 					
-					<div class="layui-form-item">
+					<!-- <div class="layui-form-item">
 						<label
 							class="layadmin-user-login-icon layui-icon layui-icon-password"
 							for="LAY-user-login-code"></label> <input type="password"
 							name="verifyCode" id="LAY-user-login-code"
 							lay-verify="required" placeholder="验证码" class="layui-input">
-					</div>
+					</div> -->
 					
 					<div class="layui-form-item" style="height:50px;">
 						<input type="checkbox" name="remember" lay-skin="primary"
@@ -82,18 +82,22 @@
 	</div>
 	<!--尾部-->
 	<jsp:include page="userview/include/foot.jsp" />
+	<script type="text/javascript" src="lib/js/md5.js"></script>
 	<script type="text/javascript">
 		layui.use(['form','layer'], function() {
 			var form = layui.form;
 			var layer=layui.layer;
 			form.on('submit(loginSubmit)',function(){
+				
+				var password = MD5($("#LAY-user-login-password").val());
+				$("#LAY-user-login-password").val(password);
 				$.ajax({
 					type:"post",
 					url:"merchant/login",
 					data:$("#loginForm").serialize(),
 					success:function(data){
 						if(data=="success"){
-							layer.msg("登陆成功！",{icon:1,anim:2,time:2000},function(){
+							layer.msg("登陆成功！",{icon:1,anim:2,time:100},function(){
 								window.location.href="view/toAdminIndex";
 							});
 						}else{

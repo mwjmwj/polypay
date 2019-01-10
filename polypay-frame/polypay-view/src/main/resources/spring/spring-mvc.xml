@@ -21,7 +21,9 @@
     <context:annotation-config/>
     <task:annotation-driven />
    
-	<mvc:resources location="/resources/" mapping="/resources/**" />
+	<mvc:resources location="/lib/" mapping="/lib/**" />
+	<mvc:resources location="/pages/" mapping="/pages/**" />
+	<mvc:resources location="/static/" mapping="/static/**" />
 	<mvc:resources location="/upload/" mapping="/upload/**" />
 	<mvc:view-controller path="/" view-name="adminlogin" />
 	<bean id="InternalResourceViewResolver"
@@ -31,7 +33,7 @@
 	</bean>
    
     <!-- 使用Annotation自动注册Bean,扫描@Controller和@ControllerAdvice-->
-    <context:component-scan base-package="com.polypay.platform.controller,com.polypay.platform.advice,com.polypay.platform.aspect" use-default-filters="false">
+    <context:component-scan base-package="com.polypay.platform.controller,com.polypay.platform.advice" use-default-filters="false">
         <!--  base-package 如果多个，用“,”分隔 -->
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
         <!--  控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常 -->
@@ -39,7 +41,7 @@
     </context:component-scan>
 
 	
-
+	<context:component-scan base-package="com.polypay.platform.aspect"></context:component-scan>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>

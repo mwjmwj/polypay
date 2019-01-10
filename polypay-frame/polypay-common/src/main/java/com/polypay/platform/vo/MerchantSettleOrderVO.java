@@ -42,6 +42,10 @@ public class MerchantSettleOrderVO extends VO {
 	private BigDecimal settleAmount;
 
 	private String payPassword;
+	
+	private String bankAccountNumber;
+	
+	private String bankName;
 
 	public BigDecimal getSettleAmount() {
 		return settleAmount;
@@ -177,5 +181,21 @@ public class MerchantSettleOrderVO extends VO {
 
 	public void setMerchantId(String merchantId) {
 		this.merchantId = merchantId == null ? null : merchantId.trim();
+	}
+
+	public String getBankAccountNumber() {
+		return bankAccountNumber;
+	}
+
+	public void setBankAccountNumber(String bankAccountNumber) {
+		this.bankAccountNumber = bankAccountNumber;
+	}
+
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
 }

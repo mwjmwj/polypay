@@ -12,6 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.utils.MD5;
 
 /**
  * 
@@ -38,6 +39,11 @@ public class ControllerExceptionAdvice {
 		log.error(String.format("requestid:%s,controller:%s,error:%s,parameter:%s",response.getRequestId(),request.getRequestURI(),ex.getMessage(),JSONObject.toJSON(request.getParameterMap())));
 		return response;
 	}
-
+ public static void main(String[] args) {
+	
+	 System.out.println(MD5.md5("123456"));
+	 
+	 
+}
 
 }

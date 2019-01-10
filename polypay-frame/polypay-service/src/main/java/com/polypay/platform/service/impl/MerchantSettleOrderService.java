@@ -11,6 +11,7 @@ import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.dao.MerchantSettleOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantSettleOrderService;
+import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
 @Service
@@ -84,6 +85,7 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 			MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException {
 		PageList<MerchantSettleOrderVO> result;
 		try {
+			merchantSettleOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
 			result = merchantSettleOrderMapper.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());

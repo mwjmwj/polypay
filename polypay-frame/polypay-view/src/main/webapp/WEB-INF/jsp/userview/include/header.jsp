@@ -13,11 +13,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>乐享手机商城</title>
-<link href="resources/css/bootstrap.min.css" rel="stylesheet">
-<link href="resources/css/style.css" rel="stylesheet">
-<script type="text/javascript" src="resources/js/jquery.1.12.4.min.js"></script>
-<script src="resources/js/bootstrap.min.js" type="text/javascript"></script>
+<title>源盛丰支付</title>
+<link href="lib/css/bootstrap.min.css" rel="stylesheet">
+<link href="lib/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="lib/js/jquery.1.12.4.min.js"></script>
+<script src="lib/js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
 	<!--导航栏部分-->

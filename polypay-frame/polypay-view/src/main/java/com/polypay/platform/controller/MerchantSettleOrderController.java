@@ -9,7 +9,6 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,7 +38,6 @@ import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
-@Controller
 @RestController
 public class MerchantSettleOrderController extends BaseController<MerchantSettleOrderVO> {
 
@@ -57,14 +55,16 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	@RequestMapping("/merchant/settle/order/list")
-	public ServiceResponse listMerchantSettleOrder(@RequestBody MerchantSettleOrderVO merchantSettleOrderVO)
+	public ServiceResponse listMerchantSettleOrder()
 			throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
 		try {
 			PageBounds pageBounds = this.getPageBounds();
 			PageList<MerchantSettleOrderVO> pageList = null;
-			pageList = merchantSettleOrderService.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
+			
+			MerchantSettleOrderVO merchantSettleOrderVO = new MerchantSettleOrderVO();
+			pageList = merchantSettleOrderService.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO );
 			Page<MerchantSettleOrderVO> pageData = getPageData(pageList);
 			response = ResponseUtils.buildResult(pageData);
 		} catch (ServiceException e) {

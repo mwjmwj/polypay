@@ -1,10 +1,12 @@
 package com.polypay.platform.aspect;
 
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.polypay.platform.consts.MerchantGlobaKeyConsts;
 import com.polypay.platform.exception.ServiceException;
 
 /**
@@ -28,28 +31,26 @@ public class AuthAspect {
 	private final static Integer PERMISSION_DENIED = -9007;
 	public final static String TOKEN = "token";
 
-	@Pointcut("execution(* com.polypay.platform.controller.*.*(..)) && !execution(* com.polypay.platform.controller.MerchantLoginController.*(..))")
+	@Pointcut("execution(* com.polypay.platform.controller.*.*(..)) && !execution(* com.polypay.platform.controller.MerchantLoginController.*(..))"
+			+ "&& !execution(* com.polypay.platform.controller.ViewController.toAdmin(..))"
+			+ "&& !execution(* com.polypay.platform.controller.ViewController.toRegister(..))")
 	public void pointCut()
 	{
 		
 	}
 	@Before("pointCut()")
-	public void before(JoinPoint joinPoint) throws ServiceException {
+	public void before(JoinPoint joinPoint) throws ServiceException, IOException {
 		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		// 获取请求的request
 		HttpServletRequest request = attributes.getRequest();
+		HttpServletResponse response = attributes.getResponse();
+		
+		Object user = request.getSession().getAttribute(MerchantGlobaKeyConsts.USER);
 
-		String token = request.getHeader(TOKEN);
-
-		Object avaliableToken = request.getSession().getAttribute(TOKEN);
-
-		if (null == avaliableToken) {
-			throw new ServiceException("权限不足", PERMISSION_DENIED);
+		if (null == user) {
+			response.sendRedirect("admin");
 		}
-		if (!avaliableToken.equals(token)) {
-			throw new ServiceException("权限不足", PERMISSION_DENIED);
-
-		}
+	
 
 	}
 

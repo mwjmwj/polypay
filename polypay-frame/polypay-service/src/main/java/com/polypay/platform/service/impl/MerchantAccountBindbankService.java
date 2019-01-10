@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.collect.Maps;
 import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
@@ -14,6 +16,7 @@ import com.polypay.platform.dao.MerchantAccountBindbankMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountBindbankService;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantAccountBindbankVO;
 
 @Service
 public class MerchantAccountBindbankService implements IMerchantAccountBindbankService {
@@ -90,6 +93,18 @@ public class MerchantAccountBindbankService implements IMerchantAccountBindbankS
 			param.put("merchantId", merchantAccountInfo.getUuid());
 			MerchantAccountBindbank selectByPrimaryKey = merchantAccountBindbankMapper.selectMerchantBindBankByID(param);
 			return selectByPrimaryKey;
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public PageList<MerchantAccountBindbankVO> listMerchantBindBank(PageBounds pageBounds,
+			MerchantAccountBindbankVO param) throws ServiceException{
+		try {
+			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+			param.setMerchantId(merchant.getUuid());
+			return merchantAccountBindbankMapper.listMerchantBindBank(pageBounds,param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

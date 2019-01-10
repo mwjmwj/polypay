@@ -39,6 +39,7 @@ public class MerchantRechargeOrderVO extends VO{
     
     private Date endTime;
     
+    private String tradeType;
 
     public Date getBeginTime() {
 		return beginTime;
@@ -159,4 +160,12 @@ public class MerchantRechargeOrderVO extends VO{
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
 }

@@ -199,4 +199,6 @@ public class MerchantPlaceOrderVO extends VO{
     public void setDescreption(String descreption) {
         this.descreption = descreption == null ? null : descreption.trim();
     }
+  
+    
 }

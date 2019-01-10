@@ -12,7 +12,7 @@ public class ServiceResponse {
 	private String message = "";
 	private Object data;
 	private String requestId;
-	private Long count;
+	private Integer count;
 	
 	public ServiceResponse()
 	{
@@ -48,10 +48,10 @@ public class ServiceResponse {
 	public void setRequestId(String requestId) {
 		this.requestId = requestId;
 	}
-	public Long getCount() {
+	public Integer getCount() {
 		return count;
 	}
-	public void setCount(Long count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 	

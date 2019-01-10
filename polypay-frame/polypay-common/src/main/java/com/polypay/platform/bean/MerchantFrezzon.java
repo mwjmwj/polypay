@@ -19,8 +19,28 @@ public class MerchantFrezzon {
     private Date reallyArrivalTime;
 
     private Integer status;
+    
+    private Date beginTime;
+    
+    private Date endTime;
+    
+    public Date getBeginTime() {
+		return beginTime;
+	}
 
-    public Integer getId() {
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	public Integer getId() {
         return id;
     }
 
