@@ -21,7 +21,6 @@
     <context:annotation-config/>
     <task:annotation-driven />
    
-	<mvc:resources location="/lib/" mapping="/lib/**" />
 	<mvc:resources location="/pages/" mapping="/pages/**" />
 	<mvc:resources location="/static/" mapping="/static/**" />
 	<mvc:resources location="/upload/" mapping="/upload/**" />

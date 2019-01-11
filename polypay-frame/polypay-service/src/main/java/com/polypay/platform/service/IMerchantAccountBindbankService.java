@@ -12,4 +12,6 @@ public interface IMerchantAccountBindbankService extends IBaseService<MerchantAc
 
 	PageList<MerchantAccountBindbankVO> listMerchantBindBank(PageBounds pageBounds, MerchantAccountBindbankVO param) throws ServiceException;
 
+	void reverseBankStatus() throws ServiceException;
+
 }

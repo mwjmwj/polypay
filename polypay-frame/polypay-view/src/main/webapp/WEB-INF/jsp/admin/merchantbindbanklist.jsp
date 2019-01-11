@@ -179,7 +179,20 @@
 			
 		 
 	
-		$('#addbank').on('click',function(){alert(1)});
+		$('#addbank').on('click',function(){
+			
+			layer.open({
+				area:['500px','600px'],
+				title:'添加绑定银行卡',
+				type:2,
+				icon:1,
+				anim:5,
+				maxmin: true,
+				offset: ['100px', '50px'],
+				content:'../view/merchantBindBank'
+			});
+		
+		});
 		});
 		
 

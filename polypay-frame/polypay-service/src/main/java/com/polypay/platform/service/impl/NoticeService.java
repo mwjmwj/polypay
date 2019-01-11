@@ -1,5 +1,7 @@
 package com.polypay.platform.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -14,12 +16,12 @@ import com.polypay.platform.service.INoticeService;
 public class NoticeService implements INoticeService {
 
 	@Autowired
-	private NoticeMapper NoticeMapper;
+	private NoticeMapper noticeMapper;
 
 	@Override
 	public int deleteByPrimaryKey(Integer id) throws ServiceException {
 		try {
-			NoticeMapper.deleteByPrimaryKey(id);
+			noticeMapper.deleteByPrimaryKey(id);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
@@ -29,7 +31,7 @@ public class NoticeService implements INoticeService {
 	@Override
 	public int insert(Notice record) throws ServiceException {
 		try {
-			NoticeMapper.insert(record);
+			noticeMapper.insert(record);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
@@ -39,7 +41,7 @@ public class NoticeService implements INoticeService {
 	@Override
 	public int insertSelective(Notice record) throws ServiceException {
 		try {
-			NoticeMapper.insertSelective(record);
+			noticeMapper.insertSelective(record);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
@@ -49,7 +51,7 @@ public class NoticeService implements INoticeService {
 	@Override
 	public Notice selectByPrimaryKey(Integer id) throws ServiceException {
 		try {
-			Notice selectByPrimaryKey = NoticeMapper.selectByPrimaryKey(id);
+			Notice selectByPrimaryKey = noticeMapper.selectByPrimaryKey(id);
 			return selectByPrimaryKey;
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
@@ -59,21 +61,28 @@ public class NoticeService implements INoticeService {
 	@Override
 	public int updateByPrimaryKeySelective(Notice record) throws ServiceException {
 		try {
-			NoticeMapper.updateByPrimaryKeySelective(record);
+			return noticeMapper.updateByPrimaryKeySelective(record);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
-		return 0;
 	}
 
 	@Override
 	public int updateByPrimaryKey(Notice record) throws ServiceException {
 		try {
-			NoticeMapper.updateByPrimaryKey(record);
+			return noticeMapper.updateByPrimaryKey(record);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
-		return 0;
+	}
+
+	@Override
+	public List<Notice> listNotice() throws ServiceException {
+		try {
+			return noticeMapper.listNotice();
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
 	}
 
 }

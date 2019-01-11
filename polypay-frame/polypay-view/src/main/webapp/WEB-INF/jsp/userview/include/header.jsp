@@ -14,10 +14,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>源盛丰支付</title>
-<link href="lib/css/bootstrap.min.css" rel="stylesheet">
-<link href="lib/css/style.css" rel="stylesheet">
-<script type="text/javascript" src="lib/js/jquery.1.12.4.min.js"></script>
-<script src="lib/js/bootstrap.min.js" type="text/javascript"></script>
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/css/style.css" rel="stylesheet">
+<script type="text/javascript" src="static/js/jquery.1.12.4.min.js"></script>
+<script src="static/js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <body>
 	<!--导航栏部分-->

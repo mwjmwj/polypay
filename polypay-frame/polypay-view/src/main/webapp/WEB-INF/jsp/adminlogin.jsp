@@ -13,13 +13,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>poly-pay</title>
-<link href="lib/css/style.css" rel="stylesheet">
-<link href="lib/css/layui.css" rel="stylesheet">
-<link href="lib/css/admin.css" rel="stylesheet">
-<link href="lib/css/pro.css" rel="stylesheet">
-<link href="lib/css/login.css" rel="stylesheet">
-<script src="lib/js/jquery.min.js" type="text/javascript"></script>
-<script src="lib/js/layui.js" type="text/javascript"></script>
+<link href="static/css/style.css" rel="stylesheet">
+<link href="static/css/layui.css" rel="stylesheet">
+<link href="static/css/admin.css" rel="stylesheet">
+<link href="static/css/pro.css" rel="stylesheet">
+<link href="static/css/login.css" rel="stylesheet">
+<script src="static/js/jquery.min.js" type="text/javascript"></script>
+<script src="static/js/layui.js" type="text/javascript"></script>
 <style type="text/css">
 </style>
 </head>
@@ -82,7 +82,7 @@
 	</div>
 	<!--尾部-->
 	<jsp:include page="userview/include/foot.jsp" />
-	<script type="text/javascript" src="lib/js/md5.js"></script>
+	<script type="text/javascript" src="static/js/md5.js"></script>
 	<script type="text/javascript">
 		layui.use(['form','layer'], function() {
 			var form = layui.form;

@@ -179,6 +179,13 @@
 		remark = #{remark,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
+	
+	<update id="reverseBankStatus" parameterType="java.lang.String">
+		update merchant_account_bindbank
+		set default_status=1
+		where 
+		merchant_id = #{uuid,jdbcType=VARCHAR}
+	</update>
 
 	<select id="selectMerchantBindBankByID"
 		parameterType="java.util.Map" resultMap="BaseResultMap">
@@ -199,4 +206,5 @@
 	</select>
 
 
+	
 </mapper>

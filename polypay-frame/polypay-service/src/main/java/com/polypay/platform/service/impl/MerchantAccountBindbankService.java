@@ -110,4 +110,14 @@ public class MerchantAccountBindbankService implements IMerchantAccountBindbankS
 		}
 	}
 
+	@Override
+	public void reverseBankStatus() throws ServiceException {
+		try {
+			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+			merchantAccountBindbankMapper.reverseBankStatus(merchant.getUuid());
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

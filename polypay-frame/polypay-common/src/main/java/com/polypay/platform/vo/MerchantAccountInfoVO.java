@@ -1,7 +1,9 @@
 package com.polypay.platform.vo;
 
 import java.util.Date;
+import java.util.List;
 
+import com.google.common.collect.Lists;
 import com.polypay.platform.consts.VerifyTypeEnum;
 
 public class MerchantAccountInfoVO extends VO{
@@ -169,4 +171,5 @@ public class MerchantAccountInfoVO extends VO{
 	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
 	}
+
 }

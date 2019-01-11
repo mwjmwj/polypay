@@ -4,10 +4,12 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -225,6 +227,7 @@ public class MerchantLoginController {
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.TOKEN, token);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.USER, merchantAccountInfo);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU, merchantMenu);
+		
 		merchantAccountInfo.setToken(token);
 		merchantAccountInfo.setPassWord(null);
 	
@@ -239,6 +242,21 @@ public class MerchantLoginController {
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.USER, null);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU,null);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.TOKEN, null);
+		
+		// 获取session
+		HttpSession session = request.getSession();
+		
+		// 获取所有sessionkey 
+		Enumeration<String> attributeNames = session.getAttributeNames();
+		String sessionKey;
+		
+		// 清空session所有的key
+		while(attributeNames.hasMoreElements())
+		{
+			sessionKey = attributeNames.nextElement();
+			session.setAttribute(sessionKey, null);
+		}
+		
 		response.setMessage("退出成功!");
 		return "adminlogin";
 	}

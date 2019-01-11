@@ -1,7 +1,11 @@
 package com.polypay.platform.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.google.common.collect.Lists;
 
 @Controller
 @RequestMapping("/view")
@@ -125,4 +129,11 @@ public class ViewController {
 	{
 		return "admin/merchantfrezzlist";
 	}
+	
+	@RequestMapping("merchantBindBank")
+	public String toMerchantBindBank()
+	{
+		return "admin/addmerchantbindbank";
+	}
+	
 }

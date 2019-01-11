@@ -23,6 +23,8 @@ public class MerchantAccountBindbankVO extends VO{
     private Integer defaultStatus;
 
     private String remark;
+    
+    private String defaultFlag;
 
     public Integer getId() {
         return id;
@@ -95,4 +97,12 @@ public class MerchantAccountBindbankVO extends VO{
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public String getDefaultFlag() {
+		return defaultFlag;
+	}
+
+	public void setDefaultFlag(String defaultFlag) {
+		this.defaultFlag = defaultFlag;
+	}
 }

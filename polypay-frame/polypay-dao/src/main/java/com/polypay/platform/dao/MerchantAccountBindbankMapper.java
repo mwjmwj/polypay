@@ -13,4 +13,6 @@ public interface MerchantAccountBindbankMapper extends BaseMapper<MerchantAccoun
 
 	PageList<MerchantAccountBindbankVO> listMerchantBindBank(PageBounds pageBounds, MerchantAccountBindbankVO param);
 
+	void reverseBankStatus(String uuid);
+
 }

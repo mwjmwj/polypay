@@ -18,6 +18,7 @@ import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
+import com.polypay.platform.consts.MerchantBindBankConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountBindbankService;
@@ -40,11 +41,13 @@ public class MerchantBindBankController extends BaseController<MerchantAccountBi
 	
 	
 	@RequestMapping("/merchant/bindbank/save")
+	@ResponseBody
 	public ServiceResponse saveBindBank(MerchantAccountBindbankVO merchantAccountBindbankVO)throws ServiceException
 	{
 		ServiceResponse response =  new ServiceResponse();
 		String accountNumber = merchantAccountBindbankVO.getAccountNumber();
-		
+		accountNumber = accountNumber.replaceAll(" ", "");
+		merchantAccountBindbankVO.setAccountNumber(accountNumber);
 		if(StringUtils.isEmpty(accountNumber))
 		{
 			ResponseUtils.exception(response, "银行卡号不能为空!", RequestStatus.FAILED.getStatus());
@@ -68,12 +71,28 @@ public class MerchantBindBankController extends BaseController<MerchantAccountBi
 		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 		BeanUtils.copyProperties(merchantAccountBindbankVO, merchantAccountBindbank);
 		merchantAccountBindbank.setMerchantId(merchant.getUuid());
+		
+		String defaultFlag = merchantAccountBindbankVO.getDefaultFlag();
+		
+		if("on".equals(defaultFlag))
+		{
+			
+			merchantAccountBindbankService.reverseBankStatus();
+			merchantAccountBindbank.setDefaultStatus(MerchantBindBankConsts.DEFAULT_BIND_BANK);
+		}else
+		{
+			merchantAccountBindbank.setDefaultStatus(MerchantBindBankConsts.NOT_DEFAULT_BIND_BANK);
+		}
+		
+		
+		
 		merchantAccountBindbankService.insertSelective(merchantAccountBindbank);
 		response.setMessage("綁定成功");
 		return response;
 	}
 	
 	@GetMapping("/merchant/bindbank/getname")
+	@ResponseBody
 	public ServiceResponse getBankName(@Param("cardnumber") String cardnumber)
 	{
 		ServiceResponse response =  new ServiceResponse();
