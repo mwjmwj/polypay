@@ -1,5 +1,7 @@
 package com.polypay.platform.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import com.polypay.platform.dao.MerchantRechargeOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
 
 @Service
@@ -108,6 +111,24 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 	public MerchantRechargeOrder getOrderByOrderNumber(String merchantOrderNumber) throws ServiceException {
 		try {
 			return merchantRechargeOrderMapper.getOrderByOrderNumber(merchantOrderNumber);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public MerchantMainDateVO getMerchantGroupDate(String merchantUUID) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.getMerchantGroupDate(merchantUUID);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public List<MerchantMainDateVO> allTimeMerchantOrder(String merchantUUID) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.allTimeMerchantOrder(merchantUUID);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

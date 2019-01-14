@@ -60,7 +60,7 @@
 						<a class="loginout" href="merchant/exit">退出</a>
 					</dd>
 				</dl></li>
-			<li class="layui-nav-item to-index"><a href="view/admin">退出账号</a>
+			<li class="layui-nav-item to-index"><a href="merchant/exit">退出账号</a>
 			</li>
 		</ul>
 
@@ -85,10 +85,8 @@
 								</ul>
 							</c:forEach>
 					</c:if>
-
 					</li>
 				</c:forEach>
-
 			</ul>
 		</div>
 	</div>
@@ -101,9 +99,9 @@
 			<ul class="layui-tab-title" id="tabName">
 				<li>登录信息</li>
 			</ul>
-			<div class="layui-tab-content">
+			<div class="layui-tab-content" style="background-color: #F5F5F5;margin-left: 10px;margin-top: 10px">
 				<div class="layui-tab-item layui-show">
-					<iframe src='./view/admin' frameborder="0" scrolling="yes"
+					<iframe src='./view/loginlog' frameborder="0" scrolling="yes"
 						class="weIframe"></iframe>
 				</div>
 			</div>

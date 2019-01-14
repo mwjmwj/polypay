@@ -98,4 +98,11 @@
     where name = #{payChannel}
     and merchant_level = #{payLevel}
   </select>
+  
+  <select id="listPayType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select 
+    <include refid="Base_Column_List" />
+    from pay_type
+    where  merchant_level = #{payLevel}
+  </select>
 </mapper>

@@ -90,4 +90,11 @@
       merchant_id = #{merchantId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  
+  <select id="listMerchantLoginLog" parameterType="com.polypay.platform.vo.MerchantLoginLogVO" resultMap="BaseResultMap">
+      select 
+    <include refid="Base_Column_List" />
+    from merchant_login_log
+    where merchant_id = #{merchantId,jdbcType=VARCHAR} order by login_time desc
+  </select>
 </mapper>

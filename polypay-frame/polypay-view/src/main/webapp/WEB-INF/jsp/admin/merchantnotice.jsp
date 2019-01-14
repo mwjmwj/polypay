@@ -36,7 +36,7 @@
         <br>${notice.content }
       </p>
     </div>
-  </li>
+ 	 </li>
 	</c:forEach>
   
 </ul>  

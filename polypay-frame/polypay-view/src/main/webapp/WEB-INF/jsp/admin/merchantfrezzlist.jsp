@@ -115,8 +115,7 @@
 					if(row.status==0)
 					{
 						return '<span style="color: green">'+Number(row.amount).toFixed(4) + "元"+'</span>';
-						}else
-						{
+					}else{
 						return '<span style="color: red">'+Number(row.amount).toFixed(4) + "元"+'</span>';
 					}
 					}
@@ -142,14 +141,11 @@
 					width : 171,
 					align : 'center',
 					templet : function(row) {
-						if(row.reallyArrivalTime == null)
-							{
-							return "";
-							}else{
-								
+					if(row.reallyArrivalTime == null){
+						return "";
+					}else{
 						return createTime(row.reallyArrivalTime);
-							}
-						
+						}
 					}
 				},{
 					fixed : 'right',

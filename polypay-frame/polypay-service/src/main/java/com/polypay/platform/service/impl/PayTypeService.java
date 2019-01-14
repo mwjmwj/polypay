@@ -1,5 +1,6 @@
 package com.polypay.platform.service.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,15 @@ public class PayTypeService implements IPayTypeService {
 			param.put("payLevel", payLevel);
 			param.put("payChannel", payChannel);
 			return PayTypeMapper.getRateByLevelAndChannel(param);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public List<PayType> listPayType(Integer payLevel) throws ServiceException {
+		try {
+			return PayTypeMapper.listPayType(payLevel);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
