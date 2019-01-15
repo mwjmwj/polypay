@@ -17,11 +17,6 @@
 <link rel="stylesheet" href="../static/css/layui.css">
 <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 
-<style type="text/css">
-.searchtable {
-	
-}
-</style>
 </head>
 <script type="text/javascript" src="../static/js/layui.all.js"></script>
 <body>
@@ -45,7 +40,7 @@
 	<table class="layui-hide" id="rechargelist" lay-filter="rechargelist"></table>
 
 
-	<script type="text/html" id="barDemo">
+	<script type="text/html" id="rechargeedit">
   <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
@@ -168,7 +163,7 @@
 				}, {
 					fixed : 'right',
 					title : '操作',
-					toolbar : '#barDemo',
+					toolbar : '#rechargeedit',
 					width : 120
 				} ] ],
 				page : true,

@@ -143,5 +143,5 @@ public class ViewController {
 	{
 		return "admin/merchantpaytype";
 	}
-	
+
 }

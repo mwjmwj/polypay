@@ -22,4 +22,17 @@ public class DateUtils {
 		cal.add(type, num);
 		return cal.getTime();
 	}
+	
+	public static Date getMonthTime(int mounth)
+	{
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.MONTH, mounth);
+		return cal.getTime();
+	}
+	
+	public static Date getNewDate()
+	{
+		return new Date();
+	}
 }

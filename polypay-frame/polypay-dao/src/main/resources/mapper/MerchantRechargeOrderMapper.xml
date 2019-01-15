@@ -33,7 +33,7 @@
 	</resultMap>
 
 	<resultMap id="listResult"
-		type="com.polypay.platform.bean.MerchantRechargeOrder">
+		type="com.polypay.platform.vo.MerchantRechargeOrderVO">
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="order_number" property="orderNumber"
 			jdbcType="VARCHAR" />

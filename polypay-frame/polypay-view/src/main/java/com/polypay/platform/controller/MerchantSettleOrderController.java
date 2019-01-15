@@ -9,10 +9,9 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -36,9 +35,10 @@ import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
+import com.polypay.platform.vo.MerchantAccountBindbankVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
-@RestController
+@Controller
 public class MerchantSettleOrderController extends BaseController<MerchantSettleOrderVO> {
 
 	private Logger log = LoggerFactory.getLogger(MerchantSettleOrderController.class);
@@ -55,6 +55,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 	private ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 	@RequestMapping("/merchant/settle/order/list")
+	@ResponseBody
 	public ServiceResponse listMerchantSettleOrder()
 			throws ServiceException {
 
@@ -79,7 +80,8 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 	}
 
 	@RequestMapping("/merchant/settle/order")
-	public @ResponseBody ServiceResponse settleOrderGenerator(@RequestBody MerchantSettleOrderVO merchantSettleOrderVO)
+	@ResponseBody
+	public  ServiceResponse settleOrderGenerator(MerchantSettleOrderVO merchantSettleOrderVO)
 			throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
@@ -166,6 +168,24 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		return response;
 
 	}
+	
+	
+	@RequestMapping("merchant/settle/order/pre")
+	public String preSettleOrder(Map<String,Object>result) throws ServiceException
+	{
+		PageBounds pageBounds = this.getPageBounds();
+		MerchantAccountBindbankVO merchantAccountBindbankVO = new MerchantAccountBindbankVO();
+		PageList<MerchantAccountBindbankVO> listMerchantBindBank = merchantAccountBindbankService.listMerchantBindBank(pageBounds, merchantAccountBindbankVO);
+		
+		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+		MerchantFinance merchantFinanceByUUID = merchantFinanceService.getMerchantFinanceByUUID(merchant.getUuid());
+		
+		result.put("merchantfinance", merchantFinanceByUUID);
+		result.put("bank", listMerchantBindBank);
+		
+		return "admin/merchantsettleapply";
+	}
+	
 
 	private MerchantSettleOrder generatorSettleOrder(MerchantSettleOrderVO merchantSettleOrderVO)
 			throws ServiceException {

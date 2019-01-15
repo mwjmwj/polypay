@@ -48,4 +48,11 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 
 	}
 	
+	@RequestMapping("merchant/place/order/pre")
+	public String merchantPlaceAmount() {
+		
+		
+		return "admin/merchantplacepayorder";
+	}
+	
 }

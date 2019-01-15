@@ -12,10 +12,15 @@ public class MerchantRechargeOrderVO extends VO{
 	private Integer id;
 
     private String orderNumber;
+    
+    private String merchantOrderNumber;
+
+    private String bankOrderNumber;
 
     private String merchantId;
 
-    private Integer type;
+
+	private Integer type;
 
     private BigDecimal payAmount;
 
@@ -40,6 +45,22 @@ public class MerchantRechargeOrderVO extends VO{
     private Date endTime;
     
     private String tradeType;
+    
+    public String getMerchantOrderNumber() {
+    	return merchantOrderNumber;
+    }
+    
+    public void setMerchantOrderNumber(String merchantOrderNumber) {
+    	this.merchantOrderNumber = merchantOrderNumber;
+    }
+    
+    public String getBankOrderNumber() {
+    	return bankOrderNumber;
+    }
+    
+    public void setBankOrderNumber(String bankOrderNumber) {
+    	this.bankOrderNumber = bankOrderNumber;
+    }
 
     public Date getBeginTime() {
 		return beginTime;

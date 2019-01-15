@@ -22,8 +22,9 @@
 <script type="text/javascript" src="../static/js/layui.all.js"></script>
 <body>
 
+<div style="margin-left: 20%;width: 245px;">
 	<table class="layui-hide" id="merchantpaytype"></table>
-
+</div>
 
 	<script>
 		layui.use('table', function() {
