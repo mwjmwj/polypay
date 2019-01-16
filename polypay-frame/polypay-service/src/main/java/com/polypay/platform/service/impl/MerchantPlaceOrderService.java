@@ -11,6 +11,7 @@ import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.dao.MerchantPlaceOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
+import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
 
 @Service
@@ -79,11 +80,15 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 		return 0;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.polypay.platform.service.IMerchantPlaceOrderService#listMerchantPlaceOrder(com.github.miemiedev.mybatis.paginator.domain.PageBounds, com.polypay.platform.vo.MerchantPlaceOrderVO)
+	 */
 	@Override
 	public PageList<MerchantPlaceOrderVO> listMerchantPlaceOrder(PageBounds pageBounds,
 			MerchantPlaceOrderVO merchantPlaceOrderVO) throws ServiceException {
 		PageList<MerchantPlaceOrderVO> result;
 		try {
+			merchantPlaceOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
 			result = merchantPlaceOrderMapper.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());

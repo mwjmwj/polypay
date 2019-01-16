@@ -143,5 +143,17 @@ public class ViewController {
 	{
 		return "admin/merchantpaytype";
 	}
-
+	
+	@RequestMapping("merchantplacebindbankList")
+	public String toMerchantPlaceBankList()
+	{
+		return "admin/merchantplacepaybindbanklist";
+	}
+	
+	@RequestMapping("merchantPlaceBindBank")
+	public String toMerchantPlaceBindBank()
+	{
+		return "admin/addmerchantplacebindbank";
+	}
+	
 }

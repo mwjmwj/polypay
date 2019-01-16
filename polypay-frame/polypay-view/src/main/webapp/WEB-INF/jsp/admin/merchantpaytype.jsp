@@ -20,15 +20,25 @@
 
 </head>
 <script type="text/javascript" src="../static/js/layui.all.js"></script>
-<body>
+<body style="background-color: white">
 
-<div style="margin-left: 20%;width: 245px;">
-	<table class="layui-hide" id="merchantpaytype"></table>
-</div>
+	<blockquote class="layui-elem-quote layui-text">
+		费率须知
+		<p style="color: red;">1. 费率会实时调控</p>
+		<p style="color: red;">2. 费率计算方式用于入金、出金；计算规则：  千分之10-1000 元扣去手续费 10元</p>
+	</blockquote>
+	
+	<fieldset class="layui-elem-field layui-field-title"
+		style="margin-top: 20px;">
+		<legend>通道费率</legend>
+	</fieldset>
+
+		<table class="layui-hide" id="merchantpaytype"></table>
+
 
 	<script>
 		layui.use('table', function() {
-			var table = layui.table;
+			var table = layui.table;                                                               
 
 			table.render({
 				elem : '#merchantpaytype',

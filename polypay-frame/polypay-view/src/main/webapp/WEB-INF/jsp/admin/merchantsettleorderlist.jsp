@@ -102,7 +102,7 @@
 				}, {
 					field : 'type',
 					title : '类型',
-					width : 80,
+					width : 113,
 					align:'center',
 					templet : function(row) {
 						if (row.type == 3) {
@@ -163,18 +163,16 @@
 				}, {
 					field : 'descreption',
 					title : '审核描述',
-					width : 170
+					width : 170,
+					align : 'center'
 				}
 				, {
 					field : 'handlePeople',
 					title : '审核人',
-					width : 70
-				}
-				, {
-					field : 'bankName',
-					title : '银行账号',
-					width : 65
-				}, {
+					width : 116,
+					align : 'center'
+				},
+				  {
 					field : 'bankAccountNumber',
 					title : '银行账号',
 					width : 200

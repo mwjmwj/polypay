@@ -54,7 +54,7 @@
     delete from merchant_place_order
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
+  <insert id="insert" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" useGeneratedKeys="true" keyProperty="id" >
     insert into merchant_place_order (id, order_number, merchant_id, 
       pay_amount, service_amount, arrive_amount, 
       bank_name, branch_name, bank_number, 
@@ -68,7 +68,7 @@
       #{handlerTime,jdbcType=TIMESTAMP}, #{handlerName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
       #{type,jdbcType=INTEGER}, #{descreption,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
+  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" useGeneratedKeys="true" keyProperty="id"  >
     insert into merchant_place_order
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

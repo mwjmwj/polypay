@@ -51,15 +51,15 @@
 			<div class="layui-inline">
 				<label class="layui-form-label">代付金额</label>
 				<div class="layui-input-inline">
-					<input type="tel" name="phone" lay-verify="required|phone"
+					<input type="tel"  lay-verify="required"
 						placeholder="${merchantfinance.blanceAmount }元 "
-						autocomplete="off" class="layui-input" id="postamount" onblur="textamount(this)" name="postamount">
+						autocomplete="off" class="layui-input" id="payAmount" onblur="textamount(this)" name="payAmount">
 				</div>
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">代付手续费</label>
 				<div class="layui-input-inline">
-					<input type="text" name="email" lay-verify="email" id="serviceamount"
+					<input type="text" id="serviceamount"
 						autocomplete="off" class="layui-input" readonly="readonly">
 				</div>
 			</div>
@@ -68,7 +68,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">支付密码</label>
 			<div class="layui-input-inline">
-				<input type="password" name="paypassword" lay-verify="pass"
+				<input type="password" name="payPassword" lay-verify="pass"
 					placeholder="请输入密码" autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-form-mid layui-word-aux">
@@ -79,7 +79,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行卡号</label>
 			<div class="layui-input-block">
-				<select name="interest" lay-filter="aihao">
+				<select name="merchantPlaceBindBankId" lay-filter="aihao">
 					<c:forEach items="${bank}" var="b">
 					<option value="${b.id }" >${b.accountName}|${b.bankName }|${b.accountNumber }</option>
 					<c:if test="${b.defaultStatus == 0 }">
@@ -93,7 +93,7 @@
 
 		<div class="layui-form-item">
 			<div class="layui-input-block">
-				<button class="layui-btn" lay-submit="" lay-filter="demo1">提交结算</button>
+				<button class="layui-btn" lay-submit="" lay-filter="demo1">提交代付</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>
 		</div>
@@ -123,13 +123,42 @@ layui.use(['form', 'layedit', 'laydate'], function(){
     }
   });
   
-  //监听提交
-  form.on('submit(demo1)', function(data){
-    layer.alert(JSON.stringify(data.field), {
-      title: '最终的提交信息'
-    })
-    return false;
-  });
+ 		 //监听提交
+		  form.on('submit(demo1)', function(data){
+		
+			  
+			  $.ajax({
+				  url:'../../../merchant/placepay/order',
+				  type:'POST',
+				  datatype:'json',
+				  data : $(".layui-form").serialize(),
+				  success : function(data) {
+						if (data.status == '0') {
+							layer.alert('订单提交成功,确定关闭窗口?', {
+								icon : 1
+							}, function() {
+								var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+								window.location.reload();
+							});
+						}
+						else{
+							layer.confirm('提交失败 '+data.message,{
+							btn: ['继续提交', '退出提交'],
+							time:2000
+							}, function(index, layero){
+								layer.close(layer.index);
+							}, function(index){
+								var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+							});
+						}
+					}
+			  });
+			  
+			  
+		    return false;
+		  });
  
   /* //表单初始赋值
   form.val('example', {
@@ -151,15 +180,15 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 	  
 		if(!/^\d{0,30}$/.test(t.value)){t.value='';return;}
 		
-	  var postamount = $('#postamount').val();
+	  var postamount = parseFloat($('#payAmount').val());
 	  
 	  if (postamount >= '${merchantfinance.blanceAmount}') {
-			$("#postamount").val('${merchantfinance.blanceAmount}');
+			$("#payAmount").val('${merchantfinance.blanceAmount}');
 		}
-	  postamount = $("#postamount").val();
+	  postamount = $("#payAmount").val();
 	  
       $("#serviceamount").val(postamount * 0.01);
-      }
+      };
 	</script>
 
 </body>

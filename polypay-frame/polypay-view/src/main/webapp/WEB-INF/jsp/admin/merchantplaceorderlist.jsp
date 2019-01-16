@@ -91,10 +91,16 @@
 					align : 'center',
 					width : 235,
 					sort : true
+				}
+				, {
+					field : 'bankNumber',
+					title : '银行卡号',
+					align : 'center',
+					width : 200
 				}, {
 					field : 'type',
 					title : '类型',
-					width : 80,
+					width : 113,
 					align: 'center',
 					templet : function(row) {
 						if (row.type == 2) {
@@ -104,17 +110,21 @@
 				}, {
 					field : 'status',
 					title : '状态',
-					width : 60,
+					width : 80,
+					align : 'center',
 					templet : function(row) {
 						if (row.status == 0) {
 							return '<span style="color: green;">成功</span>';
 						} else if (row.status == -1) {
 							return '<span style="color: red;">失败</span>';
 						}
+						else if (row.status == 1) {
+							return '<span style="color: orange;">审核中</span>';
+						}
 					}
 				}, {
 					field : 'payAmount',
-					title : '支付金额',
+					title : '代付金额',
 					width : 143,
 					style : 'color: red',
 					templet : function(row) {
@@ -129,12 +139,12 @@
 						return Number(row.serviceAmount).toFixed(4) + "元";
 					}
 				}, {
-					field : 'arrivalAmount',
+					field : 'arriveAmount',
 					title : '到账金额',
 					width : 143,
 					style : 'color: red',
 					templet : function(row) {
-						return Number(row.arrivalAmount).toFixed(4) + "元";
+						return Number(row.arriveAmount).toFixed(4) + "元";
 					}
 				}, {
 					field : 'createTime',
@@ -147,18 +157,22 @@
 				}, {
 					field : 'handlerTime',
 					title : '处理时间',
-					width : 170,
+					width : 160,
 					templet : function(row) {
+						if(row.handlerTime == '' || row.handlerTime == null)
+						{
+							return "";
+						}
 						return createTime(row.handlerTime);
 					}
 				}, {
 					field : 'handlerName',
 					title : '处理人',
-					width : 65
+					width : 120
 				}, {
 					field : 'descreption',
-					title : '审核信息',
-					width : 70,
+					title : '信息',
+					width : 120,
 					style : 'align'
 				}, {
 					fixed : 'right',

@@ -22,7 +22,6 @@ import com.polypay.platform.consts.MerchantBindBankConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountBindbankService;
-import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.utils.BankUtils;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantAccountBindbankVO;
@@ -35,10 +34,6 @@ public class MerchantBindBankController extends BaseController<MerchantAccountBi
 	
 	@Autowired
 	private IMerchantAccountBindbankService merchantAccountBindbankService;
-	
-	@Autowired
-	private IMerchantAccountInfoService merchantAccountInfoService;
-	
 	
 	@RequestMapping("/merchant/bindbank/save")
 	@ResponseBody

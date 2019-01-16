@@ -47,7 +47,10 @@ public class MerchantPlaceOrderVO extends VO{
     
     private Date endTime;
     
-
+    private Integer merchantPlaceBindBankId;
+    
+    private String payPassword;
+    
     public Date getBeginTime() {
 		return beginTime;
 	}
@@ -199,6 +202,22 @@ public class MerchantPlaceOrderVO extends VO{
     public void setDescreption(String descreption) {
         this.descreption = descreption == null ? null : descreption.trim();
     }
+
+	public Integer getMerchantPlaceBindBankId() {
+		return merchantPlaceBindBankId;
+	}
+
+	public void setMerchantPlaceBindBankId(Integer merchantPlaceBindBankId) {
+		this.merchantPlaceBindBankId = merchantPlaceBindBankId;
+	}
+
+	public String getPayPassword() {
+		return payPassword;
+	}
+
+	public void setPayPassword(String payPassword) {
+		this.payPassword = payPassword;
+	}
   
     
 }

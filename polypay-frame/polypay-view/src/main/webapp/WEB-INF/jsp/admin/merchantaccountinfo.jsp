@@ -21,8 +21,19 @@
 </head>
 <script type="text/javascript" src="../static/js/layui.js"></script>
 <script src="../static/js/jquery.min.js" type="text/javascript"></script>
-<body>
+<body style="background-color: white">
+<blockquote class="layui-elem-quote layui-text">
+		个人信息
+		<p style="color: red;">1. 个人信息不可随意给人使用。</p>
+	</blockquote>
+
+	<fieldset class="layui-elem-field layui-field-title"
+		style="margin-top: 20px;">
+		<legend>账户个人信息</legend>
+	</fieldset>
+	
 <div >
+
 	<form class="layui-form">
 		<!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
 		

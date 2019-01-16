@@ -52,7 +52,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 	@Autowired
 	private IMerchantAccountBindbankService merchantAccountBindbankService;
 
-	private ExecutorService executorService = Executors.newSingleThreadExecutor();
+	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
 	@RequestMapping("/merchant/settle/order/list")
 	@ResponseBody
