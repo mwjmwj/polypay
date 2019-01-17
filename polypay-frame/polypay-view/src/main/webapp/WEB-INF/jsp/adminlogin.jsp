@@ -40,7 +40,7 @@
 						<label
 							class="layadmin-user-login-icon layui-icon layui-icon-username"
 							for="LAY-user-login-username"></label> <input type="text"
-							name="mobileNumber"
+							name="mobileNumber" id="mobileNumber"
 							lay-verify="phone" placeholder="手机号"
 							class="layui-input layui-form-danger">
 					</div>
@@ -53,6 +53,10 @@
 							lay-verify="required" placeholder="密码" class="layui-input">
 					</div>
 					
+					<div class="layui-form-item">
+						<div class="verify-wrap" id="verify-wrap2"></div>
+					</div>
+					
 					<!-- <div class="layui-form-item">
 						<label
 							class="layadmin-user-login-icon layui-icon layui-icon-password"
@@ -61,7 +65,7 @@
 							lay-verify="required" placeholder="验证码" class="layui-input">
 					</div> -->
 					
-					<div class="layui-form-item" style="height:50px;">
+					<!-- <div class="layui-form-item" style="height:50px;">
 						<input type="checkbox" name="remember" lay-skin="primary"
 							title="记住密码">
 						<div class="layui-unselect layui-form-checkbox" lay-skin="primary">
@@ -70,10 +74,10 @@
 						<a lay-href="/user/forget"
 							class="layadmin-user-jump-change layadmin-link"
 							style="margin-top: 7px;">忘记密码？</a>
-					</div>
+					</div> -->
 					<div class="layui-form-item">
-						<button class="layui-btn layui-btn-fluid" type="button" lay-submit=""
-							lay-filter="loginSubmit">登 入</button>
+						<button id="btn1" class="layui-btn layui-btn-fluid layui-btn-disabled" disabled="disabled" type="button" lay-submit=""
+							lay-filter="loginSubmit">登录</button>
 					</div>
 				</div>
 			</div>
@@ -82,6 +86,24 @@
 	</div>
 	<!--尾部-->
 	<jsp:include page="userview/include/foot.jsp" />
+	
+	
+	<script src="<%=basePath %>/static/js/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="<%= basePath %>/static/js/js2.js"></script>
+
+	<script type="text/javascript" defer="defer">
+	//var inputwidth = parseInt($(".layui-form-item").width());
+	var slideVerify2 = new slideVerifyPlug('#verify-wrap2',{
+				wrapWidth: '100%',
+	            initText:'请按住滑块',
+	            sucessText:'验证通过',
+	           	successFun: function(){
+	           		$("#btn1").removeClass("layui-btn-disabled");
+					$("#btn1").removeAttr("disabled");
+				}
+			});
+	</script>
+	
 	<script type="text/javascript" src="static/js/md5.js"></script>
 	<script type="text/javascript">
 		layui.use(['form','layer'], function() {
@@ -90,11 +112,11 @@
 			form.on('submit(loginSubmit)',function(){
 				
 				var password = MD5($("#LAY-user-login-password").val());
-				$("#LAY-user-login-password").val(password);
+				var data = {mobileNumber:$("#mobileNumber").val(),passWord:password};
 				$.ajax({
 					type:"post",
 					url:"merchant/login",
-					data:$("#loginForm").serialize(),
+					data:data,
 					success:function(data){
 						if(data=="success"){
 							layer.msg("登陆成功！",{icon:1,anim:2,time:100},function(){

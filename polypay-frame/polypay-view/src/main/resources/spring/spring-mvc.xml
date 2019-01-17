@@ -19,7 +19,10 @@
     <mvc:annotation-driven/>
     <!--<aop:aspectj-autoproxy />-->
     <context:annotation-config/>
+    
+    <!-- 定时任务注解开启 -->
     <task:annotation-driven />
+    
    
 	<mvc:resources location="/pages/" mapping="/pages/**" />
 	<mvc:resources location="/static/" mapping="/static/**" />
@@ -41,6 +44,9 @@
 
 	
 	<context:component-scan base-package="com.polypay.platform.aspect"></context:component-scan>
+	<context:component-scan base-package="com.polypay.platform.task"></context:component-scan>
+	
+	
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
             <list>

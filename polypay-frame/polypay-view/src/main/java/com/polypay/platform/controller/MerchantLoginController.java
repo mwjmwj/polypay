@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,14 +58,15 @@ public class MerchantLoginController {
 
 	@Autowired
 	private IMerchantLoginLogSerivce merchantLoginLogSerivce;
-	
+
 	@Autowired
 	private IMerchantFinanceService merchantFinanceService;
 
+	private ExecutorService yncService = Executors.newFixedThreadPool(1);
+
 	@RequestMapping("/merchant/register")
 	@ResponseBody
-	public ServiceResponse registerMerchant(MerchantAccountInfoVO requestMerchantInfo)
-			throws ServiceException {
+	public ServiceResponse registerMerchant(MerchantAccountInfoVO requestMerchantInfo) throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
 		MerchantVerify merchantVerify;
@@ -73,27 +76,25 @@ public class MerchantLoginController {
 
 			// 根据用户邮箱或手机号获取用户
 			merchantAccountInfo = merchantAccountInfoService.getMerchantInfo(requestMerchantInfo);
-			
+
 			// 用户存在返回
 			if (null != merchantAccountInfo) {
 				ResponseUtils.exception(response, "该用户已存在！", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			
-			//密码输入为null
-			if(StringUtils.isEmpty(requestMerchantInfo.getPassWord()))
-			{
+
+			// 密码输入为null
+			if (StringUtils.isEmpty(requestMerchantInfo.getPassWord())) {
 				ResponseUtils.exception(response, "请输入密码！", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			
-			//密码输入为null
-			if(StringUtils.isEmpty(requestMerchantInfo.getPayPassword()))
-			{
+
+			// 密码输入为null
+			if (StringUtils.isEmpty(requestMerchantInfo.getPayPassword())) {
 				ResponseUtils.exception(response, "请输入支付密码！", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			
+
 			// 用户输入密码后台校验 必须由 6-20 数字+字符或字母组成
 			if (!rexCheckPassword(requestMerchantInfo.getPassWord())) {
 				ResponseUtils.exception(response, "密码需要由6-20位字母,数字，字符组成！", RequestStatus.FAILED.getStatus());
@@ -120,7 +121,6 @@ public class MerchantLoginController {
 				ResponseUtils.exception(response, "验证码已失效,请重新获取", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			
 
 			// 用户注册
 			merchantAccountInfoService.registerAndSave(requestMerchantInfo);
@@ -152,11 +152,10 @@ public class MerchantLoginController {
 	 */
 	@RequestMapping("/merchant/check")
 	@ResponseBody
-	public ServiceResponse checkMerchant(MerchantAccountInfoVO merchantAccountInfoVO)
-			throws ServiceException {
+	public ServiceResponse checkMerchant(MerchantAccountInfoVO merchantAccountInfoVO) throws ServiceException {
 		ServiceResponse response = new ServiceResponse();
 		try {
-			
+
 			regex(merchantAccountInfoVO, response);
 			if (response.getStatus() != RequestStatus.SUCCESS.getStatus()) {
 				return response;
@@ -180,8 +179,8 @@ public class MerchantLoginController {
 
 	@RequestMapping("/merchant/login")
 	@ResponseBody
-	public String login(MerchantAccountInfoVO requestMerchantInfo,
-			HttpServletResponse httpResponse, HttpServletRequest request) throws ServiceException, IOException {
+	public String login(MerchantAccountInfoVO requestMerchantInfo, HttpServletResponse httpResponse,
+			HttpServletRequest request) throws ServiceException, IOException {
 		MerchantAccountInfo merchantAccountInfo;
 
 		if (StringUtils.isEmpty(requestMerchantInfo.getMobileNumber())) {
@@ -211,60 +210,64 @@ public class MerchantLoginController {
 				return checkVerifyCodeFlag;
 			}
 		}
-		
+
 		List<Menu> merchantMenu = merchantAccountInfoService.getMerchantMenu(merchantAccountInfo.getRoleId());
-		
-		
-		// 登录成功后 保存新的登录信息
-		MerchantLoginLog merchantLoginLog = new MerchantLoginLog();
-		merchantLoginLog.setLoginTime(new Date());
-		merchantLoginLog.setIp(IPUtils.getIpAddress(request));
-		merchantLoginLog.setLoginAddress(IPUtils.getLoginAddress(request));
-		merchantLoginLog.setMerchantId(merchantAccountInfo.getUuid());
-		merchantLoginLogSerivce.insertSelective(merchantLoginLog);
+
+		yncService.execute(() -> nycSaveLoginLog(request, merchantAccountInfo.getUuid()));
+
 		String token = UUIDUtils.get32UUID();
 
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.TOKEN, token);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.USER, merchantAccountInfo);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU, merchantMenu);
-		
+
 		merchantAccountInfo.setToken(token);
 		merchantAccountInfo.setPassWord(null);
-	
+
 		return "success";
 
 	}
-	
+
+	private void nycSaveLoginLog(HttpServletRequest request, String uuid) {
+		// 登录成功后 保存新的登录信息
+		MerchantLoginLog merchantLoginLog = new MerchantLoginLog();
+		merchantLoginLog.setLoginTime(new Date());
+		merchantLoginLog.setIp(IPUtils.getIpAddress(request));
+		merchantLoginLog.setLoginAddress(IPUtils.getLoginAddress(request));
+		merchantLoginLog.setMerchantId(uuid);
+		try {
+			merchantLoginLogSerivce.insertSelective(merchantLoginLog);
+		} catch (ServiceException e) {
+		}
+	}
+
 	@RequestMapping("/merchant/exit")
-	public String exit(HttpServletRequest request)
-	{
+	public String exit(HttpServletRequest request) {
 		ServiceResponse response = new ServiceResponse();
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.USER, null);
-		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU,null);
+		request.getSession().setAttribute(MerchantGlobaKeyConsts.MENU, null);
 		request.getSession().setAttribute(MerchantGlobaKeyConsts.TOKEN, null);
-		
+
 		// 获取session
 		HttpSession session = request.getSession();
-		
-		// 获取所有sessionkey 
+
+		// 获取所有sessionkey
 		Enumeration<String> attributeNames = session.getAttributeNames();
 		String sessionKey;
-		
+
 		// 清空session所有的key
-		while(attributeNames.hasMoreElements())
-		{
+		while (attributeNames.hasMoreElements()) {
 			sessionKey = attributeNames.nextElement();
 			session.setAttribute(sessionKey, null);
 		}
-		
+
 		response.setMessage("退出成功!");
 		return "adminlogin";
 	}
 
 	@RequestMapping("/merchant/verifycode")
 	@ResponseBody
-	public ServiceResponse getVeriryCode(MerchantAccountInfoVO merchantAccountInfoVO)
-			throws ServiceException {
+	public ServiceResponse getVeriryCode(MerchantAccountInfoVO merchantAccountInfoVO) throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
 		MerchantVerify merchantVerify = null;
@@ -357,50 +360,46 @@ public class MerchantLoginController {
 
 		return response;
 	}
-	
-	
+
 	/**
-	 *  修改 密码以及支付密码  需要手机验证码支持
+	 * 修改 密码以及支付密码 需要手机验证码支持
+	 * 
 	 * @param merchantInfo
 	 * @return
 	 * @throws ServiceException
 	 */
 	@RequestMapping("/merchant/password/update")
-	public ServiceResponse updateMerchantAccountInfo(@RequestBody MerchantAccountInfoVO  merchantInfo) throws ServiceException
-	{
-		
+	public ServiceResponse updateMerchantAccountInfo(@RequestBody MerchantAccountInfoVO merchantInfo)
+			throws ServiceException {
+
 		ServiceResponse response = new ServiceResponse();
 		MerchantAccountInfo exitMerchant = merchantAccountInfoService.getMerchantInfo(merchantInfo);
-		
-		if(null==exitMerchant)
-		{
+
+		if (null == exitMerchant) {
 			ResponseUtils.exception(response, "该用户不存在!", RequestStatus.FAILED.getStatus());
 			return response;
 		}
-		
+
 		// 查看验证码是否正确
 		String checkVerifyCode = checkVerifyCode(merchantInfo);
 		if (StringUtils.isNotEmpty(checkVerifyCode)) {
-			//TODO checkVerifyCode
+			// TODO checkVerifyCode
 			return response;
 		}
 		String newPassword = merchantInfo.getNewPassword();
 		Boolean flag = false;
-		if(StringUtils.isEmpty(newPassword)&&VerifyTypeEnum.UPDATE_PWD.equals(merchantInfo.getVerifyType()))
-		{
+		if (StringUtils.isEmpty(newPassword) && VerifyTypeEnum.UPDATE_PWD.equals(merchantInfo.getVerifyType())) {
 			exitMerchant.setPassWord(newPassword);
 			merchantAccountInfoService.updateByPrimaryKeySelective(exitMerchant);
 			flag = true;
 		}
-		
+
 		String newPayPassword = merchantInfo.getNewPayPassword();
 		MerchantFinance merchantFinance;
-		if(StringUtils.isEmpty(newPayPassword)&&VerifyTypeEnum.UPDATE_PAY_PWD.equals(merchantInfo.getVerifyType()))
-		{
+		if (StringUtils.isEmpty(newPayPassword) && VerifyTypeEnum.UPDATE_PAY_PWD.equals(merchantInfo.getVerifyType())) {
 			merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(exitMerchant.getUuid());
-			
-			if(null==merchantFinance)
-			{
+
+			if (null == merchantFinance) {
 				ResponseUtils.exception(response, "该用户财务信息缺失!", RequestStatus.FAILED.getStatus());
 				return response;
 			}
@@ -408,12 +407,11 @@ public class MerchantLoginController {
 			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 			flag = true;
 		}
-		
-		if(flag)
-		{
+
+		if (flag) {
 			response.setMessage("修改成功");
 		}
-		
+
 		return response;
 	}
 
@@ -458,8 +456,7 @@ public class MerchantLoginController {
 		ResponseUtils.exception(response, "请输入手机号", RequestStatus.FAILED.getStatus());
 	}
 
-	private String checkVerifyCode(MerchantAccountInfoVO merchantAccountInfo)
-			throws ServiceException {
+	private String checkVerifyCode(MerchantAccountInfoVO merchantAccountInfo) throws ServiceException {
 		MerchantVerify tbVerifycodeVO = new MerchantVerify();
 		tbVerifycodeVO.setMobileNumber(merchantAccountInfo.getMobileNumber());
 		tbVerifycodeVO.setType(merchantAccountInfo.getVerifyType());
@@ -474,7 +471,7 @@ public class MerchantLoginController {
 		if (!comperDate) {
 			return "验证码过期,请重新获取！";
 		}
-		
+
 		if (!merchantVerify.getCode().equals(merchantAccountInfo.getVerifyCode())) {
 			return "验证码不正确！";
 		}

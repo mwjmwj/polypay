@@ -229,4 +229,24 @@
     order by create_time desc
   </select>
   
+  	<select id="getMerchantSettleMonthBill" parameterType="java.util.Map" resultType="com.polypay.platform.bean.MerchantBill">
+		SELECT 
+		merchant_id as merchantId,
+		count(1) as settleNumber,
+		sum(postal_amount) as settleAmount,
+		sum(service_amount) as settleServiceAmount
+		 from 
+		merchant_settle_order where status = 0
+		
+		<if test="beginTime != null" >
+        and create_time <![CDATA[>=]]> #{beginTime}
+    	 </if>
+     
+      <if test="endTime != null" >
+        and create_time <![CDATA[<=]]> #{endTime}
+   	  </if>
+		group by merchant_id
+	</select>
+	
+  
 </mapper>

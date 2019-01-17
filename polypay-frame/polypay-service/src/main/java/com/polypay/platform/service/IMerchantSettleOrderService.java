@@ -1,7 +1,10 @@
 package com.polypay.platform.service;
 
+import java.util.List;
+
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantSettleOrder;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
@@ -10,5 +13,7 @@ public interface IMerchantSettleOrderService extends IBaseService<MerchantSettle
 
 	PageList<MerchantSettleOrderVO> listMerchantSettleOrder(PageBounds pageBounds,
 			MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException;
+
+	List<MerchantBill> getMerchantSettleMonthBill() throws ServiceException;
 
 }

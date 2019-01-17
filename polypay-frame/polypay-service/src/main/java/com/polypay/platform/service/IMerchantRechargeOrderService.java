@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantRechargeOrder;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.vo.MerchantMainDateVO;
@@ -21,5 +22,7 @@ public interface IMerchantRechargeOrderService extends IBaseService<MerchantRech
 	MerchantMainDateVO getMerchantGroupDate(String uuid) throws ServiceException;
 
 	List<MerchantMainDateVO> allTimeMerchantOrder(String uuid) throws ServiceException;
+
+	List<MerchantBill> getMerchantRechargeMonthBill() throws ServiceException;
 
 }

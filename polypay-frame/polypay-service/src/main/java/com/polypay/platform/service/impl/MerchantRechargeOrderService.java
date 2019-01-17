@@ -1,6 +1,7 @@
 package com.polypay.platform.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -8,12 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import com.google.common.collect.Maps;
 import com.polypay.platform.bean.MerchantAccountInfo;
+import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantRechargeOrder;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.dao.MerchantRechargeOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
+import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
@@ -129,6 +133,18 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 	public List<MerchantMainDateVO> allTimeMerchantOrder(String merchantUUID) throws ServiceException {
 		try {
 			return merchantRechargeOrderMapper.allTimeMerchantOrder(merchantUUID);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public List<MerchantBill> getMerchantRechargeMonthBill() throws ServiceException {
+		try {
+			Map<String,Object> param = Maps.newHashMap();
+			param.put("beginTime", DateUtils.getBeforeMonthBegin());
+			param.put("endTime", DateUtils.getBeforeMonthEnd());
+			return merchantRechargeOrderMapper.getMerchantRechargeMonthBill(param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

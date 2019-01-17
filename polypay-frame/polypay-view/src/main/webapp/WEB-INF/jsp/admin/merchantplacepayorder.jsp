@@ -68,13 +68,14 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">支付密码</label>
 			<div class="layui-input-inline">
-				<input type="password" name="payPassword" lay-verify="pass"
+				<input type="password" lay-verify="pass" id="paypwd"
 					placeholder="请输入密码" autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-form-mid layui-word-aux">
 				请填支付密码 初始密码查看短信信息 <a style="margin-left: 110px; color: red;" href="#">忘记支付密码?</a>
 			</div>
 		</div>
+		<input id="securitypwd" name="payPassword" type="hidden" />
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行卡号</label>
@@ -100,33 +101,35 @@
 	</form>
 
 
-	<script>
-layui.use(['form', 'layedit', 'laydate'], function(){
-  var form = layui.form
-  ,layer = layui.layer
-  ,layedit = layui.layedit
-  ,laydate = layui.laydate;
+	<script type="text/javascript" src="../../../static/js/md5.js"></script>
 
-  //自定义验证规则
-  form.verify({
-    title: function(value){
-      if(value.length < 5){
-        return '标题至少得5个字符啊';
-      }
-    }
-    ,pass: [
-      /^[\S]{6,12}$/
-      ,'密码必须6到12位，且不能出现空格'
-    ]
-    ,content: function(value){
-      layedit.sync(editIndex);
-    }
-  });
+
+	<script>
+		layui.use(['form', 'layedit', 'laydate'], function(){
+		  var form = layui.form
+		  ,layer = layui.layer
+		  ,layedit = layui.layedit
+		  ,laydate = layui.laydate;
+		
+		  //自定义验证规则
+		  form.verify({
+		    title: function(value){
+		      if(value.length < 5){
+		        return '标题至少得5个字符啊';
+		      }
+		    }
+		    ,pass: [
+		      /^[\S]{6,12}$/
+		      ,'密码必须6到12位，且不能出现空格'
+		    ]
+		    ,content: function(value){
+		      layedit.sync(editIndex);
+		    }
+		  });
   
  		 //监听提交
 		  form.on('submit(demo1)', function(data){
-		
-			  
+			  $("#securitypwd").val(MD5($("#paypwd").val()));
 			  $.ajax({
 				  url:'../../../merchant/placepay/order',
 				  type:'POST',
@@ -160,35 +163,26 @@ layui.use(['form', 'layedit', 'laydate'], function(){
 		    return false;
 		  });
  
-  /* //表单初始赋值
-  form.val('example', {
-    "username": "贤心" // "name": "value"
-    ,"password": "123456"
-    ,"interest": 1
-    ,"like[write]": true //复选框选中状态
-    ,"close": true //开关状态
-    ,"sex": "女"
-    ,"desc": "我爱 layui"
-  }) */
-  
-  
-  
 	});
 	
 	
-	function textamount(t) {
-	  
-		if(!/^\d{0,30}$/.test(t.value)){t.value='';return;}
-		
-	  var postamount = parseFloat($('#payAmount').val());
-	  
-	  if (postamount >= '${merchantfinance.blanceAmount}') {
-			$("#payAmount").val('${merchantfinance.blanceAmount}');
-		}
-	  postamount = $("#payAmount").val();
-	  
-      $("#serviceamount").val(postamount * 0.01);
-      };
+	
+		function textamount(t) {
+
+			if (!/^\d{0,30}$/.test(t.value)) {
+				t.value = '';
+				return;
+			}
+
+			var postamount = parseFloat($('#payAmount').val());
+
+			if (postamount >= '${merchantfinance.blanceAmount}') {
+				$("#payAmount").val('${merchantfinance.blanceAmount}');
+			}
+			postamount = $("#payAmount").val();
+
+			$("#serviceamount").val(postamount * 0.01);
+		};
 	</script>
 
 </body>

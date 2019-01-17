@@ -69,13 +69,15 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">支付密码</label>
 			<div class="layui-input-inline">
-				<input type="password" name="payPassword" lay-verify="pass"
+				<input type="password"  lay-verify="pass" id="paypwd"
 					placeholder="请输入密码" autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-form-mid layui-word-aux">
 				请填支付密码 初始密码查看短信信息 <a style="margin-left: 110px; color: red;" href="#">忘记支付密码?</a>
 			</div>
 		</div>
+		
+		<input id="securitypwd" name="payPassword" type="hidden" />
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行卡号</label>
@@ -99,7 +101,7 @@
 			</div>
 		</div>
 	</form>
-
+<script type="text/javascript" src="../../../static/js/md5.js"></script>
 
 		<script>
 		layui.use(['form', 'layedit', 'laydate'], function(){
@@ -126,6 +128,7 @@
   
   //监听提交
   form.on('submit(settlesubmit)', function(data){
+	  $("#securitypwd").val(MD5($("#paypwd").val()));
 	  $.ajax({
 		  url:'../../../merchant/settle/order',
 		  type:'POST',

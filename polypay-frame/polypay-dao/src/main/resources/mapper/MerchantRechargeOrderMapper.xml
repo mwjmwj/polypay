@@ -338,5 +338,27 @@
 		AND mro.`status` = 0 order by mro.create_time desc )m GROUP BY
 		m.create_time
 	</select>
+	
+	
+	
+	<select id="getMerchantRechargeMonthBill" parameterType="java.util.Map" resultType="com.polypay.platform.bean.MerchantBill">
+		SELECT 
+		merchant_id as merchantId,
+		count(1) as rechargeNumber,
+		sum(pay_amount) as rechargeAmount,
+		sum(service_amount) as rechargeServiceAmount
+		 from 
+		merchant_recharge_order where status = 0
+		
+		<if test="beginTime != null" >
+        and create_time <![CDATA[>=]]> #{beginTime}
+     </if>
+     
+      <if test="endTime != null" >
+        and create_time <![CDATA[<=]]> #{endTime}
+     </if>
+		group by merchant_id
+	</select>
+	
 
 </mapper>

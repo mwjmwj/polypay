@@ -156,4 +156,10 @@ public class ViewController {
 		return "admin/addmerchantplacebindbank";
 	}
 	
+	@RequestMapping("merchantbill")
+	public String toMerchantBill()
+	{
+		return "admin/merchantbilllist";
+	}
+	
 }

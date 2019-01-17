@@ -278,4 +278,25 @@
     order by create_time desc
   </select>
   
+  
+  <select id="getMerchantPlaceMonthBill" parameterType="java.util.Map" resultType="com.polypay.platform.bean.MerchantBill">
+		SELECT 
+		merchant_id as merchantId,
+		count(1) as placeNumber,
+		sum(pay_amount) as placeAmount,
+		sum(service_amount) as placeServiceAmount
+		 from 
+		merchant_place_order where status = 0
+		<if test="beginTime != null" >
+        and create_time <![CDATA[>=]]> #{beginTime}
+     	</if>
+     
+      <if test="endTime != null" >
+        and create_time <![CDATA[<=]]> #{endTime}
+     	</if>
+		
+		group by merchant_id
+	</select>
+	
+  
 </mapper>
