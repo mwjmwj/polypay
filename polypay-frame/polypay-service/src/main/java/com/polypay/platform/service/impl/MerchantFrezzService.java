@@ -1,5 +1,7 @@
 package com.polypay.platform.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -80,6 +82,15 @@ public class MerchantFrezzService implements IMerchantFrezzService {
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 			merchantFrezzon.setMerchantId(merchant.getUuid());
 			return merchantFrezzonMapper.listMerchantFrezz(pageBounds,merchantFrezzon);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public List<MerchantFrezzon> unFrezzMerchantList() throws ServiceException {
+		try {
+			return merchantFrezzonMapper.unFrezzMerchantList();
 		} catch (DataAccessException e) {
 			throw new ServiceException(e);
 		}

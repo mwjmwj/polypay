@@ -47,7 +47,7 @@
 				<input type="text" readonly="readonly" value="已解冻" class="layui-input" style="color:green"> 
 				</c:if>
 				
-				<c:if test="${merchantFrezz.status ==1 }">
+				<c:if test="${merchantFrezz.status ==-1 }">
 				<input type="text" readonly="readonly" value="冻结中" class="layui-input" style="color:red"> 
 				</c:if>
 				

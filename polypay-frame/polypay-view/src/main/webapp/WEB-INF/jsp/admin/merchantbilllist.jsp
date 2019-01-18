@@ -63,7 +63,7 @@
 			table.render({
 				elem : '#billlist',
 				url : '../merchant/bill/list',
-				/* toolbar : '#search', */
+				toolbar  : '#search',
 				title : '用户数据表',
 				response : {
 					statusName : 'status' //规定数据状态的字段名称，默认：code
@@ -80,16 +80,6 @@
 					type : 'checkbox',
 					fixed : 'left'
 				}, {
-					field : 'tradeType',
-					title : '交易方式',
-					width : 86,
-					align : 'center',
-					fixed : 'left',
-					style : 'color:red',
-					templet : function(row) {
-						return "T+1"
-					}
-				}, {
 					field : 'zizeng',
 					title : '序号',
 					width : 60,
@@ -97,79 +87,88 @@
 					fixed : 'left',
 					templet : '#zizeng'
 				}, {
-					field : 'orderNumber',
-					title : '订单号',
+					field : 'billName',
+					title : '账单名',
+					width : 136,
+					align : 'center',
+					fixed : 'left',
+					style : 'color:red'
+				}, {
+					field : 'rechargeAmount',
+					title : '充值金额',
 					align : 'center',
 					width : 230,
-					sort : true
+					templet : function(row) {
+						return Number(row.rechargeAmount).toFixed(4) + "元";
+					}
+				}
+				, {
+					field : 'rechargeServiceAmount',
+					title : '充值服务费',
+					align : 'center',
+					width : 230,
+					templet : function(row) {
+						return Number(row.rechargeServiceAmount).toFixed(4) + "元";
+					}
 				}, {
-					field : 'type',
-					title : '类型',
+					field : 'rechargeNumber',
+					title : '充值订单数',
 					width : 100,
+					align : 'center'
+				}
+				, {
+					field : 'settleAmount',
+					title : '结算金额',
+					align : 'center',
+					width : 230,
 					templet : function(row) {
-						if (row.type == 1) {
-							return "充值订单";
-						}
+						return Number(row.settleAmount).toFixed(4) + "元";
+					}
+				}
+				, {
+					field : 'settleServiceAmount',
+					title : '结算服务费',
+					align : 'center',
+					width : 230,
+					templet : function(row) {
+						return Number(row.settleServiceAmount).toFixed(4) + "元";
 					}
 				}, {
-					field : 'status',
-					title : '状态',
-					width : 60,
+					field : 'settleNumber',
+					title : '结算订单数',
+					width : 100,
+					align : 'center'
+				}
+				, {
+					field : 'placeAmount',
+					title : '代付金额',
+					align : 'center',
+					width : 230,
 					templet : function(row) {
-						if (row.status == 0) {
-							return '<span style="color: green;">成功</span>';
-						} else if (row.status == -1) {
-							return '<span style="color: red;">失败</span>';
-						}
+						return Number(row.placeAmount).toFixed(4) + "元";
+					}
+				}
+				, {
+					field : 'placeServiceAmount',
+					title : '代付服务费',
+					align : 'center',
+					width : 230,
+					templet : function(row) {
+						return Number(row.placeServiceAmount).toFixed(4) + "元";
 					}
 				}, {
-					field : 'payAmount',
-					title : '支付金额',
-					width : 143,
-					style : 'color: red',
-					templet : function(row) {
-						return Number(row.payAmount).toFixed(4) + "元";
-					}
-				}, {
-					field : 'serviceAmount',
-					title : '服务费',
-					width : 126,
-					style : 'color: red',
-					templet : function(row) {
-						return Number(row.serviceAmount).toFixed(4) + "元";
-					}
-				}, {
-					field : 'arrivalAmount',
-					title : '到账金额',
-					width : 143,
-					style : 'color: red',
-					templet : function(row) {
-						return Number(row.arrivalAmount).toFixed(4) + "元";
-					}
-				}, {
+					field : 'placeNumber',
+					title : '代付订单数',
+					width : 100,
+					align : 'center'
+				},  {
 					field : 'createTime',
-					title : '提交时间',
+					title : '创建时间',
 					width : 160,
 					sort : true,
 					templet : function(row) {
 						return createTime(row.createTime);
 					}
-				}, {
-					field : 'successTime',
-					title : '到账时间',
-					width : 170,
-					templet : function(row) {
-						return createTime(row.successTime);
-					}
-				}, {
-					field : 'payChannel',
-					title : '通道',
-					width : 65
-				}, {
-					field : 'payBank',
-					title : '银行',
-					width : 70,
-					style : 'align'
 				}, {
 					fixed : 'right',
 					title : '操作',
@@ -223,7 +222,7 @@
 					  area:['500px','600px'],
 					  type: 2,
 					  title:'订单详细',
-					  content: '../merchant/recharge/query?id='+data.id
+					  content: '../merchant/bill/get?billid='+data.id
 					}); 
 			  } else if(layEvent === 'del'){ //删除
 			    layer.confirm('真的删除行么', function(index){

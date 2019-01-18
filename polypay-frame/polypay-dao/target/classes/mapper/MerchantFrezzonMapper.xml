@@ -150,5 +150,14 @@
      </if>
   
   </select>
+	  
+	 <select id="unFrezzMerchantList" resultMap="BaseResultMap" >
+	 
+	   select 
+	    <include refid="Base_Column_List" />
+	    from merchant_frezzon
+	    where status = -1
+	 
+	 </select>
   
 </mapper>

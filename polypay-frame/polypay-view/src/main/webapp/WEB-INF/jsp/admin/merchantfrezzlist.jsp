@@ -99,7 +99,7 @@
 					templet : function(row) {
 						if (row.status == 0) {
 							return '<span style="color: green;">已解冻</span>';
-						} else if (row.status == 1) {
+						} else if (row.status == -1) {
 							return '<span style="color: red;">冻结</span>';
 						} else{
 							return '<span style="color: #fff;">未知</span>'; 

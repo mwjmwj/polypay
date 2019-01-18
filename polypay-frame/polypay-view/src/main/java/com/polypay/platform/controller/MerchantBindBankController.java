@@ -7,7 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
@@ -93,6 +95,30 @@ public class MerchantBindBankController extends BaseController<MerchantAccountBi
 		ServiceResponse response =  new ServiceResponse();
 		String bankName = BankUtils.getname(cardnumber);
 		response.setData(bankName);
+		return response;
+	}
+	
+	
+	@GetMapping("/merchant/bindbank/bind/{id}")
+	@ResponseBody
+	public ServiceResponse bindBankName(@PathVariable("id")Integer id) throws ServiceException
+	{
+		ServiceResponse response =  new ServiceResponse();
+		
+		MerchantAccountBindbank selectMerchantBindBankByID = merchantAccountBindbankService.selectMerchantBindBankByID(id);
+		
+		if(null==selectMerchantBindBankByID)
+		{
+			response.setStatus(RequestStatus.FAILED.getStatus());
+			response.setMessage("该银行卡不存在");
+			return response;
+		}
+		
+		merchantAccountBindbankService.reverseBankStatus();
+		selectMerchantBindBankByID.setDefaultStatus(MerchantBindBankConsts.DEFAULT_BIND_BANK);
+		merchantAccountBindbankService.updateByPrimaryKeySelective(selectMerchantBindBankByID);
+		response.setMessage("綁定成功");
+		
 		return response;
 	}
 

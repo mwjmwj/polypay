@@ -9,8 +9,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +24,7 @@ import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantApi;
 import com.polypay.platform.bean.MerchantFinance;
+import com.polypay.platform.bean.MerchantFrezzon;
 import com.polypay.platform.bean.MerchantRechargeOrder;
 import com.polypay.platform.bean.PayType;
 import com.polypay.platform.bean.SystemConsts;
@@ -35,10 +38,12 @@ import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantApiService;
 import com.polypay.platform.service.IMerchantFinanceService;
+import com.polypay.platform.service.IMerchantFrezzService;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.service.IPayTypeService;
 import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtil;
+import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MD5Utils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantAccountInfoVO;
@@ -51,6 +56,8 @@ public class OpenApiController {
 	private static final Integer DEFAULT_LEVEL = 1;
 
 	private static final BigDecimal FREZZ_RATE = new BigDecimal(0.1);
+	
+	private Logger log = LoggerFactory.getLogger(OpenApiController.class);
 
 	@Autowired
 	private IMerchantAccountInfoService merchantAccountInfoService;
@@ -66,11 +73,14 @@ public class OpenApiController {
 
 	@Autowired
 	private IMerchantFinanceService merchantFinanceService;
+	
+	@Autowired
+	private IMerchantFrezzService merchantFrezzService;
 
 	@Autowired
 	private IPayTypeService payTypeService;
-
-	@GetMapping("/open/api/recharge")
+	
+	@RequestMapping("/open/api/recharge")
 	public ServiceResponse recharge(HttpServletRequest request, HttpServletResponse response) {
 		ServiceResponse result = new ServiceResponse();
 
@@ -232,6 +242,7 @@ public class OpenApiController {
 		BigDecimal frezzAmount;
 
 		synchronized (merchantId.intern()) {
+			
 			MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchantId);
 
 			if (null == merchantFinance) {
@@ -257,15 +268,38 @@ public class OpenApiController {
 
 			frezzAmount = arrivalAmount.multiply(FREZZ_RATE).setScale(4,BigDecimal.ROUND_HALF_UP);
 
-			// 修改订单入库
-			saveRechargeOrder(orderByMerchantOrderNumber, poundage, arrivalAmount);
-
-			merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
-			merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
-			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+			
+			//统一入库
+			endInsertOrder(orderByMerchantOrderNumber, resourceAmount, resourceFrezzAmount, poundage, arrivalAmount,
+					frezzAmount, merchantFinance);
 		}
 
 		return "success";
+	}
+	
+	@Transactional(rollbackFor=Exception.class)
+	private void endInsertOrder(MerchantRechargeOrder orderByMerchantOrderNumber, BigDecimal resourceAmount,
+			BigDecimal resourceFrezzAmount, BigDecimal poundage, BigDecimal arrivalAmount, BigDecimal frezzAmount,
+			MerchantFinance merchantFinance) throws ServiceException {
+		
+		try {
+		// 修改订单入库
+		saveRechargeOrder(orderByMerchantOrderNumber, poundage, arrivalAmount);
+
+		MerchantFrezzon merchantFrezzon  = new MerchantFrezzon();
+		merchantFrezzon.setAmount(frezzAmount);
+		merchantFrezzon.setFrezzTime(new Date());
+		merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
+		merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
+		
+		merchantFrezzService.insertSelective(merchantFrezzon);
+		merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
+		merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
+		merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+		}catch(Exception e)
+		{
+		log.error("save order back error");	
+		}
 	}
 	
 	private void saveRechargeOrder(MerchantRechargeOrder orderByMerchantOrderNumber, BigDecimal poundage,

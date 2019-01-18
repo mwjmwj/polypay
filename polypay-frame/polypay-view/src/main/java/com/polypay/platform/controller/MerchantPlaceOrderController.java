@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
@@ -23,6 +25,7 @@ import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.bean.MerchantPlaceOrder;
+import com.polypay.platform.bean.MerchantRechargeOrder;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
@@ -181,6 +184,17 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 		return response;
 
 	}
+	
+	
+	
+	@GetMapping("merchant/place/query")
+	public String queryMerchantPlaceOrder(@RequestParam(name="id") Integer id,Map<String,Object> result) throws ServiceException
+	{
+		MerchantPlaceOrder selectByPrimaryKey = merchantPlaceOrderService.selectByPrimaryKey(id);
+		result.put("placeorder", selectByPrimaryKey);
+		return "admin/merchantplaceedit";
+	}
+	
 	
 	private void submitPlaceOrder(MerchantPlaceOrder merchantPlaceOrder) {
 

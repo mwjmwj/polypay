@@ -23,6 +23,7 @@
 }
 </style>
 </head>
+<script type="text/javascript" src="../static/js/layui.js"></script>
 <script type="text/javascript" src="../static/js/layui.all.js"></script>
 <body>
 	
@@ -31,9 +32,9 @@
   	<i class="layui-icon">&#xe608;</i> 添加
 	</button>
 	</div>
-	
+	<script type="text/javascript" src="../static/js/jquery.min.js"></script>
 	<table class="layui-hide" id="bindbanklist" lay-filter="bindbanklist"></table>
-
+	
 	<script type="text/html" id="func">
   	<a class="layui-btn layui-btn-xs" lay-event="edit">设置默认</a>
   	<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -114,32 +115,62 @@
 				page : true
 
 			});
-		
-		});
-/* 
-			var $ = layui.$, active = {
-				reload : function() {
-					var demoReload = $('#orderNumber');
+			
+			
+			
+			
+		//监听工具条
+			table.on('tool(bindbanklist)', function(obj) { //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+				var data = obj.data; //获得当前行数据
+				var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+				var tr = obj.tr; //获得当前行 tr 的DOM对象
 
-					//执行重载
-					table.reload('bindbankreload', {
-						page : {
-							curr : 1
-						//重新从第 1 页开始
-						},
-						where : {
-							orderNumber : demoReload.val(),
-							orderNumber1 : demoReload.val()
-						}
+				if (layEvent === 'edit') { //查看
+					//do somehing
+
+					
+					layer.confirm('确定默认卡号：<span style="color:orange">【</span><span>'+data.accountNumber+'</span><span style="color:orange">】</span>', function(index){
+	    	  	$.ajax({
+	  			type: 'get',
+	  			url: '${pageContext.request.contextPath}/merchant/bindbank/bind/'+data.id,
+	  			dataType: 'json',
+	  			async:false,
+	  			success: function(data){
+	  				if(data.status=='0'){
+	  					layer.msg('设置成功!',{icon:1,time:1000});
+	  					location.reload();
+	  				}else{
+	  					layer.msg('程序异常!'+data.message,{icon:5,time:1000});
+	  				}
+	  				
+	  			},
+	  			error:function(msg) {
+	  				layer.msg('程序异常!',{icon:5,time:1000});
+	  			}
+	  			});	
+	    	  
+	        
+	        layer.close(index);
+	      });
+
+				} else if (layEvent === 'del') { //删除
+					layer.confirm('真的删除行么', function(index) {
+						obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+						layer.close(index);
+						//向服务端发送删除指令
+					});
+				} else if (layEvent === 'edit') { //编辑
+					//do something
+
+					//同步更新缓存对应的值
+					obj.update({
+						username : '123',
+						title : 'xxx'
 					});
 				}
-			}; 
-
-			$('.layui-row .layui-btn').on('click', function() {
-				var type = $(this).data('type');
-				active[type] ? active[type].call(this) : '';
 			});
-		});*/
+
+		});
 	</script>
 	<script type="text/javascript">
 		layui.use([ 'laydate' ], function() {
