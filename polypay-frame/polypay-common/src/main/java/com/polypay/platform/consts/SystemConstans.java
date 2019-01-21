@@ -9,5 +9,5 @@ public interface SystemConstans {
 	/**
 	 * 充值第四方地址
 	 */
-	String RECHARGE_REST_URL = "RECHARGE_REST_URL";
+	String SMART_RECHARGE_BEAN = "SMART_RECHARGE_BEAN";
 }

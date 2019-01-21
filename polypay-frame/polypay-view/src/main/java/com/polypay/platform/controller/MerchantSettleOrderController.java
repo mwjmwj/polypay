@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
@@ -33,6 +34,7 @@ import com.polypay.platform.service.IMerchantAccountBindbankService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
 import com.polypay.platform.utils.DateUtil;
+import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MerchantUtils;
@@ -67,6 +69,28 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 			PageList<MerchantSettleOrderVO> pageList = null;
 			
 			MerchantSettleOrderVO merchantSettleOrderVO = new MerchantSettleOrderVO();
+			
+			
+			merchantSettleOrderVO.setOrderNumber(getRequest().getParameter("orderNumber"));
+			
+			String createTime = getRequest().getParameter("beginTime");
+			String successTime = getRequest().getParameter("endTime");
+			
+			Date[] datas;
+			if(!StringUtils.isEmpty(createTime))
+			{
+				datas = DateUtils.changeDate(createTime);
+				merchantSettleOrderVO.setcBeginTime(datas[0]);
+				merchantSettleOrderVO.setcEndTime(datas[1]);
+			}
+			
+			if(!StringUtils.isEmpty(successTime))
+			{
+				datas = DateUtils.changeDate(successTime);
+				merchantSettleOrderVO.setsBeginTime(datas[0]);
+				merchantSettleOrderVO.setsEndTime(datas[1]);
+			}
+			
 			pageList = merchantSettleOrderService.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO );
 			Page<MerchantSettleOrderVO> pageData = getPageData(pageList);
 			response = ResponseUtils.buildResult(pageData);

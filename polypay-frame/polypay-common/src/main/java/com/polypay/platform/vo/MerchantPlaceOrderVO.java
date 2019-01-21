@@ -51,6 +51,46 @@ public class MerchantPlaceOrderVO extends VO{
     
     private String payPassword;
     
+    private Date cBeginTime;
+    
+    private Date cEndTime;
+    
+    private Date sBeginTime;
+    
+    private Date sEndTime;
+    
+	public Date getcBeginTime() {
+		return cBeginTime;
+	}
+
+	public void setcBeginTime(Date cBeginTime) {
+		this.cBeginTime = cBeginTime;
+	}
+
+	public Date getcEndTime() {
+		return cEndTime;
+	}
+
+	public void setcEndTime(Date cEndTime) {
+		this.cEndTime = cEndTime;
+	}
+
+	public Date getsBeginTime() {
+		return sBeginTime;
+	}
+
+	public void setsBeginTime(Date sBeginTime) {
+		this.sBeginTime = sBeginTime;
+	}
+
+	public Date getsEndTime() {
+		return sEndTime;
+	}
+
+	public void setsEndTime(Date sEndTime) {
+		this.sEndTime = sEndTime;
+	}
+    
     public Date getBeginTime() {
 		return beginTime;
 	}

@@ -35,6 +35,7 @@ import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.paychannel.IPayChannel;
 import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantApiService;
 import com.polypay.platform.service.IMerchantFinanceService;
@@ -56,7 +57,7 @@ public class OpenApiController {
 	private static final Integer DEFAULT_LEVEL = 1;
 
 	private static final BigDecimal FREZZ_RATE = new BigDecimal(0.1);
-	
+
 	private Logger log = LoggerFactory.getLogger(OpenApiController.class);
 
 	@Autowired
@@ -73,15 +74,16 @@ public class OpenApiController {
 
 	@Autowired
 	private IMerchantFinanceService merchantFinanceService;
-	
+
 	@Autowired
 	private IMerchantFrezzService merchantFrezzService;
 
 	@Autowired
 	private IPayTypeService payTypeService;
-	
+
 	@RequestMapping("/open/api/recharge")
-	public ServiceResponse recharge(HttpServletRequest request, HttpServletResponse response) {
+	public ServiceResponse recharge(Map<String, Object> paramMap, HttpServletRequest request,
+			HttpServletResponse response) {
 		ServiceResponse result = new ServiceResponse();
 
 		try {
@@ -184,10 +186,10 @@ public class OpenApiController {
 			}
 
 			// 生成订单
-			generatorOrder(merchantUUID, signMap);
+			MerchantRechargeOrder generatorOrder = generatorOrder(merchantUUID, signMap);
 
 			// 请求转发到第三方
-			sendRediect(response, signMap);
+			sendRediect(response, signMap,generatorOrder);
 
 		} catch (Exception e) {
 			result.setMessage(e.getMessage());
@@ -199,7 +201,7 @@ public class OpenApiController {
 
 	@RequestMapping("/open/api/recharge/back")
 	public String rechargeOrderBack(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-		
+
 		String success = getParameter(request, "success");
 		String merchantOrderNumber = getParameter(request, "merchant_order_number");
 
@@ -242,7 +244,7 @@ public class OpenApiController {
 		BigDecimal frezzAmount;
 
 		synchronized (merchantId.intern()) {
-			
+
 			MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchantId);
 
 			if (null == merchantFinance) {
@@ -262,46 +264,44 @@ public class OpenApiController {
 
 			payAmount = orderByMerchantOrderNumber.getPayAmount();
 
-			poundage = payAmount.multiply(new BigDecimal(rate)).setScale(4,BigDecimal.ROUND_HALF_UP);
+			poundage = payAmount.multiply(new BigDecimal(rate)).setScale(4, BigDecimal.ROUND_HALF_UP);
 
 			arrivalAmount = payAmount.subtract(poundage);
 
-			frezzAmount = arrivalAmount.multiply(FREZZ_RATE).setScale(4,BigDecimal.ROUND_HALF_UP);
+			frezzAmount = arrivalAmount.multiply(FREZZ_RATE).setScale(4, BigDecimal.ROUND_HALF_UP);
 
-			
-			//统一入库
+			// 统一入库
 			endInsertOrder(orderByMerchantOrderNumber, resourceAmount, resourceFrezzAmount, poundage, arrivalAmount,
 					frezzAmount, merchantFinance);
 		}
 
 		return "success";
 	}
-	
-	@Transactional(rollbackFor=Exception.class)
+
+	@Transactional(rollbackFor = Exception.class)
 	private void endInsertOrder(MerchantRechargeOrder orderByMerchantOrderNumber, BigDecimal resourceAmount,
 			BigDecimal resourceFrezzAmount, BigDecimal poundage, BigDecimal arrivalAmount, BigDecimal frezzAmount,
 			MerchantFinance merchantFinance) throws ServiceException {
-		
-		try {
-		// 修改订单入库
-		saveRechargeOrder(orderByMerchantOrderNumber, poundage, arrivalAmount);
 
-		MerchantFrezzon merchantFrezzon  = new MerchantFrezzon();
-		merchantFrezzon.setAmount(frezzAmount);
-		merchantFrezzon.setFrezzTime(new Date());
-		merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
-		merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
-		
-		merchantFrezzService.insertSelective(merchantFrezzon);
-		merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
-		merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
-		merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
-		}catch(Exception e)
-		{
-		log.error("save order back error");	
+		try {
+			// 修改订单入库
+			saveRechargeOrder(orderByMerchantOrderNumber, poundage, arrivalAmount);
+
+			MerchantFrezzon merchantFrezzon = new MerchantFrezzon();
+			merchantFrezzon.setAmount(frezzAmount);
+			merchantFrezzon.setFrezzTime(new Date());
+			merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
+			merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
+
+			merchantFrezzService.insertSelective(merchantFrezzon);
+			merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
+			merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
+			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+		} catch (Exception e) {
+			log.error("save order back error");
 		}
 	}
-	
+
 	private void saveRechargeOrder(MerchantRechargeOrder orderByMerchantOrderNumber, BigDecimal poundage,
 			BigDecimal arrivalAmount) throws ServiceException {
 		orderByMerchantOrderNumber.setStatus(OrderStatusConsts.SUCCESS);
@@ -336,11 +336,45 @@ public class OpenApiController {
 		return payLevel;
 	}
 
-	private void sendRediect(HttpServletResponse response, Map<String, Object> signMap)
+	private void sendRediect(HttpServletResponse response, Map<String, Object> signMap, MerchantRechargeOrder generatorOrder)
 			throws ServiceException, IOException {
-		SystemConsts consts = systemConstsService.getConsts(SystemConstans.RECHARGE_REST_URL);
-		String sendUrl = buildRedirectUrl(consts.getConstsValue(), signMap);
-		response.sendRedirect(sendUrl);
+		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
+		
+		
+		
+		// 根据配置的四方平台
+		sendRedirectUrl(response,consts.getConstsValue(), signMap,generatorOrder);
+	}
+
+	private void sendRedirectUrl(HttpServletResponse response, String bean, Map<String, Object> signMap, MerchantRechargeOrder generatorOrder) {
+		
+		try {
+			
+			Class<?> forName = Class.forName(bean);
+			
+			IPayChannel payChannel = (IPayChannel) forName.newInstance();
+			
+			//通道关闭
+			if(null==payChannel)
+			{
+				generatorOrder.setStatus(OrderStatusConsts.FAIL);
+				merchantRechargeOrderService.updateByPrimaryKeySelective(generatorOrder);
+				return;
+			}
+			
+			payChannel.sendRedirect(signMap, response);
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	private void checkMerchantOrderNumber(ServiceResponse result, String merchantOrderNumber) throws ServiceException {
@@ -354,11 +388,9 @@ public class OpenApiController {
 
 	}
 
-	private String buildRedirectUrl(String url, Map<String, Object> signMap) {
-		return url;
-	}
 
-	private void generatorOrder(String merchantUUID, Map<String, Object> signMap) throws ServiceException {
+
+	private MerchantRechargeOrder generatorOrder(String merchantUUID, Map<String, Object> signMap) throws ServiceException {
 
 		MerchantRechargeOrder order = new MerchantRechargeOrder();
 		String currentOrder = DateUtil.getCurrentDate();
@@ -377,6 +409,7 @@ public class OpenApiController {
 		signMap.put("we_order_number", orderNumber);
 
 		merchantRechargeOrderService.insertSelective(order);
+		return order;
 	}
 
 	private String getValue(Map<String, Object> signMap, String key) {

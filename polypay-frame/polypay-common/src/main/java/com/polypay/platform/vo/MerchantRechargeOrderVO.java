@@ -44,7 +44,40 @@ public class MerchantRechargeOrderVO extends VO{
     
     private Date endTime;
     
-    private String tradeType;
+    private Date cBeginTime;
+    
+    private Date cEndTime;
+    
+    private Date sBeginTime;
+    
+    private Date sEndTime;
+    
+    public Date getcBeginTime() {
+		return cBeginTime;
+	}
+
+	public void setcBeginTime(Date cBeginTime) {
+		this.cBeginTime = cBeginTime;
+	}
+
+	public Date getcEndTime() {
+		return cEndTime;
+	}
+
+	public void setcEndTime(Date cEndTime) {
+		this.cEndTime = cEndTime;
+	}
+
+	public Date getsBeginTime() {
+		return sBeginTime;
+	}
+
+	public void setsBeginTime(Date sBeginTime) {
+		this.sBeginTime = sBeginTime;
+	}
+
+
+	private String tradeType;
     
     public String getMerchantOrderNumber() {
     	return merchantOrderNumber;
@@ -188,5 +221,13 @@ public class MerchantRechargeOrderVO extends VO{
 
 	public void setTradeType(String tradeType) {
 		this.tradeType = tradeType;
+	}
+
+	public Date getsEndTime() {
+		return sEndTime;
+	}
+
+	public void setsEndTime(Date sEndTime) {
+		this.sEndTime = sEndTime;
 	}
 }

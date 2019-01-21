@@ -14,7 +14,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>poly-pay</title>
 <link href="static/css/style.css" rel="stylesheet">
-<link href="static/css/layui.css" rel="stylesheet">
+<link href="static/js/css/layui.css" rel="stylesheet">
 <link href="static/css/admin.css" rel="stylesheet">
 <link href="static/css/pro.css" rel="stylesheet">
 <link href="static/css/login.css" rel="stylesheet">

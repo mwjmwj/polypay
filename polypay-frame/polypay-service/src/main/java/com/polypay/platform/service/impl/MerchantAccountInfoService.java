@@ -162,6 +162,7 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			merchantApi.setCreateTime(new Date());
 			String secretKey = UUIDUtils.get32UUID();
 			merchantApi.setSecretKey(secretKey);
+			merchantApi.setMd5Key(UUIDUtils.get32UUID().substring(0, 8));
 			// api文档信息
 			SystemConsts constsByKey = systemConstsMapper.getConstsByKey(SystemConstans.API_DOC);
 			if (null != constsByKey) {

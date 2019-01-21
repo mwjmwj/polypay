@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:task="http://www.springframework.org/schema/task" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/task  
+	   http://www.springframework.org/schema/task/spring-task-3.2.xsd ">
+
+    <mvc:annotation-driven/>
+    <!--<aop:aspectj-autoproxy />-->
+    <context:annotation-config/>
+    
+    <!-- 定时任务注解开启 -->
+    <task:annotation-driven />
+    
+   
+	<mvc:resources location="/pages/" mapping="/pages/**" />
+	<mvc:resources location="/static/" mapping="/static/**" />
+	<mvc:resources location="/upload/" mapping="/upload/**" />
+	<mvc:view-controller path="/" view-name="adminlogin" />
+	<bean id="InternalResourceViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+   
+    <!-- 使用Annotation自动注册Bean,扫描@Controller和@ControllerAdvice-->
+    <context:component-scan base-package="com.polypay.platform.controller,com.polypay.platform.advice" use-default-filters="false">
+        <!--  base-package 如果多个，用“,”分隔 -->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <!--  控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常 -->
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
+    </context:component-scan>
+
+	
+	<context:component-scan base-package="com.polypay.platform.aspect"></context:component-scan>
+	<context:component-scan base-package="com.polypay.platform.task"></context:component-scan>
+	
+	
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter" >
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html;charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    
+		<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		<property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />
+		</bean>
+		</mvc:message-converters>
+		</mvc:annotation-driven>
+
+	
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="50000000"/>
+        <property name="maxUploadSizePerFile" value="5000000"/>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+    <!-- spring跨域支持 -->
+    <mvc:cors>
+        <mvc:mapping path="/**" allowed-origins="*" allowed-methods="*" allowed-headers="*"/>
+    </mvc:cors>
+
+
+      <!-- 启动对@AspectJ注解的支持  -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <!-- 国际化资源文件 -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="i18n.message" />
+        <!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称  -->
+        <property name="useCodeAsDefaultMessage" value="true" />
+        <property name="defaultEncoding" value="UTF-8"/>
+    </bean>
+    <mvc:interceptors>
+        <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>
+    </mvc:interceptors>
+
+</beans>

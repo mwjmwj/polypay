@@ -19,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -369,7 +368,8 @@ public class MerchantLoginController {
 	 * @throws ServiceException
 	 */
 	@RequestMapping("/merchant/password/update")
-	public ServiceResponse updateMerchantAccountInfo(@RequestBody MerchantAccountInfoVO merchantInfo)
+	@ResponseBody
+	public ServiceResponse updateMerchantAccountInfo(MerchantAccountInfoVO merchantInfo)
 			throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
@@ -383,26 +383,40 @@ public class MerchantLoginController {
 		// 查看验证码是否正确
 		String checkVerifyCode = checkVerifyCode(merchantInfo);
 		if (StringUtils.isNotEmpty(checkVerifyCode)) {
-			// TODO checkVerifyCode
+			ResponseUtils.exception(response, checkVerifyCode, RequestStatus.FAILED.getStatus());
 			return response;
 		}
 		String newPassword = merchantInfo.getNewPassword();
 		Boolean flag = false;
-		if (StringUtils.isEmpty(newPassword) && VerifyTypeEnum.UPDATE_PWD.equals(merchantInfo.getVerifyType())) {
+		if (!StringUtils.isEmpty(newPassword) && VerifyTypeEnum.UPDATE_PWD.equals(merchantInfo.getVerifyType())) {
+			if(newPassword.equals(exitMerchant.getPassWord()))
+			{
+				ResponseUtils.exception(response, "新旧密码相同", RequestStatus.FAILED.getStatus());
+				return response;
+			}
 			exitMerchant.setPassWord(newPassword);
+			
 			merchantAccountInfoService.updateByPrimaryKeySelective(exitMerchant);
 			flag = true;
 		}
 
 		String newPayPassword = merchantInfo.getNewPayPassword();
 		MerchantFinance merchantFinance;
-		if (StringUtils.isEmpty(newPayPassword) && VerifyTypeEnum.UPDATE_PAY_PWD.equals(merchantInfo.getVerifyType())) {
+		if (!StringUtils.isEmpty(newPayPassword) && VerifyTypeEnum.UPDATE_PAY_PWD.equals(merchantInfo.getVerifyType())) {
 			merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(exitMerchant.getUuid());
 
 			if (null == merchantFinance) {
 				ResponseUtils.exception(response, "该用户财务信息缺失!", RequestStatus.FAILED.getStatus());
 				return response;
 			}
+			
+			if(newPayPassword.equals(merchantFinance.getPayPassword()))
+			{
+				ResponseUtils.exception(response, "新旧支付密码相同", RequestStatus.FAILED.getStatus());
+				return response;
+			}
+			
+			
 			merchantFinance.setPayPassword(newPayPassword);
 			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 			flag = true;

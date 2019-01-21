@@ -16,7 +16,10 @@
 <title>商户后台管理</title>
 <link rel="stylesheet" href="./static/css/font.css">
 <link rel="stylesheet" href="./static/css/weadmin.css">
+
+<link rel="stylesheet" href="./static/js/css/layui.css">
 <script type="text/javascript" src="./static/js/layui.js" charset="utf-8"></script>
+
 
 </head>
 <body>
@@ -26,41 +29,38 @@
 			<a href="./view/toAdminIndex">源盛丰支付</a>
 		</div>
 		<div class="left_open">
-			<i title="展开左侧栏" class="iconfont">&#xe699;</i>
+			<i title="展开左侧栏" class="iconfont">&#xe668;</i>
 		</div>
-		<ul class="layui-nav left fast-add" lay-filter="">
-			<li class="layui-nav-item"><a href="javascript:;">常用功能</a>
-				<dl class="layui-nav-child">
+		<ul class="layui-nav left fast-add" lay-filter="" >
+			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;">常用功能</a>
+				<dl class="layui-nav-child" >
 					<!-- 二级菜单 -->
 					<dd>
-						<a onclick="WeAdminShow('资讯','https://www.youfa365.com/')"><i
+						<a onclick="WeAdminShow('充值订单','view/merchantRechargeList')"><i
 							class="iconfont">&#xe6a2;</i>我的订单</a>
 					</dd>
 					<dd>
-						<a onclick="WeAdminShow('图片','http://www.baidu.com')"><i
+						<a onclick="WeAdminShow('api管理','merchant/api')"><i
 							class="iconfont">&#xe6a8;</i>API管理</a>
 					</dd>
 					<dd>
-						<a onclick="WeAdminShow('用户','https://www.youfa365.com/')"><i
+						<a onclick="WeAdminShow('用户','merchant/accountinfo')"><i
 							class="iconfont">&#xe6b8;</i>我的账户</a>
 					</dd>
 				</dl></li>
 		</ul>
 		<ul class="layui-nav right" lay-filter="">
-			<li class="layui-nav-item"><a href="javascript:;">${sessionScope.merchant_user.mobileNumber }</a>
+			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;">${sessionScope.merchant_user.mobileNumber }</a>
 				<dl class="layui-nav-child">
 					<!-- 二级菜单 -->
 					<dd>
-						<a onclick="WeAdminShow('个人信息','http://www.baidu.com')">个人信息</a>
+						<a onclick="WeAdminShow('个人信息','merchant/accountinfo')">个人信息</a>
 					</dd>
 					<dd>
-						<a onclick="WeAdminShow('切换帐号','.merchant/exit')">切换帐号</a>
-					</dd>
-					<dd>
-						<a class="loginout" href="merchant/exit">退出</a>
+						<a class="loginout" href="merchant/exit" style="margin-top: 0px">退出</a>
 					</dd>
 				</dl></li>
-			<li class="layui-nav-item to-index"><a href="merchant/exit">退出账号</a>
+			<li class="layui-nav-item to-index"><a href="merchant/exit" style="line-height:46px;">退出账号</a>
 			</li>
 		</ul>
 
@@ -74,12 +74,12 @@
 				<c:forEach items="${sessionScope.menu}" var="f">
 					<c:if test="${ not empty f }">
 						<li><a href="javascript:;"> <i class="iconfont">${f.menuTarget }</i>
-								<cite>${f.menuName }</cite> <i class="iconfont nav_right">&#xe697;</i>
+								<cite>${f.menuName }</cite> <i class="iconfont nav_right">&#xe602;</i>
 						</a> <c:forEach items="${f.childMenu }" var="t">
 								<ul class="sub-menu">
 									<li><a
 										_href="${pageContext.request.contextPath }/${t.menuUrl }">
-											<i class="iconfont">&#xe6a7;</i> <cite>${t.menuName }</cite>
+											<i class="iconfont">&#xe602;</i> <cite>${t.menuName }</cite>
 
 									</a></li>
 								</ul>

@@ -101,8 +101,8 @@
 		)
 	</insert>
 	<insert id="insertSelective"
-		parameterType="com.polypay.platform.bean.MerchantRechargeOrder">
-		insert into merchant_recharge_order
+		parameterType="com.polypay.platform.bean.MerchantRechargeOrder" useGeneratedKeys="true" keyProperty="id">
+		insert into merchant_recharge_order 
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
@@ -284,14 +284,24 @@
 			and order_number like #{orderNumber}
 		</if>
 
-		<if test="beginTime != null">
+		<if test="cBeginTime != null">
 			and create_time <![CDATA[>=]]>
-			#{beginTime}
+			#{cBeginTime}
 		</if>
 
-		<if test="endTime != null">
+		<if test="cEndTime != null">
 			and create_time <![CDATA[<=]]>
-			#{endTime}
+			#{cEndTime}
+		</if>
+		
+		<if test="sBeginTime != null">
+			and success_time <![CDATA[>=]]>
+			#{sBeginTime}
+		</if>
+
+		<if test="sEndTime != null">
+			and success_time <![CDATA[<=]]>
+			#{sEndTime}
 		</if>
 
 		order by create_time desc

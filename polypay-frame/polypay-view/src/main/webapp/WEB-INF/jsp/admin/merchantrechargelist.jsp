@@ -14,7 +14,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="../static/css/layui.css">
+<link rel="stylesheet" href="../static/js/css/layui.css">
 <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 
 <style type="text/css">
@@ -31,10 +31,10 @@
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
 		 <div class="layui-inline">
-		<input class="layui-input" type="text" name="begintime" id="begintime" placeholder="订单提交时间" />
+		<input class="layui-input" type="text" id="begintime" name="begintime" id="begintime" placeholder="订单提交时间" />
 		</div>
 		<div class="layui-inline">
-		<input class="layui-input"type="text"  name="endtime" id="endtime"  placeholder="到账时间" />
+		<input class="layui-input"type="text" id="endtime" name="endtime" id="endtime"  placeholder="到账时间" />
 		</div>
 	
 		<button id="search" class="layui-btn" data-type="reload">搜索</button>
@@ -152,6 +152,10 @@
 					width : 160,
 					sort : true,
 					templet : function(row) {
+						if(row.createTime == null)
+						{
+							return "";
+						}
 						return createTime(row.createTime);
 					}
 				}, {
@@ -159,6 +163,10 @@
 					title : '到账时间',
 					width : 170,
 					templet : function(row) {
+						if(row.successTime == null)
+						{
+							return "";
+						}
 						return createTime(row.successTime);
 					}
 				}, {
@@ -183,8 +191,9 @@
 
 			var $ = layui.$, active = {
 				reload : function() {
-					var demoReload = $('#orderNumber');
-
+					var ordernumber = $('#orderNumber').val();
+					var begintime = $('#begintime').val();
+					var endtime = $('#endtime').val();
 					//执行重载
 					table.reload('rechargeReload', {
 						page : {
@@ -192,8 +201,9 @@
 						//重新从第 1 页开始
 						},
 						where : {
-							orderNumber : demoReload.val(),
-							orderNumber1 : demoReload.val()
+							orderNumber : ordernumber,
+							beginTime:begintime,
+							endTime:endtime
 						}
 					});
 				}

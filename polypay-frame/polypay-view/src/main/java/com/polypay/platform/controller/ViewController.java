@@ -162,4 +162,22 @@ public class ViewController {
 		return "admin/merchantbilllist";
 	}
 	
+	@RequestMapping("merchantloginpwd")
+	public String toMerchantPwd()
+	{
+		return "admin/merchantloginpwd";
+	}
+	
+	@RequestMapping("merchantpaypwd")
+	public String toMerchantPayPwd()
+	{
+		return "admin/merchantpaypwd";
+	}
+	
+	@RequestMapping("merchantaudit")
+	public String toMerchantAudit()
+	{
+		return "admin/merchantaudit";
+	}
+	
 }

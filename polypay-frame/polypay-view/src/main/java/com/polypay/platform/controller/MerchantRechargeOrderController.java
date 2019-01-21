@@ -1,5 +1,7 @@
 package com.polypay.platform.controller;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +26,7 @@ import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
+import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
 
 @Controller
@@ -34,6 +37,9 @@ public class MerchantRechargeOrderController extends BaseController<MerchantRech
 	@Autowired
 	private IMerchantRechargeOrderService merchantRechargeOrderService;
 
+	
+	public static void main(String[] args) {
+	}
 	@RequestMapping("/merchant/recharge/order/list")
 	@ResponseBody
 	public ServiceResponse listMerchantRechargeOrder(HttpServletRequest request) throws ServiceException {
@@ -41,20 +47,40 @@ public class MerchantRechargeOrderController extends BaseController<MerchantRech
 		ServiceResponse response = new ServiceResponse();
 		try {
 
-			MerchantRechargeOrderVO merchantPlaceOrderVO = new MerchantRechargeOrderVO();
+			MerchantRechargeOrderVO merchantRechargeOrderVO = new MerchantRechargeOrderVO();
 			String status = request.getParameter("type");
 
 			if (!StringUtils.isEmpty(status)) {
 				if ((OrderStatusConsts.SUCCESS + "").equals(status)) {
-					merchantPlaceOrderVO.setStatus(OrderStatusConsts.SUCCESS);
+					merchantRechargeOrderVO.setStatus(OrderStatusConsts.SUCCESS);
 				} else {
-					merchantPlaceOrderVO.setStatus(OrderStatusConsts.FAIL);
+					merchantRechargeOrderVO.setStatus(OrderStatusConsts.FAIL);
 				}
 			}
-			merchantPlaceOrderVO.setOrderNumber(getRequest().getParameter("orderNumber"));
+			
+			merchantRechargeOrderVO.setOrderNumber(getRequest().getParameter("orderNumber"));
+			
+			String createTime = getRequest().getParameter("beginTime");
+			String successTime = getRequest().getParameter("endTime");
+			
+			Date[] datas;
+			if(!StringUtils.isEmpty(createTime))
+			{
+				datas = DateUtils.changeDate(createTime);
+				merchantRechargeOrderVO.setcBeginTime(datas[0]);
+				merchantRechargeOrderVO.setcEndTime(datas[1]);
+			}
+			
+			if(!StringUtils.isEmpty(successTime))
+			{
+				datas = DateUtils.changeDate(successTime);
+				merchantRechargeOrderVO.setsBeginTime(datas[0]);
+				merchantRechargeOrderVO.setsEndTime(datas[1]);
+			}
+			
 			PageBounds pageBounds = this.getPageBounds();
 			PageList<MerchantRechargeOrderVO> pageList = null;
-			pageList = merchantRechargeOrderService.listMerchantRechargeOrder(pageBounds, merchantPlaceOrderVO);
+			pageList = merchantRechargeOrderService.listMerchantRechargeOrder(pageBounds, merchantRechargeOrderVO);
 			Page<MerchantRechargeOrderVO> pageData = getPageData(pageList);
 			response = ResponseUtils.buildResult(pageData);
 		} catch (ServiceException e) {

@@ -218,13 +218,25 @@
         and order_number like #{orderNumber}
      </if>
     
-     <if test="beginTime != null" >
-        and create_time <![CDATA[>=]]> #{beginTime}
-     </if>
-     
-      <if test="endTime != null" >
-        and create_time <![CDATA[<=]]> #{endTime}
-     </if>
+    	<if test="cBeginTime != null">
+			and create_time <![CDATA[>=]]>
+			#{cBeginTime}
+		</if>
+
+		<if test="cEndTime != null">
+			and create_time <![CDATA[<=]]>
+			#{cEndTime}
+		</if>
+		
+		<if test="sBeginTime != null">
+			and pay_time <![CDATA[>=]]>
+			#{sBeginTime}
+		</if>
+
+		<if test="sEndTime != null">
+			and pay_time <![CDATA[<=]]>
+			#{sEndTime}
+		</if>
      
     order by create_time desc
   </select>

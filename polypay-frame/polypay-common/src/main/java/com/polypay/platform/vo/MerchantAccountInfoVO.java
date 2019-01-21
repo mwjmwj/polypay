@@ -44,6 +44,10 @@ public class MerchantAccountInfoVO extends VO{
     
     private String newPassword;
     
+    private String confirmPassword;
+    
+    private String confirmPayPassword;
+    
     public String getNewPayPassword() {
 		return newPayPassword;
 	}
@@ -170,6 +174,22 @@ public class MerchantAccountInfoVO extends VO{
 
 	public void setPayPassword(String payPassword) {
 		this.payPassword = payPassword;
+	}
+
+	public String getConfirmPayPassword() {
+		return confirmPayPassword;
+	}
+
+	public void setConfirmPayPassword(String confirmPayPassword) {
+		this.confirmPayPassword = confirmPayPassword;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 }

@@ -1,9 +1,15 @@
 package com.polypay.platform.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DateUtils {
+
+	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
 	public static boolean comperDate(Date beforeDate, Date endDate) {
 		long btime = beforeDate.getTime();
@@ -73,6 +79,44 @@ public class DateUtils {
 		Date date = canlendar.getTime();
 
 		return date;
+	}
+
+	/**
+	 * 传入字符串 2017-01-02 - 2018-03-04 解析成 2017-01-02 00:00:00 和 2018-03-04 23:59:59
+	 * 
+	 * @param datastrs
+	 * @return
+	 */
+	public static Date[] changeDate(String datastrs) {
+		Date[] result = new Date[2];
+		String[] split = datastrs.split(" - ");
+
+		int index = 0;
+		for (String datestr : split) {
+
+			if (StringUtils.isEmpty(datestr)) {
+				continue;
+			}
+			try {
+				if (index == 0) {
+					result[index] = SDF.parse(datestr);
+					index++;
+				} else {
+					Date parse = SDF.parse(datestr);
+					Calendar c = Calendar.getInstance();
+					c.setTime(parse);
+					c.set(Calendar.HOUR_OF_DAY, 23);
+					c.set(Calendar.MINUTE, 59);
+					c.set(Calendar.SECOND, 59);
+					result[index] = c.getTime();
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		return result;
 	}
 
 }

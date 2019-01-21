@@ -13,14 +13,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>源丰盛支付</title>
-<link href="resources/css/style.css" rel="stylesheet">
-<link href="resources/css/layui.css" rel="stylesheet">
-<link href="resources/css/admin.css" rel="stylesheet">
-<link href="resources/css/pro.css" rel="stylesheet">
-<link href="resources/css/login.css" rel="stylesheet">
-<script src="resources/js/jquery.min.js" type="text/javascript"></script>
-<script src="resources/js/layui.js" type="text/javascript"></script>
-<script src="resources/js/gt.js"></script>
+<link href="static/css/style.css" rel="stylesheet">
+<link href="static/js/css/layui.css" rel="stylesheet">
+<link href="static/css/admin.css" rel="stylesheet">
+<link href="static/css/pro.css" rel="stylesheet">
+<link href="static/css/login.css" rel="stylesheet">
+<script src="static/js/jquery.min.js" type="text/javascript"></script>
+<script src="static/js/layui.js" type="text/javascript"></script>
+<script src="static/js/gt.js"></script>
 <style type="text/css">
 </style>
 </head>
@@ -39,14 +39,7 @@
 					</div>
 					<div
 						class="layadmin-user-login-box layadmin-user-login-body layui-form">
-						<!-- <div class="layui-form-item">
-							<label
-								class="layadmin-user-login-icon layui-icon layui-icon-username"
-								for="LAY-user-login-nickname"></label> <input type="text"
-								name="userName" id="LAY-user-login-nickname"
-								lay-verify="nickname" placeholder="昵称" class="layui-input">
-						</div> -->
-
+		
 						<div class="layui-form-item">
 							<label
 								class="layadmin-user-login-icon layui-icon layui-icon-cellphone"
@@ -56,13 +49,6 @@
 								placeholder="手机" class="layui-input" />
 								<span id="mobilespan" style="display: none"><em></em></span>
 						</div>
-
-						<!-- 	<div class="layui-form-item">
-							<label>完成验证：</label>
-					        <div id="captcha1">
-					            <p id="wait1" class="">正在加载验证码......</p>
-					        </div>
-						</div> -->
 
 
 						<div class="layui-form-item">
@@ -86,15 +72,7 @@
 								</div>
 							</div>
 						</div>
-
-						<!-- <div class="layui-form-item">
-							<label
-								class="layadmin-user-login-icon layui-icon layui-icon-cellphone"
-								for="LAY-user-login-email"></label> <input type="text"
-								name="userEmail" id="LAY-user-login-email"
-								lay-verify="email" placeholder="邮箱" class="layui-input">
-						</div> -->
-
+						
 						<div class="layui-form-item">
 							<label
 								class="layadmin-user-login-icon layui-icon layui-icon-password"
@@ -139,18 +117,7 @@
 							<button class="layui-btn layui-btn-fluid" id="regSubmit"
 								lay-submit="" type="button" lay-filter="reg-submit">注 册</button>
 						</div>
-						<!-- 	<div class="layui-trans layui-form-item layadmin-user-login-other">
-							<label>社交账号注册</label> <a href="javascript:;"><i
-								class="layui-icon layui-icon-login-qq"></i></a> <a
-								href="javascript:;"><i
-								class="layui-icon layui-icon-login-wechat"></i></a> <a
-								href="javascript:;"><i
-								class="layui-icon layui-icon-login-weibo"></i></a> <a
-								lay-href="user/login"
-								class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
-							<a lay-href="view/login"
-								class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
-						</div> -->
+						
 					</div>
 				</div>
 			</div>
