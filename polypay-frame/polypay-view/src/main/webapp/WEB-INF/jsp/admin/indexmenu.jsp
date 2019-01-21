@@ -15,7 +15,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-	<link rel="stylesheet" href="../static/css/layui.css">
+	<link rel="stylesheet" href="../static/js/css/layui.css">
 	<link href="../static/js/maincss/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 	<link href="../static/js/maincss/font-awesome.css?v=4.4.0" rel="stylesheet">
 
