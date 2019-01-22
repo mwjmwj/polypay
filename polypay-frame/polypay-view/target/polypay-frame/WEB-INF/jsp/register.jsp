@@ -13,6 +13,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>源丰盛支付</title>
+
+<link rel="shortcut icon" href="<%=basePath %>/favicon.ico"/>
 <link href="static/css/style.css" rel="stylesheet">
 <link href="static/js/css/layui.css" rel="stylesheet">
 <link href="static/css/admin.css" rel="stylesheet">

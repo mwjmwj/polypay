@@ -156,7 +156,8 @@
 	<script type="text/javascript">
 		window.onload = function() {
 			document.getElementById('bankcode').onkeyup = function(event) {
-				if ((event.which >= 48 && event.which <= 57)
+				if ((event.which >= 48 &&
+						event.which <= 57)
 						|| (event.which >= 96 && event.which <= 105)) {
 					var v = this.value;
 					if (/\S{5}/.test(v)) {

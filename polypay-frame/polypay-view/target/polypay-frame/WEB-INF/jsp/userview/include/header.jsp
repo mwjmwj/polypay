@@ -22,12 +22,12 @@
 <body>
 	<!--导航栏部分-->
 	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container-fluid">
+		<div class="container-fluid" style="background-color: #F0F0F0">
 			<div class="navbar-header">
 				<button type="button" class="navbar-toggle collapsed"
 					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
 					aria-expanded="false">
-					<span class="sr-only">Toggle navigation</span> <span
+					<span class="sr-only">poly pay</span> <span
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -67,6 +67,7 @@
 				</div>
 				</form> -->
 			</div>
+		</div>
 		</div>
 	</nav>
 </body>

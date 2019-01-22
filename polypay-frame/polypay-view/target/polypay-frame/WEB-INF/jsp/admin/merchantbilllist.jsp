@@ -26,7 +26,7 @@
 <script type="text/javascript" src="../static/js/layui.all.js"></script>
 <body>
 
-	<div class="layui-row" style="margin-top: 10px" >
+	<!-- <div class="layui-row" style="margin-top: 10px" >
  	<div class="layui-inline">		
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
@@ -39,8 +39,20 @@
 	
 		<button id="search" class="layui-btn" data-type="reload">搜索</button>
 		<button id="clear" class="layui-btn" data-type="reload">清空</button>
-		</div>
+		</div> -->
 		
+		
+		
+		
+<blockquote class="layui-elem-quote layui-text">
+		个人账单
+		<p style="color: red;">个人账单每月1号生成上一个月所有的成功订单，包含订单金额，服务费，笔数</p>
+	</blockquote>
+
+	<fieldset class="layui-elem-field layui-field-title"
+		style="margin-top: 20px;">
+		<legend>个人账单管理</legend>
+	</fieldset>
 
 	<table class="layui-hide" id="billlist" lay-filter="billlist"></table>
 

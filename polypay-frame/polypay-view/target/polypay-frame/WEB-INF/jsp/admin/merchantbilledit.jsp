@@ -22,6 +22,7 @@
 <script type="text/javascript" src="../../static/js/layui.all.js"></script>
 <body>
 
+
 	<form class="layui-form layui-form-pane">
 		<!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
 		<div class="layui-form-item">
@@ -38,12 +39,12 @@
 			</div>
 		</div>
 		
-	<%-- 	<div class="layui-form-item">
+	 	<div class="layui-form-item">
 			<label class="layui-form-label">充值服务费</label>
 			<div class="layui-input-block">
 				<input type="text" readonly="readonly" value="${merchantbill.rechargeServiceAmount }" class="layui-input"> 
 			</div>
-		</div> --%>
+		</div>
 		
 		
 		<div class="layui-form-item">
@@ -61,12 +62,12 @@
 			</div>
 		</div>
 		
-		<%-- <div class="layui-form-item">
+		 <div class="layui-form-item">
 			<label class="layui-form-label">结算服务费</label>
 			<div class="layui-input-block">
 				<input type="text" readonly="readonly" value="${merchantbill.settleServiceAmount }" class="layui-input"> 
 			</div>
-		</div> --%>
+		</div> 
 		
 		
 		<div class="layui-form-item">
@@ -83,12 +84,12 @@
 			</div>
 		</div>
 		
-	<%-- 	<div class="layui-form-item">
+		<div class="layui-form-item">
 			<label class="layui-form-label">代付服务费</label>
 			<div class="layui-input-block">
 				<input type="text" readonly="readonly" value="${merchantbill.placeServiceAmount }" class="layui-input"> 
 			</div>
-		</div> --%>
+		</div> 
 		
 		
 		<div class="layui-form-item">

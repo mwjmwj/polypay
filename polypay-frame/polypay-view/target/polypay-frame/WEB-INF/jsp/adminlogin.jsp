@@ -13,26 +13,31 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>poly-pay</title>
+
+<link rel="shortcut icon" href="<%=basePath %>/favicon.ico"/>
+
 <link href="static/css/style.css" rel="stylesheet">
 <link href="static/js/css/layui.css" rel="stylesheet">
 <link href="static/css/admin.css" rel="stylesheet">
 <link href="static/css/pro.css" rel="stylesheet">
 <link href="static/css/login.css" rel="stylesheet">
+
+  
 <script src="static/js/jquery.min.js" type="text/javascript"></script>
 <script src="static/js/layui.js" type="text/javascript"></script>
-<style type="text/css">
-</style>
+
 </head>
 <body>
 
 <jsp:include page="userview/include/header.jsp" />
-	<div class="container-fluid">
+
+	<div class="container-fluid" style="background-image: url('static/images/timg.jpg')">
 	<form id="loginForm">
 		<div class="layadmin-user-login layadmin-user-display-show" style="padding-bottom:0px;padding-top:50px;height:250px;"
 			id="LAY-user-login">
 			<div class="layadmin-user-login-main" style="height:200px;">
 				<div class="layadmin-user-login-box layadmin-user-login-header">
-					<h2>商户后台管理</h2>
+					<h2 style="color: white">商户后台管理</h2>
 				</div>
 				<div
 					class="layadmin-user-login-box layadmin-user-login-body layui-form" style="height:100px;">
@@ -86,8 +91,7 @@
 	</div>
 	<!--尾部-->
 	<jsp:include page="userview/include/foot.jsp" />
-	
-	
+
 	<script src="<%=basePath %>/static/js/jquery.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="<%= basePath %>/static/js/js2.js"></script>
 
