@@ -180,4 +180,11 @@ public class ViewController {
 		return "admin/merchantaudit";
 	}
 	
+	@RequestMapping("merchantproxy")
+	public String toMerchantProxy()
+	{
+		return "admin/merchantproxylist";
+	}
+	
+	
 }

@@ -148,6 +148,28 @@
       <if test="endTime != null" >
         and arrival_time <![CDATA[<=]]> #{endTime}
      </if>
+     
+     
+     <if test="cBeginTime != null">
+			and frezz_time <![CDATA[>=]]>
+			#{cBeginTime}
+		</if>
+
+		<if test="cEndTime != null">
+			and frezz_time <![CDATA[<=]]>
+			#{cEndTime}
+		</if>
+		
+		<if test="sBeginTime != null">
+			and really_arrival_time <![CDATA[>=]]>
+			#{sBeginTime}
+		</if>
+
+		<if test="sEndTime != null">
+			and really_arrival_time <![CDATA[<=]]>
+			#{sEndTime}
+		</if>
+		
   
   </select>
 	  

@@ -31,10 +31,10 @@
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
 		 <div class="layui-inline">
-		<input class="layui-input" type="text" name="begintime" id="begintime" placeholder="订单提交时间" />
+		<input class="layui-input" type="text" name="begintime" id="begintime" placeholder="冻结时间" />
 		</div>
 		<div class="layui-inline">
-		<input class="layui-input"type="text"  name="endtime" id="endtime"  placeholder="到账时间" />
+		<input class="layui-input"type="text"  name="endtime" id="endtime"  placeholder="预计到账时间" />
 		</div>
 	
 		<button id="search" class="layui-btn" data-type="reload">搜索</button>
@@ -55,7 +55,7 @@
 
 	<script type="text/html" id="zizeng">
     {{d.LAY_TABLE_INDEX+1}}
-</script>
+	</script>
 
 	<script>
 		layui.use('table', function() {
@@ -158,21 +158,27 @@
 
 			});
 
+			
 			var $ = layui.$, active = {
-				reload : function() {
-					var demoReload = $('#orderNumber');
-					//执行重载
-					table.reload('frezzReload', {
-						page : {
-							curr : 1
-						//重新从第 1 页开始
-						},
-						where : {
-							orderNumber : demoReload.val()
-						}
-					});
-				}
-			};
+					reload : function() {
+						var ordernumber = $('#orderNumber').val();
+						var begintime = $('#begintime').val();
+						var endtime = $('#endtime').val();
+						//执行重载
+						table.reload('frezzReload', {
+							page : {
+								curr : 1
+							//重新从第 1 页开始
+							},
+							where : {
+								orderNumber : ordernumber,
+								beginTime:begintime,
+								endTime:endtime
+							}
+						});
+					}
+				};
+			
 
 			$('.layui-row #search').on('click', function() {
 				var type = $(this).data('type');

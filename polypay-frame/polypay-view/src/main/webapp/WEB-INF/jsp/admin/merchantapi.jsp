@@ -39,7 +39,7 @@
   
   
   <div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">秘钥</label>
+    <label class="layui-form-label">加密私钥</label>
     <div class="layui-input-block">
       <textarea placeholder="请输入内容" class="layui-textarea">${merchantapi.md5Key }</textarea>
     </div>

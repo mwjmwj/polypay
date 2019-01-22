@@ -14,6 +14,8 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>商户后台管理</title>
+
+<link rel="shortcut icon" href="<%=basePath %>/favicon.ico"/>
 <link rel="stylesheet" href="./static/css/font.css">
 <link rel="stylesheet" href="./static/css/weadmin.css">
 
@@ -31,6 +33,8 @@
 		<div class="left_open">
 			<i title="展开左侧栏" class="iconfont">&#xe668;</i>
 		</div>
+		
+		<c:if test="${sessionScope.merchant_user.roleId == '1' }">
 		<ul class="layui-nav left fast-add" lay-filter="" >
 			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;">常用功能</a>
 				<dl class="layui-nav-child" >
@@ -63,6 +67,10 @@
 			<li class="layui-nav-item to-index"><a href="merchant/exit" style="line-height:46px;">退出账号</a>
 			</li>
 		</ul>
+		</c:if>
+		
+		
+		
 
 	</div>
 	<!-- 顶部结束 -->
@@ -97,13 +105,13 @@
 		<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip"
 			lay-allowclose="true">
 			<ul class="layui-tab-title" id="tabName">
-				<li>登录信息</li>
+				<!-- <li>登录信息</li> -->
 			</ul>
 			<div class="layui-tab-content" style="background-color: #F5F5F5;margin-left: 10px;margin-top: 10px">
-				<div class="layui-tab-item layui-show">
+				<!-- <div class="layui-tab-item layui-show">
 					<iframe src='./view/loginlog' frameborder="0" scrolling="yes"
 						class="weIframe"></iframe>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>

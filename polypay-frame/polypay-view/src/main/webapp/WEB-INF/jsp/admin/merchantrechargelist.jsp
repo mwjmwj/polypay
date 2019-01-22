@@ -63,7 +63,8 @@
 			table.render({
 				elem : '#rechargelist',
 				url : '../merchant/recharge/order/list',
-				/* toolbar : '#search', */
+				toolbar : '#search',
+				totalRow : true,
 				title : '用户数据表',
 				response : {
 					statusName : 'status' //规定数据状态的字段名称，默认：code
@@ -78,7 +79,8 @@
 				},
 				cols : [ [ {
 					type : 'checkbox',
-					fixed : 'left'
+					fixed : 'left',
+					totalRowText: '合计'
 				}, {
 					field : 'tradeType',
 					title : '交易方式',
@@ -127,6 +129,7 @@
 					title : '支付金额',
 					width : 143,
 					style : 'color: red',
+					totalRow: true,
 					templet : function(row) {
 						return Number(row.payAmount).toFixed(4) + "元";
 					}
@@ -135,6 +138,7 @@
 					title : '服务费',
 					width : 126,
 					style : 'color: red',
+					totalRow: true,
 					templet : function(row) {
 						return Number(row.serviceAmount).toFixed(4) + "元";
 					}
@@ -143,6 +147,7 @@
 					title : '到账金额',
 					width : 143,
 					style : 'color: red',
+					totalRow: true,
 					templet : function(row) {
 						return Number(row.arrivalAmount).toFixed(4) + "元";
 					}

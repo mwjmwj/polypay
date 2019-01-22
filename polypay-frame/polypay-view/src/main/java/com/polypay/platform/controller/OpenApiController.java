@@ -289,7 +289,7 @@ public class OpenApiController {
 
 			MerchantFrezzon merchantFrezzon = new MerchantFrezzon();
 			merchantFrezzon.setAmount(frezzAmount);
-			merchantFrezzon.setFrezzTime(new Date());
+			merchantFrezzon.setFrezzTime(new Date()); 
 			merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
 			merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
 

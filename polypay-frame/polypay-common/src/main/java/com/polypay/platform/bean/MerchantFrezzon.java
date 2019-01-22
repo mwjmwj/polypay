@@ -24,6 +24,38 @@ public class MerchantFrezzon {
     
     private Date endTime;
     
+    private Date cBeginTime;
+    
+    private Date cEndTime;
+    
+    private Date sBeginTime;
+    
+    private Date sEndTime;
+    
+    public Date getcBeginTime() {
+		return cBeginTime;
+	}
+
+	public void setcBeginTime(Date cBeginTime) {
+		this.cBeginTime = cBeginTime;
+	}
+
+	public Date getcEndTime() {
+		return cEndTime;
+	}
+
+	public void setcEndTime(Date cEndTime) {
+		this.cEndTime = cEndTime;
+	}
+
+	public Date getsBeginTime() {
+		return sBeginTime;
+	}
+
+	public void setsBeginTime(Date sBeginTime) {
+		this.sBeginTime = sBeginTime;
+	}
+    
     public Date getBeginTime() {
 		return beginTime;
 	}
@@ -103,4 +135,12 @@ public class MerchantFrezzon {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+	public Date getsEndTime() {
+		return sEndTime;
+	}
+
+	public void setsEndTime(Date sEndTime) {
+		this.sEndTime = sEndTime;
+	}
 }

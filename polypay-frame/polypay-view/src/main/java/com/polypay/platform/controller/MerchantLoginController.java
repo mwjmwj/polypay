@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.github.qcloudsms.SmsSingleSender;
+import com.github.qcloudsms.SmsSingleSenderResult;
+import com.github.qcloudsms.httpclient.HTTPException;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.Menu;
@@ -496,6 +500,20 @@ public class MerchantLoginController {
 		// 8-20 位，字母、数字、字符
 		String regStr = "^([A-Z]|[a-z]|[0-9]|[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“'。，、？]){8,20}$";
 		return input.matches(regStr);
+	}
+	
+	
+	public static void main(String[] args) throws JSONException, HTTPException, IOException {
+		
+		
+		String[] params = {"567810","5"};//数组具体的元素个数和模板中变量个数必须一致，例如事例中templateId:5678对应一个变量，参数数组中元素个数也必须是一个
+	    SmsSingleSender ssender = new SmsSingleSender(1400182523, "aaa15e1f7fe240ba4dadb3340423261a");
+	    
+	    String[] phoneNumbers = {"17607450610"};
+		SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers [0],
+				7839, params, null, "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
+		
+		System.out.println(result);
 	}
 
 }

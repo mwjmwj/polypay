@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,6 +17,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
+import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.consts.MerchantBindBankConsts;
@@ -120,6 +122,30 @@ public class MerchantPlaceBindBankController extends BaseController<MerchantPlac
 		return response;
 
 	}
+	
+	@GetMapping("/merchant/placebindbank/bind/{id}")
+	@ResponseBody
+	public ServiceResponse bindBankName(@PathVariable("id")Integer id) throws ServiceException
+	{
+		ServiceResponse response =  new ServiceResponse();
+		
+		MerchantPlaceAccountBindbank selectMerchantBindBankByID = merchantPlaceAccountBindbankService.selectMerchantBindBankByID(id);
+		
+		if(null==selectMerchantBindBankByID)
+		{
+			response.setStatus(RequestStatus.FAILED.getStatus());
+			response.setMessage("该银行卡不存在");
+			return response;
+		}
+		
+		merchantPlaceAccountBindbankService.reverseBankStatus();
+		selectMerchantBindBankByID.setDefaultStatus(MerchantBindBankConsts.DEFAULT_BIND_BANK);
+		merchantPlaceAccountBindbankService.updateByPrimaryKeySelective(selectMerchantBindBankByID);
+		response.setMessage("綁定成功");
+		
+		return response;
+	}
+
 	
 	
 }
