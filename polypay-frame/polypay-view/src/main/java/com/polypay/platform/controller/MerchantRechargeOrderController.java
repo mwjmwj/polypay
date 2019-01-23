@@ -1,6 +1,5 @@
 package com.polypay.platform.controller;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
@@ -27,6 +26,8 @@ import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.utils.DateUtils;
+import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
 
 @Controller
@@ -48,14 +49,10 @@ public class MerchantRechargeOrderController extends BaseController<MerchantRech
 		try {
 
 			MerchantRechargeOrderVO merchantRechargeOrderVO = new MerchantRechargeOrderVO();
-			String status = request.getParameter("type");
+			String status = request.getParameter("status");
 
 			if (!StringUtils.isEmpty(status)) {
-				if ((OrderStatusConsts.SUCCESS + "").equals(status)) {
-					merchantRechargeOrderVO.setStatus(OrderStatusConsts.SUCCESS);
-				} else {
-					merchantRechargeOrderVO.setStatus(OrderStatusConsts.FAIL);
-				}
+				merchantRechargeOrderVO.setStatus(Integer.parseInt(status));
 			}
 			
 			merchantRechargeOrderVO.setOrderNumber(getRequest().getParameter("orderNumber"));
@@ -100,6 +97,18 @@ public class MerchantRechargeOrderController extends BaseController<MerchantRech
 		MerchantRechargeOrder selectByPrimaryKey = merchantRechargeOrderService.selectByPrimaryKey(id);
 		result.put("rechargeorder", selectByPrimaryKey);
 		return "admin/merchantrechargeedit";
+	}
+	
+	@GetMapping("merchant/recharge/all")
+	@ResponseBody
+	public ServiceResponse allMerchantRecharge() throws ServiceException
+	{
+		ServiceResponse response = new ServiceResponse();
+		
+		MerchantMainDateVO merchantGroupDate = merchantRechargeOrderService.getMerchantGroupDate(MerchantUtils.getMerchant().getUuid());
+		response.setData(merchantGroupDate);
+		
+		return response;
 	}
 
 }

@@ -39,6 +39,7 @@ import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantPlaceAccountBindbankVO;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
 
@@ -89,6 +90,12 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 				merchantPlaceOrderVO.setsEndTime(datas[1]);
 			}
 			
+			String status = getRequest().getParameter("status");
+			
+			if(!StringUtils.isEmpty(status))
+			{
+				merchantPlaceOrderVO.setStatus(Integer.parseInt(status));
+			}
 			
 			pageList = merchantPlaceOrderService.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
 			Page<MerchantPlaceOrderVO> pageData = getPageData(pageList);
@@ -218,6 +225,21 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 		result.put("placeorder", selectByPrimaryKey);
 		return "admin/merchantplaceedit";
 	}
+	
+	
+	@GetMapping("merchant/place/all")
+	@ResponseBody
+	public ServiceResponse allMerchantPlace() throws ServiceException
+	{
+		ServiceResponse response = new ServiceResponse();
+		
+		MerchantMainDateVO merchantGroupDate = merchantPlaceOrderService.allMerchantPlace(MerchantUtils.getMerchant().getUuid());
+		response.setData(merchantGroupDate);
+		
+		return response;
+	}
+	
+	
 	
 	
 	private void submitPlaceOrder(MerchantPlaceOrder merchantPlaceOrder) {

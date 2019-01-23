@@ -7,6 +7,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantPlaceOrder;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
 
 public interface MerchantPlaceOrderMapper extends BaseMapper<MerchantPlaceOrder> {
@@ -15,6 +16,8 @@ public interface MerchantPlaceOrderMapper extends BaseMapper<MerchantPlaceOrder>
 			MerchantPlaceOrderVO merchantPlaceOrderVO);
 
 	List<MerchantBill> getMerchantPlaceMonthBill(Map<String, Object> param);
+
+	MerchantMainDateVO allMerchantPlace(String uuid);
 
 
 }

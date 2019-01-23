@@ -17,6 +17,29 @@ public class MerchantMainDateVO extends VO {
 	
 	private BigDecimal merchantAllRechargeAmount;
 	
+	private BigDecimal merchantAllServiceAmount;
+	
+	private BigDecimal merchantAllSettleAmount;
+	
+	private BigDecimal merchantAllPlaceAmount;
+	
+	
+	public BigDecimal getMerchantAllSettleAmount() {
+		return merchantAllSettleAmount;
+	}
+
+	public void setMerchantAllSettleAmount(BigDecimal merchantAllSettleAmount) {
+		this.merchantAllSettleAmount = merchantAllSettleAmount;
+	}
+
+	public BigDecimal getMerchantAllPlaceAmount() {
+		return merchantAllPlaceAmount;
+	}
+
+	public void setMerchantAllPlaceAmount(BigDecimal merchantAllPlaceAmount) {
+		this.merchantAllPlaceAmount = merchantAllPlaceAmount;
+	}
+
 	private String createTime;
 	
 	public String getMerchantTodayOrderNumber() {
@@ -57,6 +80,14 @@ public class MerchantMainDateVO extends VO {
 
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+
+	public BigDecimal getMerchantAllServiceAmount() {
+		return merchantAllServiceAmount;
+	}
+
+	public void setMerchantAllServiceAmount(BigDecimal merchantAllServiceAmount) {
+		this.merchantAllServiceAmount = merchantAllServiceAmount;
 	}
 
 }

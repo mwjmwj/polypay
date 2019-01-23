@@ -13,4 +13,6 @@ public interface IMerchantFrezzService extends IBaseService<MerchantFrezzon>{
 
 	List<MerchantFrezzon> unFrezzMerchantList() throws ServiceException;
 
+	String allMerchantFrezzAmount(String uuid) throws ServiceException;
+
 }

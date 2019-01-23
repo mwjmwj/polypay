@@ -12,4 +12,6 @@ public interface MerchantFrezzonMapper extends BaseMapper<MerchantFrezzon>{
 
 	List<MerchantFrezzon> unFrezzMerchantList();
 
+	String allMerchantFrezzAmount(String uuid);
+
 }

@@ -1,0 +1,17 @@
+com\polypay\platform\dao\MerchantLoginLogMapper.class
+com\polypay\platform\dao\MerchantRechargeOrderMapper.class
+com\polypay\platform\dao\NoticeMapper.class
+com\polypay\platform\dao\MenuMapper.class
+com\polypay\platform\dao\BaseMapper.class
+com\polypay\platform\dao\SystemConstsMapper.class
+com\polypay\platform\dao\MerchantPlaceAccountBindbankMapper.class
+com\polypay\platform\dao\MerchantVerifyMapper.class
+com\polypay\platform\dao\MerchantPlaceOrderMapper.class
+com\polypay\platform\dao\MerchantFinanceMapper.class
+com\polypay\platform\dao\PayTypeMapper.class
+com\polypay\platform\dao\MerchantSettleOrderMapper.class
+com\polypay\platform\dao\MerchantAccountBindbankMapper.class
+com\polypay\platform\dao\MerchantAccountInfoMapper.class
+com\polypay\platform\dao\MerchantFrezzonMapper.class
+com\polypay\platform\dao\MerchantBillMapper.class
+com\polypay\platform\dao\MerchantApiMapper.class

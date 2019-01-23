@@ -184,7 +184,7 @@
 	</properties>
 
 	<build>
-		<finalName>polypay-frame</finalName>
+		<finalName>polypay</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

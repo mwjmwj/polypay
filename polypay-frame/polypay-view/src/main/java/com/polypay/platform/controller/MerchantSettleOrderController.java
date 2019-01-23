@@ -40,6 +40,7 @@ import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantAccountBindbankVO;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
 @Controller
@@ -89,6 +90,13 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 				datas = DateUtils.changeDate(successTime);
 				merchantSettleOrderVO.setsBeginTime(datas[0]);
 				merchantSettleOrderVO.setsEndTime(datas[1]);
+			}
+			
+				String status = getRequest().getParameter("status");
+			
+			if(!StringUtils.isEmpty(status))
+			{
+				merchantSettleOrderVO.setStatus(Integer.parseInt(status));
 			}
 			
 			pageList = merchantSettleOrderService.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO );
@@ -220,6 +228,21 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		result.put("settleorder", selectByPrimaryKey);
 		return "admin/merchantsettleedit";
 	}
+	
+	
+	
+	@GetMapping("merchant/settle/all")
+	@ResponseBody
+	public ServiceResponse allMerchantRecharge() throws ServiceException
+	{
+		ServiceResponse response = new ServiceResponse();
+		
+		MerchantMainDateVO merchantGroupDate = merchantSettleOrderService.allMerchantSettle(MerchantUtils.getMerchant().getUuid());
+		response.setData(merchantGroupDate);
+		
+		return response;
+	}
+	
 	
 	
 

@@ -23,9 +23,11 @@
 }
 </style>
 </head>
-<script type="text/javascript" src="../static/js/layui.all.js"></script>
+<script type="text/javascript" src="../static/js/layui.js"></script>
+<script type="text/javascript" src="../static/js/jquery.min.js"></script>
 <body>
 
+<div class="layui-form">
 	<div class="layui-row" style="margin-top: 10px" >
  	<div class="layui-inline">		
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
@@ -36,12 +38,30 @@
 		<div class="layui-inline">
 		<input class="layui-input"type="text" id="endtime" name="endtime" id="endtime"  placeholder="到账时间" />
 		</div>
-	
+		
+		 <div class="layui-inline">
+      <div class="layui-input-inline">
+        <select id="status" name="status" lay-verify=" lay-search="">
+          <option value="">选择订单状态</option>
+          <option value="-1">失败</option>
+          <option value="0">成功</option>
+        </select>
+      </div>
+    </div>
 		<button id="search" class="layui-btn" data-type="reload">搜索</button>
 		<button id="clear" class="layui-btn" data-type="reload">清空</button>
+		
+		<div class="layui-inline" style="margin-left: 100px;">		
+		总充值金额： <span id="allamount">0</span> 元
 		</div>
 		
-
+		<div class="layui-inline" style="margin-left: 100px;">	
+		总手续费： <span id="serviceamount">0</span>元
+		</div>
+		
+		</div>
+		
+</div>
 	<table class="layui-hide" id="rechargelist" lay-filter="rechargelist"></table>
 
 
@@ -77,11 +97,15 @@
 					,
 					dataName : 'data' //规定数据列表的字段名称，默认：data
 				},
-				cols : [ [ {
-					type : 'checkbox',
+				cols : [ [{
+					field : 'zizeng',
+					title : '序号',
+					width : 60,
+					align : 'center',
 					fixed : 'left',
-					totalRowText: '合计'
-				}, {
+					totalRowText: '合计',
+					templet : '#zizeng'
+				},{
 					field : 'tradeType',
 					title : '交易方式',
 					width : 86,
@@ -91,13 +115,6 @@
 					templet : function(row) {
 						return "T+1"
 					}
-				}, {
-					field : 'zizeng',
-					title : '序号',
-					width : 60,
-					align : 'center',
-					fixed : 'left',
-					templet : '#zizeng'
 				}, {
 					field : 'orderNumber',
 					title : '订单号',
@@ -193,12 +210,15 @@
 				id : "rechargeReload"
 
 			});
-
+			
+	
 			var $ = layui.$, active = {
 				reload : function() {
 					var ordernumber = $('#orderNumber').val();
 					var begintime = $('#begintime').val();
 					var endtime = $('#endtime').val();
+					
+					var status = $("#status").val();
 					//执行重载
 					table.reload('rechargeReload', {
 						page : {
@@ -208,7 +228,8 @@
 						where : {
 							orderNumber : ordernumber,
 							beginTime:begintime,
-							endTime:endtime
+							endTime:endtime,
+							status:status
 						}
 					});
 				}
@@ -258,6 +279,19 @@
 			});
 			
 		});
+		
+		$.ajax({
+			url:'../merchant/recharge/all',
+			success:function(data){
+				if(data.status == 0)
+				{
+				$("#allamount").html(data.data.merchantAllRechargeAmount==null?0:data.data.merchantAllRechargeAmount);
+				$("#serviceamount").html(data.data.merchantAllServiceAmount==null?0:data.data.merchantAllServiceAmount);
+				};
+			}
+			
+		});
+
 	
 	</script>
 	<script type="text/javascript">

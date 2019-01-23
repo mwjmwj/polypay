@@ -105,13 +105,13 @@
 		<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip"
 			lay-allowclose="true">
 			<ul class="layui-tab-title" id="tabName">
-				<!-- <li>登录信息</li> -->
+				 <li>控制面板</li>
 			</ul>
 			<div class="layui-tab-content" style="background-color: #F5F5F5;margin-left: 10px;margin-top: 10px">
-				<!-- <div class="layui-tab-item layui-show">
-					<iframe src='./view/loginlog' frameborder="0" scrolling="yes"
+				 <div class="layui-tab-item layui-show">
+					<iframe src='./index/mainmenu' frameborder="0" scrolling="yes"
 						class="weIframe"></iframe>
-				</div> -->
+				</div>
 			</div>
 		</div>
 	</div>

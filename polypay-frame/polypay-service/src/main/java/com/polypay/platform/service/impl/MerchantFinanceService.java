@@ -39,6 +39,10 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 	private final static Integer SUBTRACT = -1;
 	private final static String MESSAGE = "message";
 	
+	
+	private final static String ID = "id";
+	private final static String ORDER_TYPE = "orderType";
+	
 	@Autowired
 	private MerchantFinanceMapper merchantFinanceMapper;
 
@@ -143,6 +147,9 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 			data.put(AMOUNT, entry.getArrivalAmount());
 			data.put(MESSAGE, entry.getDescreption());
 			data.put(TYPE, ADD);
+			data.put(ID, entry.getId());
+			data.put(ORDER_TYPE, entry.getType());
+			
 			result.add(data);
 		}
 		
@@ -152,6 +159,9 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 			data.put(AMOUNT, entry.getPayAmount());
 			data.put(MESSAGE, entry.getDescreption());
 			data.put(TYPE, SUBTRACT);
+			data.put(ID, entry.getId());
+			data.put(ORDER_TYPE, entry.getType());
+			
 			result.add(data);
 		}
 		
@@ -161,6 +171,9 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 			data.put(AMOUNT, entry.getPostalAmount());
 			data.put(MESSAGE, entry.getDescreption());
 			data.put(TYPE, SUBTRACT);
+			data.put(ID, entry.getId());
+			data.put(ORDER_TYPE, entry.getType());
+			
 			result.add(data);
 		}
 		

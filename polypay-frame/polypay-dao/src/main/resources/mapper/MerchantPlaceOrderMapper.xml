@@ -310,5 +310,20 @@
 		group by merchant_id
 	</select>
 	
+	<select id="allMerchantPlace"
+		parameterType="java.lang.String"
+		resultType="com.polypay.platform.vo.MerchantMainDateVO">
+
+		SELECT
+		SUM(mro.`pay_amount`) AS merchantAllPlaceAmount,
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS merchantAllServiceAmount
+		FROM merchant_place_order mro WHERE mro.`merchant_id` = #{merchantUUID}
+		AND mro.`status` = 0
+		GROUP BY mro.`merchant_id`
+
+	</select>
+	
+	
   
 </mapper>

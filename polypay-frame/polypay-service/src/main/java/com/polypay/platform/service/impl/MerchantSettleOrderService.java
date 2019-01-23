@@ -18,6 +18,7 @@ import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantSettleOrderService;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
 @Service
@@ -106,6 +107,15 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 			param.put("beginTime", DateUtils.getBeforeMonthBegin());
 			param.put("endTime", DateUtils.getBeforeMonthEnd());
 			return merchantSettleOrderMapper.getMerchantSettleMonthBill(param);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public MerchantMainDateVO allMerchantSettle(String uuid) throws ServiceException {
+		try {
+			return merchantSettleOrderMapper.allMerchantSettle(uuid);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

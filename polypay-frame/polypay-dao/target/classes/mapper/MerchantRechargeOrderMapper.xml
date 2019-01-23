@@ -331,7 +331,8 @@
 
 		SELECT
 		SUM(mro.`pay_amount`) AS merchantAllRechargeAmount,
-		COUNT(1) AS merchantAllOrderNumber
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS merchantAllServiceAmount
 		FROM merchant_recharge_order mro WHERE mro.`merchant_id` = #{merchantUUID}
 		AND mro.`status` = 0
 		GROUP BY mro.`merchant_id`
@@ -369,6 +370,7 @@
      </if>
 		group by merchant_id
 	</select>
+	
 	
 
 </mapper>

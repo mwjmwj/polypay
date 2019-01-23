@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.alibaba.fastjson.JSON;
 import com.polypay.platform.bean.MerchantAccountInfo;
+import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.service.IMerchantFinanceService;
+import com.polypay.platform.service.IMerchantFrezzService;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantMainDateVO;
@@ -21,15 +24,21 @@ public class MainMenuController {
 	@Autowired
 	private IMerchantRechargeOrderService merchantRechargeOrderService;
 	
+	@Autowired
+	private IMerchantFrezzService merchantFrezzService;
+	
+	@Autowired
+	private IMerchantFinanceService merchantFinanceService;
+	
 	
 	@RequestMapping("index/mainmenu")
 	public String getMainDate(Map<String,Object> result) throws ServiceException{
 		
-		// 总订单 当日订单
 		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
-		MerchantMainDateVO data = merchantRechargeOrderService.getMerchantGroupDate(merchant.getUuid());
-		result.put("data", data);
 		
+		
+		
+		// 图标数据
 		List<MerchantMainDateVO> echarData = merchantRechargeOrderService.allTimeMerchantOrder(merchant.getUuid());
 		
 		String[] ehtimes = new String[echarData.size()];
@@ -38,7 +47,7 @@ public class MainMenuController {
 		
 		int index = 0;
 		
-		//赋值
+		// 图标数据赋值
 		for (MerchantMainDateVO merchantMainDateVO : echarData) {
 			ehtimes[index] = merchantMainDateVO.getCreateTime();
 			ehOrderNumber[index] = merchantMainDateVO.getMerchantAllOrderNumber();
@@ -49,6 +58,18 @@ public class MainMenuController {
 		result.put("ehtimes", JSON.toJSON(ehtimes));
 		result.put("ehOrderNumbers", JSON.toJSON(ehOrderNumber));
 		result.put("ehOrderAmounts", JSON.toJSON(ehOrderAmount));
+		
+		
+		// 个人总冻结金额
+		String allFrezzAmount = merchantFrezzService.allMerchantFrezzAmount(merchant.getUuid());
+		
+		//个人可用金额
+		MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchant.getUuid());
+		
+		result.put("allfrezzamount", allFrezzAmount);
+		result.put("merchantFinance", merchantFinance);
+		
+		
 		
 		return "admin/indexmenu";
 	}

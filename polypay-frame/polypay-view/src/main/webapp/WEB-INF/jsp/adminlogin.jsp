@@ -7,6 +7,7 @@
 			+ path + "/";
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
 <head>
 <base href="<%=basePath%>">
 <meta charset="utf-8">
@@ -58,9 +59,9 @@
 							lay-verify="required" placeholder="密码" class="layui-input">
 					</div>
 					
-					<div class="layui-form-item">
+				<!-- 	<div class="layui-form-item">
 						<div class="verify-wrap" id="verify-wrap2"></div>
-					</div>
+					</div> -->
 					
 					<!-- <div class="layui-form-item">
 						<label
@@ -81,7 +82,7 @@
 							style="margin-top: 7px;">忘记密码？</a>
 					</div> -->
 					<div class="layui-form-item">
-						<button id="btn1" class="layui-btn layui-btn-fluid layui-btn-disabled" disabled="disabled" type="button" lay-submit=""
+						<button id="btn1" class="layui-btn layui-btn-fluid"  type="button" lay-submit=""
 							lay-filter="loginSubmit">登录</button>
 					</div>
 				</div>
@@ -124,7 +125,7 @@
 					success:function(data){
 						if(data=="success"){
 							layer.msg("登陆成功！",{icon:1,anim:2,time:100},function(){
-								window.location.href="view/toAdminIndex";
+								window.location.href="<%=basePath%>view/toAdminIndex";
 							});
 						}else{
 							layer.msg("登陆失败！请检查用户名和密码后重试！",{icon:5,anim:6,time:3000});

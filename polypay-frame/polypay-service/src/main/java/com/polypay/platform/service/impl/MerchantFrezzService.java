@@ -96,4 +96,13 @@ public class MerchantFrezzService implements IMerchantFrezzService {
 		}
 	}
 
+	@Override
+	public String allMerchantFrezzAmount(String uuid) throws ServiceException {
+		try {
+			return merchantFrezzonMapper.allMerchantFrezzAmount(uuid);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e);
+		}
+	}
+
 }

@@ -28,6 +28,8 @@ public class MerchantAccountInfo {
     private String token;
     
     private Integer roleId;
+    
+    private String helppayoff;
 
     public Integer getId() {
         return id;
@@ -131,5 +133,13 @@ public class MerchantAccountInfo {
 
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
+	}
+
+	public String getHelppayoff() {
+		return helppayoff;
+	}
+
+	public void setHelppayoff(String helppayoff) {
+		this.helppayoff = helppayoff;
 	}
 }
