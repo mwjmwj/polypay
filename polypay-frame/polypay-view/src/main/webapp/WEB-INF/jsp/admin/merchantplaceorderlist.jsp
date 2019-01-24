@@ -89,7 +89,7 @@
 				url : '../merchant/place/order/list',
 				title : '用户数据表',
 				totalRow : true,
-				toolbar : '#search',
+				toolbar : 's',
 				response : {
 					statusName : 'status' //规定数据状态的字段名称，默认：code
 					,

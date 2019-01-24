@@ -15,125 +15,247 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>poly-pay</title>
 
-<link rel="shortcut icon" href="<%=basePath %>/favicon.ico"/>
+<link rel="shortcut icon" href="./static/favicon.ico" />
+<!--必要样式-->
+<link href="static/css/styles.css" rel="stylesheet" type="text/css" />
+<link href="static/css/demo.css" rel="stylesheet" type="text/css" />
+<link href="static/css/loaders.css" rel="stylesheet" type="text/css" />
 
-<link href="static/css/style.css" rel="stylesheet">
-<link href="static/js/css/layui.css" rel="stylesheet">
-<link href="static/css/admin.css" rel="stylesheet">
-<link href="static/css/pro.css" rel="stylesheet">
-<link href="static/css/login.css" rel="stylesheet">
-
-  
-<script src="static/js/jquery.min.js" type="text/javascript"></script>
-<script src="static/js/layui.js" type="text/javascript"></script>
 
 </head>
 <body>
-
-<jsp:include page="userview/include/header.jsp" />
-
-	<div class="container-fluid" style="background-image: url('static/images/timg.jpg')">
-	<form id="loginForm">
-		<div class="layadmin-user-login layadmin-user-display-show" style="padding-bottom:0px;padding-top:50px;height:250px;"
-			id="LAY-user-login">
-			<div class="layadmin-user-login-main" style="height:200px;">
-				<div class="layadmin-user-login-box layadmin-user-login-header">
-					<h2 style="color: white">商户后台管理</h2>
+	<div class='login'>
+		<div class='login_title'>
+			<span>商户后台登录</span>
+		</div>
+		<div class='login_fields'>
+			<div class='login_fields__user'>
+				<div class='icon'>
+					<img alt="" src='static/img/user_icon_copy.png'>
 				</div>
-				<div
-					class="layadmin-user-login-box layadmin-user-login-body layui-form" style="height:100px;">
-					<div class="layui-form-item">
-						<label
-							class="layadmin-user-login-icon layui-icon layui-icon-username"
-							for="LAY-user-login-username"></label> <input type="text"
-							name="mobileNumber" id="mobileNumber"
-							lay-verify="phone" placeholder="手机号"
-							class="layui-input layui-form-danger">
-					</div>
-				
-					<div class="layui-form-item">
-						<label
-							class="layadmin-user-login-icon layui-icon layui-icon-password"
-							for="LAY-user-login-password"></label> <input type="password"
-							name="passWord" id="LAY-user-login-password"
-							lay-verify="required" placeholder="密码" class="layui-input">
-					</div>
-					
-				<!-- 	<div class="layui-form-item">
-						<div class="verify-wrap" id="verify-wrap2"></div>
-					</div> -->
-					
-					<!-- <div class="layui-form-item">
-						<label
-							class="layadmin-user-login-icon layui-icon layui-icon-password"
-							for="LAY-user-login-code"></label> <input type="password"
-							name="verifyCode" id="LAY-user-login-code"
-							lay-verify="required" placeholder="验证码" class="layui-input">
-					</div> -->
-					
-					<!-- <div class="layui-form-item" style="height:50px;">
-						<input type="checkbox" name="remember" lay-skin="primary"
-							title="记住密码">
-						<div class="layui-unselect layui-form-checkbox" lay-skin="primary">
-							<span>记住密码</span><i class="layui-icon layui-icon-ok"></i>
-						</div>
-						<a lay-href="/user/forget"
-							class="layadmin-user-jump-change layadmin-link"
-							style="margin-top: 7px;">忘记密码？</a>
-					</div> -->
-					<div class="layui-form-item">
-						<button id="btn1" class="layui-btn layui-btn-fluid"  type="button" lay-submit=""
-							lay-filter="loginSubmit">登录</button>
-					</div>
+				<input name="mobileNumber" placeholder='手机号' maxlength="11" type='text'
+					autocomplete="off" style="width: 320px" />
+				<div class='validation'>
+					<img alt="" src='static/img/tick.png'>
+				</div>
+			</div>
+			<div class='login_fields__password'>
+				<div class='icon'>
+					<img alt="" src='static/img/lock_icon_copy.png'>
+				</div>
+				<input name="passWord" placeholder='密码' maxlength="32" type='password'
+					autocomplete="off" style="width: 320px">
+				<div class='validation'>
+					<img alt="" src='static/img/tick.png'>
+				</div>
+			</div>
+			<div class='login_fields__password'>
+				<div class='icon'>
+					<img alt="" src='static/img/key.png'>
+				</div>
+				<input name="code" placeholder='验证码' maxlength="4" type='text'
+					name="ValidateNum" autocomplete="off" style="width: 320px">
+				<div class='validation' style="opacity: 1; right: -5px; top: -3px;">
+					<canvas class="J_codeimg" id="myCanvas" onclick="Code();">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+				</div>
+			</div>
+			<div class='login_fields__submit'>
+			
+				<input type='button' value='登录' />
+				<div class='validation' style="font-color: white;opacity: 1; right: 30px; top: 10px;">
+				<a href='view/register' >注册</a>
 				</div>
 			</div>
 		</div>
-		</form>
+		<div class='success'></div>
+		<div class='disclaimer'>
+			<p>欢迎登录后台管理系统</p>
+		</div>
 	</div>
-	<!--尾部-->
-	<jsp:include page="userview/include/foot.jsp" />
+	<div class='authent'>
+		<div class="loader"
+			style="height: 44px; width: 44px; margin-left: 28px;">
+			<div class="loader-inner ball-clip-rotate-multiple">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</div>
+		<p>认证中...</p>
+	</div>
+	<div class="OverWindows"></div>
 
-	<script src="<%=basePath %>/static/js/jquery.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="<%= basePath %>/static/js/js2.js"></script>
+	<link href="static/js/css/layui.css" rel="stylesheet" type="text/css" />
 
-	<script type="text/javascript" defer="defer">
-	//var inputwidth = parseInt($(".layui-form-item").width());
-	var slideVerify2 = new slideVerifyPlug('#verify-wrap2',{
-				wrapWidth: '100%',
-	            initText:'请按住滑块',
-	            sucessText:'验证通过',
-	           	successFun: function(){
-	           		$("#btn1").removeClass("layui-btn-disabled");
-					$("#btn1").removeAttr("disabled");
-				}
-			});
-	</script>
+	<script type="text/javascript" src="static/js/jquery.min.js"></script>
+	<script type="text/javascript" src="static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src='static/js/stopExecutionOnTimeout.js?t=1'></script>
+	<script type="text/javascript" src="static/js/layui.all.js"></script>
+	<script type="text/javascript" src="static/js/Particleground.js"></script>
+	<script type="text/javascript" src="static/js/Treatment.js"></script>
+	<script type="text/javascript" src="static/js/jquery.mockjax.js"></script>
 	
 	<script type="text/javascript" src="static/js/md5.js"></script>
+
 	<script type="text/javascript">
-		layui.use(['form','layer'], function() {
-			var form = layui.form;
-			var layer=layui.layer;
-			form.on('submit(loginSubmit)',function(){
+		var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
+		var ajaxmockjax = 1;//是否启用虚拟Ajax的请求响 0 不启用  1 启用
+		//默认账号密码
+		
+		var truelogin = "123456";
+		var truepwd = "123456";
+		
+		var CodeVal = 0;
+	    Code();
+	    function Code() {
+			if(canGetCookie == 1){
+				createCode("AdminCode");
+				var AdminCode = getCookieValue("AdminCode");
+				showCheck(AdminCode);
+			}else{
+				showCheck(createCode(""));
+			}
+	    }
+	    function showCheck(a) {
+			CodeVal = a;
+	        var c = document.getElementById("myCanvas");
+	        var ctx = c.getContext("2d");
+	        ctx.clearRect(0, 0, 1000, 1000);
+	        ctx.font = "80px 'Hiragino Sans GB'";
+	        ctx.fillStyle = "#E8DFE8";
+	        ctx.fillText(a, 0, 100);
+	    }
+	    $(document).keypress(function (e) {
+	        // 回车键事件  
+	        if (e.which == 13) {
+	            $('input[type="button"]').click();
+	        }
+	    });
+	    //粒子背景特效
+	    $('body').particleground({
+	        dotColor: '#E8DFE8',
+	        lineColor: 'orange'
+	    });
+	    $('input[name="pwd"]').focus(function () {
+	        $(this).attr('type', 'password');
+	    });
+	    $('input[type="text"]').focus(function () {
+	        $(this).prev().animate({ 'opacity': '1' }, 200);
+	    });
+	    $('input[type="text"],input[type="password"]').blur(function () {
+	        $(this).prev().animate({ 'opacity': '.5' }, 200);
+	    });
+	    $('input[name="login"],input[name="pwd"]').keyup(function () {
+	        var Len = $(this).val().length;
+	        if (!$(this).val() == '' && Len >= 5) {
+	            $(this).next().animate({
+	                'opacity': '1',
+	                'right': '30'
+	            }, 200);
+	        } else {
+	            $(this).next().animate({
+	                'opacity': '0',
+	                'right': '20'
+	            }, 200);
+	        }
+	    });
+	    var open = 0;
+	    layui.use('layer', function () {
+	
+	        //非空验证
+	        $('input[type="button"]').click(function () {
+	            var login = $('input[name="mobileNumber"]').val();
+	            var pwd = $('input[name="passWord"]').val();
+	            var code = $('input[name="code"]').val();
+	            
+	            
+	            
+	            if (login == '') {
+	                ErroAlert('请输入您的账号');
+	            } else if (pwd == '') {
+	                ErroAlert('请输入密码');
+	            } else if (code != CodeVal) {
+	                ErroAlert('输入正确验证码');
+	            } else {
+	            	
+	            
+	                //认证中..
+	               /*  fullscreen(); */
+	                
+	                /* $('.login').addClass('test'); //倾斜特效
+	                setTimeout(function () {
+	                    $('.login').addClass('testtwo'); //平移特效
+	                }, 300); */
+	              /*   setTimeout(function () {
+	                    $('.authent').show().animate({ right: -320 }, {
+	                        easing: 'easeOutQuint',
+	                        duration: 600,
+	                        queue: false
+	                    });
+	                    $('.authent').animate({ opacity: 1 }, {
+	                        duration: 200,
+	                        queue: false
+	                    }).addClass('visible');
+	                }, 500);
+ */
+	                
+	                var mdpwd = MD5(pwd);
+	                //登录
+	                var JsonData = { mobileNumber: login, passWord: mdpwd};
+					//此处做为ajax内部判断
+					var url = "";
 				
-				var password = MD5($("#LAY-user-login-password").val());
-				var data = {mobileNumber:$("#mobileNumber").val(),passWord:password};
-				$.ajax({
-					type:"post",
-					url:"merchant/login",
-					data:data,
-					success:function(data){
-						if(data=="success"){
-							layer.msg("登陆成功！",{icon:1,anim:2,time:100},function(){
-								window.location.href="<%=basePath%>view/toAdminIndex";
-							});
-						}else{
-							layer.msg("登陆失败！请检查用户名和密码后重试！",{icon:5,anim:6,time:3000});
+					$.ajax({
+						type:"post",
+						url:"merchant/login",
+						data:JsonData,
+						success:function(data){
+							if(data=="success"){
+								layer.msg("登陆成功！",{icon:1,anim:2,time:100},function(){
+									window.location.href="<%=basePath%>view/toAdminIndex";
+								});
+							}else{
+								ErroAlert("登陆失败！请检查用户名和密码后重试！");
+							}
 						}
-					}
-				});
-			});
-		});
-	</script>
+					});
+					
+					
+					   
+	            }
+	        })
+	    })
+	    var fullscreen = function () {
+	        elem = document.body;
+	        if (elem.webkitRequestFullScreen) {
+	            elem.webkitRequestFullScreen();
+	        } else if (elem.mozRequestFullScreen) {
+	            elem.mozRequestFullScreen();
+	        } else if (elem.requestFullScreen) {
+	            elem.requestFullscreen();
+	        } else {
+	            //浏览器不支持全屏API或已被禁用  
+	        }
+	    }  
+		if(ajaxmockjax == 1){
+			$.mockjax({  
+				url: 'Ajax/Login',  
+				status: 200,  
+				responseTime: 50,          
+				responseText: {"Status":"ok","Text":"登录成功<br /><br />欢迎回来"}  
+			}); 
+			$.mockjax({  
+				url: 'Ajax/LoginFalse',  
+				status: 200,  
+				responseTime: 50,          
+				responseText: {"Status":"Erro","Erro":"账号名或密码或验证码有误"}
+			});   
+		}
+    </script>
+
+
+
+	<script type="text/javascript" src="static/js/md5.js"></script>
+	
 </body>
 </html>

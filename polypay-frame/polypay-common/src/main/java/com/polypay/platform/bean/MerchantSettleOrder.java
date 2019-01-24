@@ -14,7 +14,7 @@ public class MerchantSettleOrder {
 
     private BigDecimal arrivalAmount;
 
-    private Integer merchantBindBankId;
+    private String merchantBindBank;
 
     private Date createTime;
 
@@ -70,13 +70,6 @@ public class MerchantSettleOrder {
         this.arrivalAmount = arrivalAmount;
     }
 
-    public Integer getMerchantBindBankId() {
-        return merchantBindBankId;
-    }
-
-    public void setMerchantBindBankId(Integer merchantBindBankId) {
-        this.merchantBindBankId = merchantBindBankId;
-    }
 
     public Date getCreateTime() {
         return createTime;
@@ -133,4 +126,12 @@ public class MerchantSettleOrder {
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId == null ? null : merchantId.trim();
     }
+
+	public String getMerchantBindBank() {
+		return merchantBindBank;
+	}
+
+	public void setMerchantBindBank(String merchantBindBank) {
+		this.merchantBindBank = merchantBindBank;
+	}
 }

@@ -19,6 +19,8 @@ public class MerchantSettleOrderVO extends VO {
 
 	private BigDecimal arrivalAmount;
 
+	private String merchantBindBank;
+	
 	private Integer merchantBindBankId;
 
 	private Date createTime;
@@ -159,14 +161,6 @@ public class MerchantSettleOrderVO extends VO {
 		this.arrivalAmount = arrivalAmount;
 	}
 
-	public Integer getMerchantBindBankId() {
-		return merchantBindBankId;
-	}
-
-	public void setMerchantBindBankId(Integer merchantBindBankId) {
-		this.merchantBindBankId = merchantBindBankId;
-	}
-
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -237,5 +231,21 @@ public class MerchantSettleOrderVO extends VO {
 
 	public void setBankName(String bankName) {
 		this.bankName = bankName;
+	}
+
+	public String getMerchantBindBank() {
+		return merchantBindBank;
+	}
+
+	public void setMerchantBindBank(String merchantBindBank) {
+		this.merchantBindBank = merchantBindBank;
+	}
+
+	public Integer getMerchantBindBankId() {
+		return merchantBindBankId;
+	}
+
+	public void setMerchantBindBankId(Integer merchantBindBankId) {
+		this.merchantBindBankId = merchantBindBankId;
 	}
 }

@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.collect.Maps;
+import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantSettleOrder;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.RoleConsts;
 import com.polypay.platform.dao.MerchantSettleOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantSettleOrderService;
@@ -90,20 +92,27 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 	@Override
 	public PageList<MerchantSettleOrderVO> listMerchantSettleOrder(PageBounds pageBounds,
 			MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException {
-		PageList<MerchantSettleOrderVO> result;
+		PageList<MerchantSettleOrderVO> result = null;
 		try {
-			merchantSettleOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
-			result = merchantSettleOrderMapper.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
+
+			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+			if (RoleConsts.MERCHANT.equals(merchant.getRoleId())) {
+				merchantSettleOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
+				result = merchantSettleOrderMapper.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
+			} else if (RoleConsts.MANAGER.equals(merchant.getRoleId())) {
+				result = merchantSettleOrderMapper.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
+			}
+
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
 		return result;
 	}
-	
+
 	@Override
 	public List<MerchantBill> getMerchantSettleMonthBill() throws ServiceException {
 		try {
-			Map<String,Object> param = Maps.newHashMap();
+			Map<String, Object> param = Maps.newHashMap();
 			param.put("beginTime", DateUtils.getBeforeMonthBegin());
 			param.put("endTime", DateUtils.getBeforeMonthEnd());
 			return merchantSettleOrderMapper.getMerchantSettleMonthBill(param);

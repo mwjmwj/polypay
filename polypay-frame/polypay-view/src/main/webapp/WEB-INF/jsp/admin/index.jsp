@@ -15,7 +15,7 @@
 	content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>商户后台管理</title>
 
-<link rel="shortcut icon" href="<%=basePath %>/favicon.ico"/>
+<link rel="shortcut icon" href="./static/favicon.ico"/>
 <link rel="stylesheet" href="./static/css/font.css">
 <link rel="stylesheet" href="./static/css/weadmin.css">
 

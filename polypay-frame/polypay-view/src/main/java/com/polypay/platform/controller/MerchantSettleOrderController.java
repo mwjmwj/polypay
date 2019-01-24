@@ -1,6 +1,7 @@
 package com.polypay.platform.controller;
 
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -254,7 +255,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		String orderNumber = "S" + currentOrder + RandomUtils.random(6);
 		merchantSettleOrder.setOrderNumber(orderNumber);
 
-		merchantSettleOrder.setMerchantBindBankId(merchantSettleOrderVO.getMerchantBindBankId());
+		merchantSettleOrder.setMerchantBindBank(merchantSettleOrderVO.getBankAccountNumber());
 		merchantSettleOrder.setMerchantId(merchantSettleOrderVO.getMerchantId());
 		merchantSettleOrder.setStatus(OrderStatusConsts.SUBMIT);
 		merchantSettleOrder.setCreateTime(new Date());

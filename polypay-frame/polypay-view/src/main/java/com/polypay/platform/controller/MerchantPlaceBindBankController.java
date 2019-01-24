@@ -17,7 +17,6 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
-import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.consts.MerchantBindBankConsts;

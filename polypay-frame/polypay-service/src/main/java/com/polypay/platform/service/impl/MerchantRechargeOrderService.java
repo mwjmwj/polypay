@@ -14,6 +14,7 @@ import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantRechargeOrder;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.RoleConsts;
 import com.polypay.platform.dao.MerchantRechargeOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
@@ -91,11 +92,16 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 	@Override
 	public PageList<MerchantRechargeOrderVO> listMerchantRechargeOrder(PageBounds pageBounds,
 			MerchantRechargeOrderVO merchantRechargeOrderVO) throws ServiceException {
-		PageList<MerchantRechargeOrderVO> result;
+		PageList<MerchantRechargeOrderVO> result = null;
 		try {
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
-			merchantRechargeOrderVO.setMerchantId(merchant.getUuid());
-			result = merchantRechargeOrderMapper.listMerchantRechargeOrder(pageBounds, merchantRechargeOrderVO);
+			
+			if (RoleConsts.MERCHANT.equals(merchant.getRoleId())) {
+				merchantRechargeOrderVO.setMerchantId(merchant.getUuid());
+				result = merchantRechargeOrderMapper.listMerchantRechargeOrder(pageBounds, merchantRechargeOrderVO);
+			} else if (RoleConsts.MANAGER.equals(merchant.getRoleId())) {
+				result = merchantRechargeOrderMapper.listMerchantRechargeOrder(pageBounds, merchantRechargeOrderVO);
+			}
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

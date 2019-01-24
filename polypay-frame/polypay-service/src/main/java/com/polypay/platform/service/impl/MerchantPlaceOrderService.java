@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.collect.Maps;
+import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantBill;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.RoleConsts;
 import com.polypay.platform.dao.MerchantPlaceOrderMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
@@ -87,26 +89,35 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.polypay.platform.service.IMerchantPlaceOrderService#listMerchantPlaceOrder(com.github.miemiedev.mybatis.paginator.domain.PageBounds, com.polypay.platform.vo.MerchantPlaceOrderVO)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.polypay.platform.service.IMerchantPlaceOrderService#
+	 * listMerchantPlaceOrder(com.github.miemiedev.mybatis.paginator.domain.
+	 * PageBounds, com.polypay.platform.vo.MerchantPlaceOrderVO)
 	 */
 	@Override
 	public PageList<MerchantPlaceOrderVO> listMerchantPlaceOrder(PageBounds pageBounds,
 			MerchantPlaceOrderVO merchantPlaceOrderVO) throws ServiceException {
-		PageList<MerchantPlaceOrderVO> result;
+		PageList<MerchantPlaceOrderVO> result = null;
 		try {
-			merchantPlaceOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
-			result = merchantPlaceOrderMapper.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
+			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+			if (RoleConsts.MERCHANT.equals(merchant.getRoleId())) {
+				merchantPlaceOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
+				result = merchantPlaceOrderMapper.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
+			} else if (RoleConsts.MANAGER.equals(merchant.getRoleId())) {
+				result = merchantPlaceOrderMapper.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
+			}
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
 		return result;
 	}
-	
+
 	@Override
 	public List<MerchantBill> getMerchantPlaceMonthBill() throws ServiceException {
 		try {
-			Map<String,Object> param = Maps.newHashMap();
+			Map<String, Object> param = Maps.newHashMap();
 			param.put("beginTime", DateUtils.getBeforeMonthBegin());
 			param.put("endTime", DateUtils.getBeforeMonthEnd());
 			return merchantPlaceOrderMapper.getMerchantPlaceMonthBill(param);

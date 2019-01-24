@@ -83,7 +83,7 @@
 			table.render({
 				elem : '#rechargelist',
 				url : '../merchant/recharge/order/list',
-				toolbar : '#search',
+				toolbar : 's',
 				totalRow : true,
 				title : '用户数据表',
 				response : {

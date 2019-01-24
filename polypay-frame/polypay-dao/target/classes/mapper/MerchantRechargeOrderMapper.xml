@@ -2,36 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper
 	namespace="com.polypay.platform.dao.MerchantRechargeOrderMapper">
-	<resultMap id="BaseResultMap"
-		type="com.polypay.platform.bean.MerchantRechargeOrder">
-		<id column="id" property="id" jdbcType="INTEGER" />
-		<result column="order_number" property="orderNumber"
-			jdbcType="VARCHAR" />
-		<result column="merchant_order_number"
-			property="merchantOrderNumber" jdbcType="VARCHAR" />
-		<result column="bank_order_number" property="bankOrderNumber"
-			jdbcType="VARCHAR" />
-		<result column="merchant_id" property="merchantId"
-			jdbcType="VARCHAR" />
-		<result column="type" property="type" jdbcType="INTEGER" />
-		<result column="pay_amount" property="payAmount"
-			jdbcType="DECIMAL" />
-		<result column="service_amount" property="serviceAmount"
-			jdbcType="DECIMAL" />
-		<result column="arrival_amount" property="arrivalAmount"
-			jdbcType="DECIMAL" />
-		<result column="create_time" property="createTime"
-			jdbcType="TIMESTAMP" />
-		<result column="success_time" property="successTime"
-			jdbcType="TIMESTAMP" />
-		<result column="pay_channel" property="payChannel"
-			jdbcType="VARCHAR" />
-		<result column="pay_bank" property="payBank" jdbcType="VARCHAR" />
-		<result column="descreption" property="descreption"
-			jdbcType="VARCHAR" />
-		<result column="status" property="status" jdbcType="INTEGER" />
-	</resultMap>
-
 	<resultMap id="listResult"
 		type="com.polypay.platform.vo.MerchantRechargeOrderVO">
 		<id column="id" property="id" jdbcType="INTEGER" />
@@ -60,14 +30,59 @@
 		<result column="descreption" property="descreption"
 			jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="trade_type" property="tradeType"
+			jdbcType="VARCHAR" />
+		<result column="account_mobile_number"
+			property="accountMobileNumber" jdbcType="VARCHAR" />
+		<result column="account_bank_number"
+			property="accountBankNumber" jdbcType="VARCHAR" />
+		<result column="account_name" property="accountName"
+			jdbcType="VARCHAR" />
 	</resultMap>
 
-
+	<resultMap id="BaseResultMap"
+		type="com.polypay.platform.bean.MerchantRechargeOrder">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="order_number" property="orderNumber"
+			jdbcType="VARCHAR" />
+		<result column="merchant_order_number"
+			property="merchantOrderNumber" jdbcType="VARCHAR" />
+		<result column="bank_order_number" property="bankOrderNumber"
+			jdbcType="VARCHAR" />
+		<result column="merchant_id" property="merchantId"
+			jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="pay_amount" property="payAmount"
+			jdbcType="DECIMAL" />
+		<result column="service_amount" property="serviceAmount"
+			jdbcType="DECIMAL" />
+		<result column="arrival_amount" property="arrivalAmount"
+			jdbcType="DECIMAL" />
+		<result column="create_time" property="createTime"
+			jdbcType="TIMESTAMP" />
+		<result column="success_time" property="successTime"
+			jdbcType="TIMESTAMP" />
+		<result column="pay_channel" property="payChannel"
+			jdbcType="VARCHAR" />
+		<result column="pay_bank" property="payBank" jdbcType="VARCHAR" />
+		<result column="descreption" property="descreption"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="trade_type" property="tradeType"
+			jdbcType="VARCHAR" />
+		<result column="account_mobile_number"
+			property="accountMobileNumber" jdbcType="VARCHAR" />
+		<result column="account_bank_number"
+			property="accountBankNumber" jdbcType="VARCHAR" />
+		<result column="account_name" property="accountName"
+			jdbcType="VARCHAR" />
+	</resultMap>
 	<sql id="Base_Column_List">
 		id, order_number, merchant_order_number, bank_order_number, merchant_id,
 		type, pay_amount,
 		service_amount, arrival_amount, create_time, success_time, pay_channel, pay_bank,
-		descreption, status
+		descreption, status, trade_type, account_mobile_number,
+		account_bank_number, account_name
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -88,8 +103,9 @@
 		bank_order_number, merchant_id, type,
 		pay_amount, service_amount, arrival_amount,
 		create_time, success_time, pay_channel,
-		pay_bank, descreption, status
-		)
+		pay_bank, descreption, status,
+		trade_type, account_mobile_number, account_bank_number,
+		account_name)
 		values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR},
 		#{merchantOrderNumber,jdbcType=VARCHAR},
 		#{bankOrderNumber,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR},
@@ -97,12 +113,15 @@
 		#{payAmount,jdbcType=DECIMAL}, #{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL},
 		#{createTime,jdbcType=TIMESTAMP}, #{successTime,jdbcType=TIMESTAMP},
 		#{payChannel,jdbcType=VARCHAR},
-		#{payBank,jdbcType=VARCHAR}, #{descreption,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
-		)
+		#{payBank,jdbcType=VARCHAR}, #{descreption,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+		#{tradeType,jdbcType=VARCHAR},
+		#{accountMobileNumber,jdbcType=VARCHAR},
+		#{accountBankNumber,jdbcType=VARCHAR},
+		#{accountName,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective"
-		parameterType="com.polypay.platform.bean.MerchantRechargeOrder" useGeneratedKeys="true" keyProperty="id">
-		insert into merchant_recharge_order 
+		parameterType="com.polypay.platform.bean.MerchantRechargeOrder">
+		insert into merchant_recharge_order
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null">
 				id,
@@ -148,6 +167,18 @@
 			</if>
 			<if test="status != null">
 				status,
+			</if>
+			<if test="tradeType != null">
+				trade_type,
+			</if>
+			<if test="accountMobileNumber != null">
+				account_mobile_number,
+			</if>
+			<if test="accountBankNumber != null">
+				account_bank_number,
+			</if>
+			<if test="accountName != null">
+				account_name,
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -195,6 +226,18 @@
 			</if>
 			<if test="status != null">
 				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="tradeType != null">
+				#{tradeType,jdbcType=VARCHAR},
+			</if>
+			<if test="accountMobileNumber != null">
+				#{accountMobileNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="accountBankNumber != null">
+				#{accountBankNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				#{accountName,jdbcType=VARCHAR},
 			</if>
 		</trim>
 	</insert>
@@ -244,6 +287,18 @@
 			<if test="status != null">
 				status = #{status,jdbcType=INTEGER},
 			</if>
+			<if test="tradeType != null">
+				trade_type = #{tradeType,jdbcType=VARCHAR},
+			</if>
+			<if test="accountMobileNumber != null">
+				account_mobile_number = #{accountMobileNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="accountBankNumber != null">
+				account_bank_number = #{accountBankNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				account_name = #{accountName,jdbcType=VARCHAR},
+			</if>
 		</set>
 		where id = #{id,jdbcType=INTEGER}
 	</update>
@@ -263,7 +318,11 @@
 		pay_channel = #{payChannel,jdbcType=VARCHAR},
 		pay_bank = #{payBank,jdbcType=VARCHAR},
 		descreption = #{descreption,jdbcType=VARCHAR},
-		status = #{status,jdbcType=INTEGER}
+		status = #{status,jdbcType=INTEGER},
+		trade_type = #{tradeType,jdbcType=VARCHAR},
+		account_mobile_number = #{accountMobileNumber,jdbcType=VARCHAR},
+		account_bank_number = #{accountBankNumber,jdbcType=VARCHAR},
+		account_name = #{accountName,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 
@@ -273,8 +332,12 @@
 		select
 		<include refid="Base_Column_List" />
 		from merchant_recharge_order
-		where merchant_id = #{merchantId}
-
+		where 1=1
+		
+		<if test="merchantId != null">
+			and merchant_id = #{merchantId,jdbcType=INTEGER}
+		</if>
+		
 		<if test="status != null">
 			and status = #{status,jdbcType=INTEGER}
 		</if>
@@ -293,7 +356,7 @@
 			and create_time <![CDATA[<=]]>
 			#{cEndTime}
 		</if>
-		
+
 		<if test="sBeginTime != null">
 			and success_time <![CDATA[>=]]>
 			#{sBeginTime}
@@ -312,7 +375,8 @@
 		select
 		<include refid="Base_Column_List" />
 		from merchant_recharge_order
-		where merchant_order_number = #{merchantOrderNumber}
+		where merchant_order_number =
+		#{merchantOrderNumber}
 
 	</select>
 
@@ -332,45 +396,57 @@
 		SELECT
 		SUM(mro.`pay_amount`) AS merchantAllRechargeAmount,
 		COUNT(1) AS merchantAllOrderNumber,
-		sum(mro.`service_amount`) AS merchantAllServiceAmount
-		FROM merchant_recharge_order mro WHERE mro.`merchant_id` = #{merchantUUID}
+		sum(mro.`service_amount`) AS
+		merchantAllServiceAmount
+		FROM merchant_recharge_order mro WHERE
+		mro.`merchant_id` = #{merchantUUID}
 		AND mro.`status` = 0
-		GROUP BY mro.`merchant_id`
+		GROUP BY
+		mro.`merchant_id`
 
 	</select>
 	<select id="allTimeMerchantOrder"
 		parameterType="java.lang.String"
 		resultType="com.polypay.platform.vo.MerchantMainDateVO">
 
-		SELECT m.create_time as createTime,SUM(m.pay_amount) as merchantAllRechargeAmount,COUNT(*) AS merchantAllOrderNumber FROM (SELECT
+		SELECT m.create_time as createTime,SUM(m.pay_amount) as
+		merchantAllRechargeAmount,COUNT(*) AS merchantAllOrderNumber FROM
+		(SELECT
 		DATE_FORMAT(mro.`create_time`,'%Y-%m-%d') AS create_time,
 		mro.`pay_amount` AS pay_amount
-		FROM merchant_recharge_order mro WHERE mro.`merchant_id`=#{merchantUUID}
-		AND mro.`status` = 0 order by mro.create_time desc )m GROUP BY
+		FROM merchant_recharge_order mro WHERE
+		mro.`merchant_id`=#{merchantUUID}
+		AND mro.`status` = 0 order by
+		mro.create_time desc )m GROUP BY
 		m.create_time
 	</select>
-	
-	
-	
-	<select id="getMerchantRechargeMonthBill" parameterType="java.util.Map" resultType="com.polypay.platform.bean.MerchantBill">
-		SELECT 
+
+
+
+	<select id="getMerchantRechargeMonthBill"
+		parameterType="java.util.Map"
+		resultType="com.polypay.platform.bean.MerchantBill">
+		SELECT
 		merchant_id as merchantId,
 		count(1) as rechargeNumber,
-		sum(pay_amount) as rechargeAmount,
+		sum(pay_amount) as
+		rechargeAmount,
 		sum(service_amount) as rechargeServiceAmount
-		 from 
+		from
 		merchant_recharge_order where status = 0
-		
-		<if test="beginTime != null" >
-        and create_time <![CDATA[>=]]> #{beginTime}
-     </if>
-     
-      <if test="endTime != null" >
-        and create_time <![CDATA[<=]]> #{endTime}
-     </if>
+
+		<if test="beginTime != null">
+			and create_time <![CDATA[>=]]>
+			#{beginTime}
+		</if>
+
+		<if test="endTime != null">
+			and create_time <![CDATA[<=]]>
+			#{endTime}
+		</if>
 		group by merchant_id
 	</select>
-	
-	
+
+
 
 </mapper>

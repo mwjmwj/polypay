@@ -82,7 +82,7 @@
 			table.render({
 				elem : '#settlelist',
 				url : '../merchant/settle/order/list',
-				toolbar : '#search',
+				toolbar : 's',
 				totalRow : true,
 				title : '用户数据表',
 				response : {

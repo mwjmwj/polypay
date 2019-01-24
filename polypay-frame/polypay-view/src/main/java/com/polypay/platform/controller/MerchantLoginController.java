@@ -2,6 +2,7 @@ package com.polypay.platform.controller;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.qcloudsms.SmsSingleSender;
-import com.github.qcloudsms.SmsSingleSenderResult;
-import com.github.qcloudsms.httpclient.HTTPException;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.Menu;
@@ -42,6 +39,8 @@ import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantLoginLogSerivce;
 import com.polypay.platform.service.IMerchantVerifyService;
 import com.polypay.platform.utils.DateUtils;
+import com.polypay.platform.utils.HttpClientUtil;
+import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.IPUtils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.utils.RegexUtil;
@@ -331,12 +330,12 @@ public class MerchantLoginController {
 				return response;
 			}
 
-			boolean comperDate = DateUtils.comperDate(new Date(), merchantVerify.getAvaliableTime());
+			/*boolean comperDate = DateUtils.comperDate(new Date(), merchantVerify.getAvaliableTime());
 
 			if (comperDate) {
 				response.setMessage("验证码在有效期,5分钟再发送!");
 				return response;
-			}
+			}*/
 
 			this.sendVerifyCode(response, merchantVerify);
 
@@ -373,8 +372,7 @@ public class MerchantLoginController {
 	 */
 	@RequestMapping("/merchant/password/update")
 	@ResponseBody
-	public ServiceResponse updateMerchantAccountInfo(MerchantAccountInfoVO merchantInfo)
-			throws ServiceException {
+	public ServiceResponse updateMerchantAccountInfo(MerchantAccountInfoVO merchantInfo) throws ServiceException {
 
 		ServiceResponse response = new ServiceResponse();
 		MerchantAccountInfo exitMerchant = merchantAccountInfoService.getMerchantInfo(merchantInfo);
@@ -393,34 +391,32 @@ public class MerchantLoginController {
 		String newPassword = merchantInfo.getNewPassword();
 		Boolean flag = false;
 		if (!StringUtils.isEmpty(newPassword) && VerifyTypeEnum.UPDATE_PWD.equals(merchantInfo.getVerifyType())) {
-			if(newPassword.equals(exitMerchant.getPassWord()))
-			{
+			if (newPassword.equals(exitMerchant.getPassWord())) {
 				ResponseUtils.exception(response, "新旧密码相同", RequestStatus.FAILED.getStatus());
 				return response;
 			}
 			exitMerchant.setPassWord(newPassword);
-			
+
 			merchantAccountInfoService.updateByPrimaryKeySelective(exitMerchant);
 			flag = true;
 		}
 
 		String newPayPassword = merchantInfo.getNewPayPassword();
 		MerchantFinance merchantFinance;
-		if (!StringUtils.isEmpty(newPayPassword) && VerifyTypeEnum.UPDATE_PAY_PWD.equals(merchantInfo.getVerifyType())) {
+		if (!StringUtils.isEmpty(newPayPassword)
+				&& VerifyTypeEnum.UPDATE_PAY_PWD.equals(merchantInfo.getVerifyType())) {
 			merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(exitMerchant.getUuid());
 
 			if (null == merchantFinance) {
 				ResponseUtils.exception(response, "该用户财务信息缺失!", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			
-			if(newPayPassword.equals(merchantFinance.getPayPassword()))
-			{
+
+			if (newPayPassword.equals(merchantFinance.getPayPassword())) {
 				ResponseUtils.exception(response, "新旧支付密码相同", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			
-			
+
 			merchantFinance.setPayPassword(newPayPassword);
 			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 			flag = true;
@@ -439,17 +435,28 @@ public class MerchantLoginController {
 		return instance.getTime();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void sendVerifyCode(ServiceResponse response, MerchantVerify merchantVerify)
 			throws ServiceException, IllegalAccessException, InvocationTargetException {
 		MerchantVerify tbVerifycodeVO = new MerchantVerify();
 		BeanUtils.copyProperties(tbVerifycodeVO, merchantVerify);
 		if (null != merchantVerify.getMobileNumber()) {
+
 			/**
 			 * 发送手机验证码 成功直接return
 			 */
-			if (true) {
-				// TODO
-				System.out.println("verifycode " + merchantVerify.getCode());
+
+			StringBuilder url = new StringBuilder();
+			url.append("http://m.5c.com.cn/api/send/index.php?").append("username=zhang1")
+					.append("&password_md5=1adbb3178591fd5bb0c248518f39bf6d")
+					.append("&apikey=2cd1102e4b32661f0aadee35d9940985").append("&mobile=")
+					.append(merchantVerify.getMobileNumber()).append("&encode=UTF-8").append("&content=")
+					.append(URLEncoder
+							.encode("【源盛丰】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作，请忽略."));
+
+			HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(url.toString());
+
+			if (StringUtils.isNotEmpty(httpGet.getResultAsString())&&httpGet.getResultAsString().contains("success")) {
 				response.setMessage("发送成功");
 				return;
 			}
@@ -500,20 +507,6 @@ public class MerchantLoginController {
 		// 8-20 位，字母、数字、字符
 		String regStr = "^([A-Z]|[a-z]|[0-9]|[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“'。，、？]){8,20}$";
 		return input.matches(regStr);
-	}
-	
-	
-	public static void main(String[] args) throws JSONException, HTTPException, IOException {
-		
-		
-		String[] params = {"567810","5"};//数组具体的元素个数和模板中变量个数必须一致，例如事例中templateId:5678对应一个变量，参数数组中元素个数也必须是一个
-	    SmsSingleSender ssender = new SmsSingleSender(1400182523, "aaa15e1f7fe240ba4dadb3340423261a");
-	    
-	    String[] phoneNumbers = {"17607450610"};
-		SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers [0],
-				7839, params, null, "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
-		
-		System.out.println(result);
 	}
 
 }

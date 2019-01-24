@@ -39,33 +39,13 @@
 
 				<ul class="nav navbar-nav navbar-right" style="padding-right:30px;">
 					<c:if test="${ empty sessionScope.user}">
-						<li><a href="view/register" >注册</a></li>
+						<!-- <li><a href="view/register" >注册</a></li> -->
 						<li><a href="view/admin">登录</a></li>
 					</c:if>
-					<c:if test="${not empty sessionScope.user}">
-						<li><a href="view/usercenter">用户中心</a></li>
-						<li class="dropdown"><a href="#" class="dropdown-toggle"
-							data-toggle="dropdown" role="button" aria-haspopup="true"
-							aria-expanded="false"><div style="margin-top:-5px;float:left;width:30px; height:30px; border-radius:50%; overflow:hidden;"><img src="upload/${user.userImg }" style="width:30px;height:30px;" class="layui-nav-img"></div>&nbsp;&nbsp;${sessionScope.user.userName} <span
-								class="caret"></span>
-						</a>
-							<ul class="dropdown-menu">
-								<li><a href="view/cart">购物车</a></li>
-								<li><a href="user/amendinfo">个人资料修改</a></li>
-								<li><a href="user/logout">注销登录</a></li>
-							</ul></li>
-					</c:if>
+					
 				</ul>
 
 				<div class="navbar-form navbar-right">
-<!-- 				<form action="goods/search" method="post">
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="iPhone X" name="keyWord"
-							id="searchKeyWord" />
-					</div>
-					<button class="btn btn-default" type="submit">查找商品</button>
-				</div>
-				</form> -->
 			</div>
 		</div>
 		</div>

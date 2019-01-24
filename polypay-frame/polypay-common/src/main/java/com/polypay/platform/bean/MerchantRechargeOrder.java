@@ -33,8 +33,49 @@ public class MerchantRechargeOrder {
     private String descreption;
 
     private Integer status;
+    
+    private String tradeType;
+    
+    private String accountMobileNumber;
 
-    public Integer getId() {
+    private String accountBankNumber;
+
+    private String accountName;
+    
+
+    public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+
+	public String getAccountMobileNumber() {
+		return accountMobileNumber;
+	}
+
+	public void setAccountMobileNumber(String accountMobileNumber) {
+		this.accountMobileNumber = accountMobileNumber;
+	}
+
+	public String getAccountBankNumber() {
+		return accountBankNumber;
+	}
+
+	public void setAccountBankNumber(String accountBankNumber) {
+		this.accountBankNumber = accountBankNumber;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public Integer getId() {
         return id;
     }
 

@@ -11,6 +11,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.polypay.platform.bean.Menu;
@@ -23,6 +25,7 @@ import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantHelpPayConsts;
 import com.polypay.platform.consts.MerchantPayLevelConsts;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.RoleConsts;
 import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.dao.MenuMapper;
 import com.polypay.platform.dao.MerchantAccountInfoMapper;
@@ -142,6 +145,8 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 					merchantAccountInfo.getHelppayStatus() == null ? MerchantHelpPayConsts.CLOSE_HELP_PAY
 							: merchantAccountInfo.getHelppayStatus());
 			merchantAccountInfo.setPayLevel(MerchantPayLevelConsts.VIP_SLIVE);
+			merchantAccountInfo.setRoleId(RoleConsts.MERCHANT);
+			
 			merchantAccountInfoMapper.insertSelective(merchantAccountInfo);
 
 			// 保存财务信息
@@ -209,6 +214,16 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			}
 
 			return pMenus;
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param) throws ServiceException {
+		try {
+
+			return merchantAccountInfoMapper.listMerchantBindBank(pageBounds,param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
