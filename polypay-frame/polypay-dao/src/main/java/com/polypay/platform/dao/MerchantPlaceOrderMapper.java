@@ -18,6 +18,7 @@ public interface MerchantPlaceOrderMapper extends BaseMapper<MerchantPlaceOrder>
 	List<MerchantBill> getMerchantPlaceMonthBill(Map<String, Object> param);
 
 	MerchantMainDateVO allMerchantPlace(String uuid);
-
+	
+	MerchantMainDateVO managerAllMerchantPlaceOrder();
 
 }

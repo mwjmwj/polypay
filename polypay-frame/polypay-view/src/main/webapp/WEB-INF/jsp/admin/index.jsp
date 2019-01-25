@@ -109,8 +109,21 @@
 			</ul>
 			<div class="layui-tab-content" style="background-color: #F5F5F5;margin-left: 10px;margin-top: 10px">
 				 <div class="layui-tab-item layui-show">
+					
+					<c:if test="${sessionScope.merchant_user.roleId == 2 || sessionScope.merchant_user.roleId == 3 }">
+					
+					<iframe src='./manager/mainmenu' frameborder="0" scrolling="yes"
+						class="weIframe"></iframe>
+						
+					</c:if>
+					
+					<c:if test="${sessionScope.merchant_user.roleId == 1 }">
+					
 					<iframe src='./index/mainmenu' frameborder="0" scrolling="yes"
 						class="weIframe"></iframe>
+					</c:if>
+						
+						
 				</div>
 			</div>
 		</div>

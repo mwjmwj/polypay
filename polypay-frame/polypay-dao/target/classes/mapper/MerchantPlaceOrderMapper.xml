@@ -377,5 +377,14 @@
 	</select>
 
 
+	<select id="managerAllMerchantPlaceOrder" resultType="com.polypay.platform.vo.MerchantMainDateVO">
+		select 
+		sum(mro.`pay_amount`) AS merchantAllPlaceAmount,
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS
+		merchantAllServiceAmount
+		from merchant_place_order mro where mro.`status` = 0
+	</select>
+
 
 </mapper>

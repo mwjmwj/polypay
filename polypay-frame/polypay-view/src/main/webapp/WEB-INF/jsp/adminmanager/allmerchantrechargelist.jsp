@@ -67,7 +67,7 @@
 
 
 	<script type="text/html" id="barDemo">
- 		 <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
+ 		 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">查看</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -115,6 +115,14 @@
 					templet : function(row) {
 						return "T+1"
 					}
+				}
+				, {
+					field : 'merchantId',
+					title : '商户ID',
+					align : 'center',
+					width : 280,
+					style : 'color: red',
+					sort : true
 				}, {
 					field : 'orderNumber',
 					title : '订单号',
@@ -281,7 +289,7 @@
 		});
 		
 		$.ajax({
-			url:'../merchantmanager/recharge/all',
+			url:'../managermerchant/recharge/all',
 			success:function(data){
 				if(data.status == 0)
 				{

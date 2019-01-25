@@ -156,4 +156,14 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 		}
 	}
 
+	@Override
+	public MerchantMainDateVO managerAllMerchantRechargeOrder() throws ServiceException {
+		
+		try {
+			return merchantRechargeOrderMapper.managerAllMerchantRechargeOrder();
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

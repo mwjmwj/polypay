@@ -45,6 +45,7 @@
           <option value="">选择订单状态</option>
           <option value="-1">失败</option>
           <option value="0">成功</option>
+           <option value="1">待审核</option>
         </select>
       </div>
     </div>
@@ -66,8 +67,17 @@
 
 
 	<script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+		{{#  if(d.status == '1'){ }}
+ 		 <a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
+		{{#  } }}
+
+		{{#  if(d.status != '1'){ }}
+ 		 <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">查看</a>
+		{{#  } }}
+
+  		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
 </script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
@@ -114,6 +124,14 @@
 					templet : function(row) {
 						return "T+1"
 					}
+				}
+				, {
+					field : 'merchantId',
+					title : '商户ID',
+					align : 'center',
+					width : 280,
+					style : 'color: red',
+					sort : true
 				}, {
 					field : 'orderNumber',
 					title : '订单号',
@@ -260,8 +278,11 @@
 				  layer.open({
 					  area:['500px','600px'],
 					  type: 2,
-					  title:'订单详细',
-					  content: '../merchant/settle/query?id='+data.id
+					  title:'结算订单详细',
+					  icon:1,
+						anim:5,
+						maxmin: true,
+					  content: '../merchantmanager/settle/query?id='+data.id
 					}); 
 			  } else if(layEvent === 'del'){ //删除
 			    layer.confirm('真的删除行么', function(index){
@@ -269,24 +290,24 @@
 			      layer.close(index);
 			      //向服务端发送删除指令
 			    });
-			  } else if(layEvent === 'edit'){ //编辑
-			    //do something
-			    
-			    //同步更新缓存对应的值
-			    obj.update({
-			      username: '123'
-			      ,title: 'xxx'
-			    });
+			  } else if(layEvent === 'audit'){ //编辑
+				  layer.open({
+					  area:['500px','700px'],
+					  type: 2,
+					  title:'结算订单详细',
+					  icon:1,
+						anim:5,
+						maxmin: true,
+					  content: '../merchantmanager/settle/query?id='+data.id
+					}); 
 			  }
 			});
-			
-			
 			
 		});
 		
 		
 		$.ajax({
-			url:'../merchantmanager/settle/all',
+			url:'../managermerchant/settle/all',
 			success:function(data){
 				if(data.status == 0)
 				{

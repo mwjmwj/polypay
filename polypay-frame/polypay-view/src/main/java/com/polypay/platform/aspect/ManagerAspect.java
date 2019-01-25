@@ -53,9 +53,9 @@ public class ManagerAspect {
 			return;
 		}
 		
-		if (((MerchantAccountInfo) user).getRoleId() != RoleConsts.PROXY
-				|| ((MerchantAccountInfo) user).getRoleId() != RoleConsts.MANAGER) {
-			response.sendRedirect("toAdminIndex");
+		if (!((MerchantAccountInfo) user).getRoleId().equals(RoleConsts.PROXY)
+				&& !((MerchantAccountInfo) user).getRoleId().equals(RoleConsts.MANAGER)) {
+			response.sendRedirect("../view/toAdminIndex");
 			return;
 		}
 

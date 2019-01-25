@@ -19,4 +19,6 @@ public interface IMerchantPlaceOrderService extends IBaseService<MerchantPlaceOr
 
 	MerchantMainDateVO allMerchantPlace(String uuid) throws ServiceException;
 
+	MerchantMainDateVO managerAllMerchantPlaceOrder() throws ServiceException;
+
 }

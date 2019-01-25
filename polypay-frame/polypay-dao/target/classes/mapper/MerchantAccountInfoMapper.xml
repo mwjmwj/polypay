@@ -26,7 +26,7 @@
 
 
 	<resultMap id="listResultMap"
-		type="  com.polypay.platform.vo.MerchantAccountInfoVO">
+		type="com.polypay.platform.vo.MerchantAccountInfoVO">
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="uuid" property="uuid" jdbcType="VARCHAR" />
 		<result column="proxy_id" property="proxyId" jdbcType="VARCHAR" />
@@ -238,8 +238,6 @@
 	<select id="listMerchantBindBank"
 		parameterType="com.polypay.platform.vo.MerchantAccountInfoVO"
 		resultMap="listResultMap">
-
-
 		select
 		<include refid="Base_Column_List" />
 		from merchant_account_info
@@ -257,7 +255,7 @@
 		</if>
 
 		<if test="mobileNumber != null">
-			<bind name="mobileNumber" value="'%'mobileNumber'%'" />
+			<bind name="mobileNumber" value="'%'+mobileNumber+'%'" />
 			and mobile_number like #{mobileNumber}
 		</if>
 

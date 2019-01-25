@@ -135,4 +135,13 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 		}
 	}
 
+	@Override
+	public MerchantMainDateVO managerAllMerchantPlaceOrder() throws ServiceException {
+		try {
+			return merchantPlaceOrderMapper.managerAllMerchantPlaceOrder();
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

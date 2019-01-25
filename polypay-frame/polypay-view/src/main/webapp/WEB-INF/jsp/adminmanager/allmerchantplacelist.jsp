@@ -28,7 +28,10 @@
 <body>
 <div class="layui-form">
 	<div class="layui-row" style="margin-top: 10px">
- 	<div class="layui-inline">		
+		<div class="layui-inline">		
+ 		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户ID" />
+		</div>
+ 		<div class="layui-inline">		
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
 		 <div class="layui-inline">
@@ -71,8 +74,17 @@
 
 
 	<script type="text/html" id="barDemo">
-  <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+		{{#  if(d.status == '1'){ }}
+ 		 <a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
+		{{#  } }}
+
+		{{#  if(d.status != '1'){ }}
+ 		 <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">查看</a>
+		{{#  } }}
+	
+  		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
 </script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
@@ -110,6 +122,14 @@
 					templet : '#zizeng',
 					totalRowText: '合计'
 				}, {
+					field : 'merchantId',
+					title : '商户ID',
+					align : 'center',
+					width : 280,
+					style : 'color: red',
+					sort : true
+				}
+				, {
 					field : 'orderNumber',
 					title : '订单号',
 					align : 'center',
@@ -219,6 +239,7 @@
 						var begintime = $('#begintime').val();
 						var endtime = $('#endtime').val();
 						var status = $('#status').val();
+						var merchantId = $("#merchantId").val();
 						//执行重载
 						table.reload('placeReload', {
 							page : {
@@ -226,6 +247,7 @@
 							//重新从第 1 页开始
 							},
 							where : {
+								merchantId : merchantId,
 								orderNumber : ordernumber,
 								beginTime:begintime,
 								endTime:endtime,
@@ -284,7 +306,7 @@
 		
 		
 		$.ajax({
-			url:'../merchantmanager/place/all',
+			url:'../managermerchant/place/all',
 			success:function(data){
 				if(data.status == 0)
 				{

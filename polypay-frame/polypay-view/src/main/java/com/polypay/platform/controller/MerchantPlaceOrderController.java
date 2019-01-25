@@ -196,10 +196,10 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 				merchantFinance.setBlanceAmount(blanceAmount.subtract(settleAmount));
 				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 			}
-			final MerchantPlaceOrder asyncMerchantPlaceOrder = merchantPlaceOrder;
+			//final MerchantPlaceOrder asyncMerchantPlaceOrder = merchantPlaceOrder;
 
 			// 异步发起请求第三方提现
-			executorService.submit(() -> submitPlaceOrder(asyncMerchantPlaceOrder));
+			//executorService.submit(() -> submitPlaceOrder(asyncMerchantPlaceOrder));
 			response.setMessage("订单提交成功");
 		} catch (ServiceException e) {
 			log.error(response.getRequestId() + " " + e.getMessage());

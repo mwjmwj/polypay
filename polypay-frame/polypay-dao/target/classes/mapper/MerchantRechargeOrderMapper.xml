@@ -78,10 +78,13 @@
 			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, order_number, merchant_order_number, bank_order_number, merchant_id,
+		id, order_number, merchant_order_number, bank_order_number,
+		merchant_id,
 		type, pay_amount,
-		service_amount, arrival_amount, create_time, success_time, pay_channel, pay_bank,
-		descreption, status, trade_type, account_mobile_number,
+		service_amount, arrival_amount,
+		create_time, success_time, pay_channel, pay_bank,
+		descreption, status,
+		trade_type, account_mobile_number,
 		account_bank_number, account_name
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -94,7 +97,8 @@
 	<delete id="deleteByPrimaryKey"
 		parameterType="java.lang.Integer">
 		delete from merchant_recharge_order
-		where id = #{id,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert"
 		parameterType="com.polypay.platform.bean.MerchantRechargeOrder">
@@ -102,18 +106,23 @@
 		merchant_order_number,
 		bank_order_number, merchant_id, type,
 		pay_amount, service_amount, arrival_amount,
-		create_time, success_time, pay_channel,
+		create_time, success_time,
+		pay_channel,
 		pay_bank, descreption, status,
-		trade_type, account_mobile_number, account_bank_number,
+		trade_type,
+		account_mobile_number, account_bank_number,
 		account_name)
-		values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR},
+		values
+		(#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR},
 		#{merchantOrderNumber,jdbcType=VARCHAR},
 		#{bankOrderNumber,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR},
 		#{type,jdbcType=INTEGER},
-		#{payAmount,jdbcType=DECIMAL}, #{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL},
+		#{payAmount,jdbcType=DECIMAL},
+		#{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL},
 		#{createTime,jdbcType=TIMESTAMP}, #{successTime,jdbcType=TIMESTAMP},
 		#{payChannel,jdbcType=VARCHAR},
-		#{payBank,jdbcType=VARCHAR}, #{descreption,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+		#{payBank,jdbcType=VARCHAR},
+		#{descreption,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
 		#{tradeType,jdbcType=VARCHAR},
 		#{accountMobileNumber,jdbcType=VARCHAR},
 		#{accountBankNumber,jdbcType=VARCHAR},
@@ -249,7 +258,8 @@
 				order_number = #{orderNumber,jdbcType=VARCHAR},
 			</if>
 			<if test="merchantOrderNumber != null">
-				merchant_order_number = #{merchantOrderNumber,jdbcType=VARCHAR},
+				merchant_order_number =
+				#{merchantOrderNumber,jdbcType=VARCHAR},
 			</if>
 			<if test="bankOrderNumber != null">
 				bank_order_number = #{bankOrderNumber,jdbcType=VARCHAR},
@@ -291,10 +301,12 @@
 				trade_type = #{tradeType,jdbcType=VARCHAR},
 			</if>
 			<if test="accountMobileNumber != null">
-				account_mobile_number = #{accountMobileNumber,jdbcType=VARCHAR},
+				account_mobile_number =
+				#{accountMobileNumber,jdbcType=VARCHAR},
 			</if>
 			<if test="accountBankNumber != null">
-				account_bank_number = #{accountBankNumber,jdbcType=VARCHAR},
+				account_bank_number =
+				#{accountBankNumber,jdbcType=VARCHAR},
 			</if>
 			<if test="accountName != null">
 				account_name = #{accountName,jdbcType=VARCHAR},
@@ -305,25 +317,36 @@
 	<update id="updateByPrimaryKey"
 		parameterType="com.polypay.platform.bean.MerchantRechargeOrder">
 		update merchant_recharge_order
-		set order_number = #{orderNumber,jdbcType=VARCHAR},
-		merchant_order_number = #{merchantOrderNumber,jdbcType=VARCHAR},
-		bank_order_number = #{bankOrderNumber,jdbcType=VARCHAR},
-		merchant_id = #{merchantId,jdbcType=VARCHAR},
+		set order_number =
+		#{orderNumber,jdbcType=VARCHAR},
+		merchant_order_number =
+		#{merchantOrderNumber,jdbcType=VARCHAR},
+		bank_order_number =
+		#{bankOrderNumber,jdbcType=VARCHAR},
+		merchant_id =
+		#{merchantId,jdbcType=VARCHAR},
 		type = #{type,jdbcType=INTEGER},
 		pay_amount = #{payAmount,jdbcType=DECIMAL},
-		service_amount = #{serviceAmount,jdbcType=DECIMAL},
-		arrival_amount = #{arrivalAmount,jdbcType=DECIMAL},
-		create_time = #{createTime,jdbcType=TIMESTAMP},
-		success_time = #{successTime,jdbcType=TIMESTAMP},
-		pay_channel = #{payChannel,jdbcType=VARCHAR},
+		service_amount =
+		#{serviceAmount,jdbcType=DECIMAL},
+		arrival_amount =
+		#{arrivalAmount,jdbcType=DECIMAL},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		success_time =
+		#{successTime,jdbcType=TIMESTAMP},
+		pay_channel =
+		#{payChannel,jdbcType=VARCHAR},
 		pay_bank = #{payBank,jdbcType=VARCHAR},
 		descreption = #{descreption,jdbcType=VARCHAR},
-		status = #{status,jdbcType=INTEGER},
+		status =
+		#{status,jdbcType=INTEGER},
 		trade_type = #{tradeType,jdbcType=VARCHAR},
 		account_mobile_number = #{accountMobileNumber,jdbcType=VARCHAR},
 		account_bank_number = #{accountBankNumber,jdbcType=VARCHAR},
 		account_name = #{accountName,jdbcType=VARCHAR}
-		where id = #{id,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
 	</update>
 
 	<select id="listMerchantRechargeOrder"
@@ -333,11 +356,11 @@
 		<include refid="Base_Column_List" />
 		from merchant_recharge_order
 		where 1=1
-		
+
 		<if test="merchantId != null">
 			and merchant_id = #{merchantId,jdbcType=INTEGER}
 		</if>
-		
+
 		<if test="status != null">
 			and status = #{status,jdbcType=INTEGER}
 		</if>
@@ -431,7 +454,8 @@
 		count(1) as rechargeNumber,
 		sum(pay_amount) as
 		rechargeAmount,
-		sum(service_amount) as rechargeServiceAmount
+		sum(service_amount) as
+		rechargeServiceAmount
 		from
 		merchant_recharge_order where status = 0
 
@@ -446,6 +470,19 @@
 		</if>
 		group by merchant_id
 	</select>
+
+
+	<select id="managerAllMerchantRechargeOrder"
+		resultType="com.polypay.platform.vo.MerchantMainDateVO">
+		select
+		sum(mro.`pay_amount`) AS merchantAllRechargeAmount,
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS
+		merchantAllServiceAmount
+		from
+		merchant_recharge_order mro where mro.`status` = 0
+	</select>
+
 
 
 

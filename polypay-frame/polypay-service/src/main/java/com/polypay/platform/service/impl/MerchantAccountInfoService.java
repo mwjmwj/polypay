@@ -189,6 +189,7 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 		}
 	}
 
+
 	@Override
 	public List<Menu> getMerchantMenu(Integer roleId) throws ServiceException {
 		try {

@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -22,6 +23,8 @@ import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.utils.DateUtils;
+import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
 
 @Controller
@@ -83,6 +86,18 @@ public class ManagerMerchantRechargeOrderController extends BaseController<Merch
 		}
 		return response;
 
+	}
+	
+	@GetMapping("managermerchant/recharge/all")
+	@ResponseBody
+	public ServiceResponse allMerchantRecharge() throws ServiceException
+	{
+		ServiceResponse response = new ServiceResponse();
+		
+		MerchantMainDateVO merchantGroupDate = merchantRechargeOrderService.managerAllMerchantRechargeOrder();
+		response.setData(merchantGroupDate);
+		
+		return response;
 	}
 
 }

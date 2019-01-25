@@ -184,10 +184,10 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 				merchantFinance.setBlanceAmount(blanceAmount.subtract(settleAmount));
 				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 			}
-			final MerchantSettleOrder asyncMerchantSettleOrder = merchantSettleOrder;
+			//final MerchantSettleOrder asyncMerchantSettleOrder = merchantSettleOrder;
 
 			// 异步发起请求第三方提现
-			executorService.submit(() -> submitSettleOrder(asyncMerchantSettleOrder));
+			//executorService.submit(() -> submitSettleOrder(asyncMerchantSettleOrder));
 			response.setMessage("订单提交成功");
 		} catch (ServiceException e) {
 			log.error(response.getRequestId() + " " + e.getMessage());
@@ -322,5 +322,5 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 			}
 		}
 	}
-
+	
 }

@@ -57,9 +57,11 @@
 	</resultMap>
 
 	<sql id="Base_Column_List">
-		id, order_number, postal_amount, service_amount, arrival_amount,
+		id, order_number, postal_amount, service_amount,
+		arrival_amount,
 		merchant_bind_bank,
-		create_time, pay_time, status, type, descreption, handle_people, merchant_id
+		create_time, pay_time, status, type,
+		descreption, handle_people, merchant_id
 	</sql>
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
@@ -71,22 +73,26 @@
 	<delete id="deleteByPrimaryKey"
 		parameterType="java.lang.Integer">
 		delete from merchant_settle_order
-		where id = #{id,jdbcType=INTEGER}
+		where id =
+		#{id,jdbcType=INTEGER}
 	</delete>
 	<insert id="insert"
 		parameterType="com.polypay.platform.bean.MerchantSettleOrder">
-		insert into merchant_settle_order (id, order_number, postal_amount,
+		insert into merchant_settle_order (id, order_number,
+		postal_amount,
 		service_amount, arrival_amount, merchant_bind_bank,
 		create_time, pay_time, status,
 		type, descreption, handle_people,
 		merchant_id)
-		values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR},
+		values (#{id,jdbcType=INTEGER},
+		#{orderNumber,jdbcType=VARCHAR},
 		#{postalAmount,jdbcType=DECIMAL},
 		#{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL},
 		#{merchantBindBank,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP},
 		#{status,jdbcType=INTEGER},
-		#{type,jdbcType=INTEGER}, #{descreption,jdbcType=INTEGER}, #{handlePeople,jdbcType=VARCHAR},
+		#{type,jdbcType=INTEGER},
+		#{descreption,jdbcType=INTEGER}, #{handlePeople,jdbcType=VARCHAR},
 		#{merchantId,jdbcType=VARCHAR})
 	</insert>
 	<insert id="insertSelective"
@@ -193,7 +199,8 @@
 				arrival_amount = #{arrivalAmount,jdbcType=DECIMAL},
 			</if>
 			<if test="merchantBindBank != null">
-				merchant_bind_bank = #{merchantBindBank,jdbcType=VARCHAR},
+				merchant_bind_bank =
+				#{merchantBindBank,jdbcType=VARCHAR},
 			</if>
 			<if test="createTime != null">
 				create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -222,18 +229,28 @@
 	<update id="updateByPrimaryKey"
 		parameterType="com.polypay.platform.bean.MerchantSettleOrder">
 		update merchant_settle_order
-		set order_number = #{orderNumber,jdbcType=VARCHAR},
-		postal_amount = #{postalAmount,jdbcType=DECIMAL},
-		service_amount = #{serviceAmount,jdbcType=DECIMAL},
-		arrival_amount = #{arrivalAmount,jdbcType=DECIMAL},
-		merchant_bind_bank = #{merchantBindBank,jdbcType=VARCHAR},
-		create_time = #{createTime,jdbcType=TIMESTAMP},
-		pay_time = #{payTime,jdbcType=TIMESTAMP},
+		set order_number =
+		#{orderNumber,jdbcType=VARCHAR},
+		postal_amount =
+		#{postalAmount,jdbcType=DECIMAL},
+		service_amount =
+		#{serviceAmount,jdbcType=DECIMAL},
+		arrival_amount =
+		#{arrivalAmount,jdbcType=DECIMAL},
+		merchant_bind_bank =
+		#{merchantBindBank,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		pay_time =
+		#{payTime,jdbcType=TIMESTAMP},
 		status = #{status,jdbcType=INTEGER},
 		type = #{type,jdbcType=INTEGER},
-		descreption = #{descreption,jdbcType=INTEGER},
-		handle_people = #{handlePeople,jdbcType=VARCHAR},
-		merchant_id = #{merchantId,jdbcType=VARCHAR}
+		descreption =
+		#{descreption,jdbcType=INTEGER},
+		handle_people =
+		#{handlePeople,jdbcType=VARCHAR},
+		merchant_id =
+		#{merchantId,jdbcType=VARCHAR}
 		where id = #{id,jdbcType=INTEGER}
 	</update>
 
@@ -289,7 +306,8 @@
 		count(1) as settleNumber,
 		sum(postal_amount) as
 		settleAmount,
-		sum(service_amount) as settleServiceAmount
+		sum(service_amount) as
+		settleServiceAmount
 		from
 		merchant_settle_order where status = 0
 
@@ -321,6 +339,20 @@
 		mro.`merchant_id`
 
 	</select>
+
+
+	<select id="managerAllMerchantSettleOrder"
+		resultType="com.polypay.platform.vo.MerchantMainDateVO">
+		select
+		sum(mro.`postal_amount`) AS merchantAllSettleAmount,
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS
+		merchantAllServiceAmount
+		from
+		merchant_settle_order mro where
+		mro.`status` = 0
+	</select>
+
 
 
 </mapper>

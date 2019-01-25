@@ -130,4 +130,13 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 		}
 	}
 
+	@Override
+	public MerchantMainDateVO managerAllMerchantSettleOrder() throws ServiceException {
+		try {
+			return merchantSettleOrderMapper.managerAllMerchantSettleOrder();
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

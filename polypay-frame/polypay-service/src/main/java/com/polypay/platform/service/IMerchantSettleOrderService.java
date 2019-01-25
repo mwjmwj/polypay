@@ -19,4 +19,6 @@ public interface IMerchantSettleOrderService extends IBaseService<MerchantSettle
 
 	MerchantMainDateVO allMerchantSettle(String uuid) throws ServiceException;
 
+	MerchantMainDateVO managerAllMerchantSettleOrder() throws ServiceException;
+
 }

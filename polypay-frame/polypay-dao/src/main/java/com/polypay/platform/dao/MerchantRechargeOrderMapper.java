@@ -24,5 +24,7 @@ public interface MerchantRechargeOrderMapper extends BaseMapper<MerchantRecharge
 	List<MerchantMainDateVO> allTimeMerchantOrder(String merchantUUID);
 
 	List<MerchantBill> getMerchantRechargeMonthBill(Map<String,Object> param);
+	
+	MerchantMainDateVO managerAllMerchantRechargeOrder();
 
 }
