@@ -33,5 +33,21 @@ public class ManagerViewController {
 		return "adminmanager/allmerchantrechargelist";
 	}
 	
+	/**
+	 * 商户注册页
+	 * @return
+	 */
+	@RequestMapping("merchantregister")
+	public String register() {
+		return "proxymanager/merchantregister";
+	}
 	
+	/**
+	 * 商户列表页
+	 * @return
+	 */
+	@RequestMapping("allmerchantaccountinfolist")
+	public String merchantlist() {
+		return "proxymanager/allmerchantaccountinfolist";
+	}
 }

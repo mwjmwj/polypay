@@ -33,7 +33,7 @@
 		</div>
 	</fieldset>
 
-	<form class="layui-form layui-form-pane" action="">
+	<form class="layui-form layui-form-pane" action="" id="regForm">
 		<div class="layui-form-item">
 			<label class="layui-form-label"> <i
 				class="layui-icon layui-icon-cellphone"></i>
@@ -67,7 +67,6 @@
 			</div>
 		</div>
 
-
 		<div class="layui-form-item">
 			<label class="layui-form-label">开通代付</label>
 			<div class="layui-input-block">
@@ -77,7 +76,7 @@
 
 		<div class="layui-form-item">
 			<div class="layui-input-block">
-				<button class="layui-btn" lay-submit lay-filter="formDemo">注册商户</button>
+				<button class="layui-btn" lay-submit lay-filter="reg-submit">注册商户</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>
 		</div>
@@ -88,9 +87,8 @@
 			var form = layui.form;
 			var layer = layui.layer;
 			
-			
 			form.on('submit(reg-submit)', function() {
-				$.post("proxy/register/merchant", $("#regForm").serialize(),
+				$.post("<%= basePath%>proxy/register/merchant", $("#regForm").serialize(),
 						function(data) {
 							if (data.status == 0) {
 								layer.msg("注册成功！即将转向登陆页面！", {
@@ -124,7 +122,7 @@
 			var mobileNumber = '${sessionScope.merchant_user.mobileNumber}';
 
 			$.ajax({
-				url : "merchant/verifycode",
+				url : "<%= basePath%>merchant/verifycode",
 				type : "post",
 				dataType : "json",
 				data : {
