@@ -21,6 +21,11 @@ public class ManagerViewController {
 	public String toMerchantSettleList(){
 		return "adminmanager/allmerchantsettlelist";
 	}
+	@RequestMapping("merchant/register")
+	public String toMerchantRegister()
+	{
+		return "adminmanager/merchantregister";
+	}
 	
 	
 	@RequestMapping("merchantrechargelist")

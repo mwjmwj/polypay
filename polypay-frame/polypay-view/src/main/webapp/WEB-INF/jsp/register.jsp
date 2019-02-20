@@ -23,15 +23,14 @@
 <script src="static/js/jquery.min.js" type="text/javascript"></script>
 <script src="static/js/layui.js" type="text/javascript"></script>
 <script src="static/js/gt.js"></script>
-<style type="text/css">
-</style>
+
 </head>
 <body>
 	<!--导航栏部分-->
 	<jsp:include page="userview/include/header.jsp" />
 
 	<!-- 中间内容 -->
-	<div class="container-fluid">
+	<div class="container-fluid" style="margin-left: 10%;">
 		<form id="regForm">
 			<div class="layadmin-user-login layadmin-user-display-show"
 				style="padding-top: 30px; padding-bottom: 30px;" id="LAY-user-login">
