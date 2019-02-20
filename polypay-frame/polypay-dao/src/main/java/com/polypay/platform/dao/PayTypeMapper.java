@@ -11,4 +11,5 @@ public interface PayTypeMapper extends BaseMapper<PayType>{
 
 	List<PayType> listPayType(Integer payLevel);
 
+	List<PayType> list(PayType payType);
 }  

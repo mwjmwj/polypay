@@ -11,4 +11,5 @@ public interface IPayTypeService extends IBaseService<PayType>{
 
 	List<PayType> listPayType(Integer payLevel) throws ServiceException;
 
+	List<PayType> list(PayType payType);
 }

@@ -99,4 +99,9 @@ public class PayTypeService implements IPayTypeService {
 		}
 	}
 
+	@Override
+	public List<PayType> list(PayType payType) {
+		return PayTypeMapper.list(payType);
+	}
+
 }

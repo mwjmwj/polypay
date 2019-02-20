@@ -50,4 +50,9 @@ public class ManagerViewController {
 	public String merchantlist() {
 		return "proxymanager/allmerchantaccountinfolist";
 	}
+	
+	@RequestMapping("merchantpaytype")
+	public String merchantpaytypelist() {
+		return "adminmanager/merchantpaytype";
+	}
 }
