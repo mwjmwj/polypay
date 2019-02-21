@@ -48,6 +48,8 @@ public class MerchantAccountInfoVO extends VO{
     
     private Integer roleId;
     
+    private Integer rate;
+    
     public String getNewPayPassword() {
 		return newPayPassword;
 	}
@@ -198,6 +200,14 @@ public class MerchantAccountInfoVO extends VO{
 
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
+	}
+
+	public Integer getRate() {
+		return rate;
+	}
+
+	public void setRate(Integer rate) {
+		this.rate = rate;
 	}
 
 }

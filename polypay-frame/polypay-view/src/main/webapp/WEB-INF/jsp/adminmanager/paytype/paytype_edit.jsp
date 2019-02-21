@@ -27,97 +27,92 @@
 
 	<fieldset class="layui-elem-field layui-field-title"
 		style="margin-top: 20px;">
-		<legend>商户注册</legend>
-		<div>
-		提示：默认密码：111111，支付密码666888
-		</div>
+		<legend>支付类型修改</legend>
 	</fieldset>
 
-	<form class="layui-form layui-form-pane" action="">
+	<form class="layui-form layui-form-pane" action="" id="payForm">
+		<input type="hidden" id="id" name="id" value="${item.id }"/>
 		<div class="layui-form-item">
-			<label class="layui-form-label"> <i
-				class="layui-icon layui-icon-cellphone"></i>
+			<label class="layui-form-label">支付名称
 			</label>
 			<div class="layui-input-inline">
-				<input type="text" name="mobileNumber" id="mobile"
-					lay-verify="phone|required" placeholder="商户手机号码" autocomplete="off"
+				<input type="text" name="name" id="name" value="${item.name }"
+					lay-verify="required" placeholder="支付名称" 
 					onchange="isPoneAvailable()" 
 					class="layui-input">
 			</div>
-			<span id="mobilespan" style="display: none"><em></em></span>
-		</div>
-
-		<div class="layui-form-item">
-			<label class="layui-form-label"> <i
-				class="layui-icon layui-icon-vercode"></i>
-			</label>
-			<div class="layui-input-inline">
-				<div class="layui-col-xs8">
-					<input name="verifyCode" id="code" title="输入验证码" type="text"
-						lay-verify="required" placeholder="验证码" class="layui-input">
-				</div>
-				<div class="layui-col-xs4" style="padding-left: 20px">
-					<button id="btn1" onclick="sendVerifyCode()"
-						class="layui-btn layui-btn-radius layui-btn-normal"
-						disabled="disabled">
-						<span id="span1" style="display: none;">获取验证码 </span> <span
-							id="span2" style="display: none;"><em>0</em>秒重新获取</span>
-					</button>
-				</div>
-			</div>
+			<span id="namespan" style="display: none"><em></em></span>
 		</div>
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">费率
 			</label>
 			<div class="layui-input-inline">
-				<input type="text" name="rate" id="rate"
-					lay-verify="required" placeholder="费率"
+				<input type="number" name="rate" id="rate" value="${item.rate }"
+					lay-verify="required" placeholder="费率" 
 					class="layui-input">
 			</div>
-			<div class="layui-form-mid layui-word-aux">以千分位为计数单位</div>
+			<span id="ratespan" style="display: none"><em></em></span>
 		</div>
-
+		
 		<div class="layui-form-item">
-			<label class="layui-form-label">开通代付</label>
-			<div class="layui-input-block">
-				<input type="checkbox" name="switch" lay-skin="switch">
+			<label class="layui-form-label">姓名
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="merchantId" id="merchantId" value="${item.merchantId }"
+					lay-verify="required" placeholder="姓名" 
+					class="layui-input">
 			</div>
+			<span id="merchantIdspan" style="display: none"><em></em></span>
 		</div>
-
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="status" id="status" value="${item.status }"
+					lay-verify="required" placeholder="状态" 
+					class="layui-input">
+			</div>
+			<span id="merchantLevelspan" style="display: none"><em></em></span>
+		</div>
+		
 		<div class="layui-form-item">
 			<div class="layui-input-block">
-				<button class="layui-btn" lay-submit lay-filter="formDemo">注册商户</button>
+				<button class="layui-btn" lay-submit lay-filter="pay-submit">修改</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>
 		</div>
 	</form>
 
 	<script type="text/javascript">
+	console.log('${item}');
 		layui.use([ 'form', 'layer' ], function() {
 			var form = layui.form;
 			var layer = layui.layer;
 			
-			
-			form.on('submit(reg-submit)', function() {
-				$.post("proxy/register/merchant", $("#regForm").serialize(),
+			form.on('submit(pay-submit)', function() {
+				$.post("../update", $("#payForm").serialize(),
 						function(data) {
+							console.log("修改之前的数据: ",data);
 							if (data.status == 0) {
-								layer.msg("注册成功！即将转向登陆页面！", {
+								layer.msg(data.message, {
 									icon : 1,
 									anim : 4,
 									time : 2000
 								}, function() {
-									window.location.href = "view/admin";
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
 								});
 							} else {
-								layer.msg("注册失败！请重试！"+data.message, {
+								layer.msg(data.message, {
 									icon : 5,
 									anim : 6,
 									time : 2000
 								});
 							}
 						});
+				return false;
 			});
 		});
 	

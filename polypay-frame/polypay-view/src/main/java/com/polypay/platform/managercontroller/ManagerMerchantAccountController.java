@@ -23,6 +23,7 @@ import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantVerify;
+import com.polypay.platform.bean.PayType;
 import com.polypay.platform.consts.MerchantHelpPayConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.VerifyTypeEnum;
@@ -30,6 +31,7 @@ import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantVerifyService;
+import com.polypay.platform.service.IPayTypeService;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
@@ -47,6 +49,9 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 
 	@Autowired
 	private IMerchantVerifyService merchantVerifyService;
+	
+	@Autowired
+	private IPayTypeService payTypeService;
 	
 	@RequestMapping("proxy/register/merchant")
 	@ResponseBody
@@ -92,10 +97,23 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 			requestMerchantInfo.setPassWord("111111");
 			requestMerchantInfo.setPayPassword("666888");
 			requestMerchantInfo.setProxyId(MerchantUtils.getMerchant().getUuid());
-			// 用户注册
-			merchantAccountInfoService.registerAndSave(requestMerchantInfo);
-
-			response.setMessage("注册成功!");
+			
+			try {
+				// 用户注册
+				merchantAccountInfoService.registerAndSave(requestMerchantInfo);
+				
+				//新建支付费率
+				PayType payType = new PayType();
+				payType.setMerchantId(requestMerchantInfo.getUuid());
+				payType.setRate(requestMerchantInfo.getRate());
+				payType.setName("支付宝");
+				payType.setStatus(0);
+				payTypeService.insertSelective(payType);
+				response.setMessage("注册成功!");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			// 密码加密返回
 			requestMerchantInfo.setPassWord(null);

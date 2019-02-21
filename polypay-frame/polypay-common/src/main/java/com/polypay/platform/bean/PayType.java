@@ -1,15 +1,22 @@
 package com.polypay.platform.bean;
 
-public class PayType {
-    private Integer id;
+import java.io.Serializable;
+
+public class PayType implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
+
+	private Integer id;
 
     private String name;
 
-    private Long rate;
+    private Integer rate;
 
     private Integer status;
 
-    private Integer merchantLevel;
+    private String merchantId;
+    
+    private String merchantName;
 
     public Integer getId() {
         return id;
@@ -27,11 +34,11 @@ public class PayType {
         this.name = name == null ? null : name.trim();
     }
 
-    public Long getRate() {
+    public Integer getRate() {
         return rate;
     }
 
-    public void setRate(Long rate) {
+    public void setRate(Integer rate) {
         this.rate = rate;
     }
 
@@ -43,11 +50,19 @@ public class PayType {
         this.status = status;
     }
 
-    public Integer getMerchantLevel() {
-        return merchantLevel;
-    }
+	public String getMerchantId() {
+		return merchantId;
+	}
 
-    public void setMerchantLevel(Integer merchantLevel) {
-        this.merchantLevel = merchantLevel;
-    }
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId;
+	}
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
 }

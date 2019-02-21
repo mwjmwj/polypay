@@ -27,67 +27,47 @@
 
 	<fieldset class="layui-elem-field layui-field-title"
 		style="margin-top: 20px;">
-		<legend>商户注册</legend>
-		<div>
-		提示：默认密码：111111，支付密码666888
-		</div>
+		<legend>支付类型新增</legend>
 	</fieldset>
 
-	<form class="layui-form layui-form-pane" action="">
+	<form class="layui-form layui-form-pane" action="" id="payForm">
+		<input type="hidden" id="status" name="status" value="0">
 		<div class="layui-form-item">
-			<label class="layui-form-label"> <i
-				class="layui-icon layui-icon-cellphone"></i>
+			<label class="layui-form-label">支付名称
 			</label>
 			<div class="layui-input-inline">
-				<input type="text" name="mobileNumber" id="mobile"
-					lay-verify="phone|required" placeholder="商户手机号码" autocomplete="off"
-					onchange="isPoneAvailable()" 
+				<input type="text" name="name" id="name"
+					lay-verify="required" placeholder="支付名称" 
 					class="layui-input">
 			</div>
-			<span id="mobilespan" style="display: none"><em></em></span>
-		</div>
-
-		<div class="layui-form-item">
-			<label class="layui-form-label"> <i
-				class="layui-icon layui-icon-vercode"></i>
-			</label>
-			<div class="layui-input-inline">
-				<div class="layui-col-xs8">
-					<input name="verifyCode" id="code" title="输入验证码" type="text"
-						lay-verify="required" placeholder="验证码" class="layui-input">
-				</div>
-				<div class="layui-col-xs4" style="padding-left: 20px">
-					<button id="btn1" onclick="sendVerifyCode()"
-						class="layui-btn layui-btn-radius layui-btn-normal"
-						disabled="disabled">
-						<span id="span1" style="display: none;">获取验证码 </span> <span
-							id="span2" style="display: none;"><em>0</em>秒重新获取</span>
-					</button>
-				</div>
-			</div>
+			<span id="namespan" style="display: none"><em></em></span>
 		</div>
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">费率
 			</label>
 			<div class="layui-input-inline">
-				<input type="text" name="rate" id="rate"
-					lay-verify="required" placeholder="费率"
+				<input type="number" name="rate" id="rate"
+					lay-verify="required" placeholder="费率" 
 					class="layui-input">
 			</div>
-			<div class="layui-form-mid layui-word-aux">以千分位为计数单位</div>
+			<span id="ratespan" style="display: none"><em></em></span>
 		</div>
-
+		
 		<div class="layui-form-item">
-			<label class="layui-form-label">开通代付</label>
-			<div class="layui-input-block">
-				<input type="checkbox" name="switch" lay-skin="switch">
+			<label class="layui-form-label">姓名
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="merchantId" id="merchantId"
+					lay-verify="required" placeholder="姓名" 
+					class="layui-input">
 			</div>
+			<span id="merchantIdspan" style="display: none"><em></em></span>
 		</div>
-
+		
 		<div class="layui-form-item">
 			<div class="layui-input-block">
-				<button class="layui-btn" lay-submit lay-filter="formDemo">注册商户</button>
+				<button class="layui-btn" lay-submit lay-filter="pay-submit">新增</button>
 				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			</div>
 		</div>
@@ -98,55 +78,32 @@
 			var form = layui.form;
 			var layer = layui.layer;
 			
-			
-			form.on('submit(reg-submit)', function() {
-				$.post("proxy/register/merchant", $("#regForm").serialize(),
+			form.on('submit(pay-submit)', function() {
+				$.post("../paytype/add", $("#payForm").serialize(),
 						function(data) {
+							console.log(data);
 							if (data.status == 0) {
-								layer.msg("注册成功！即将转向登陆页面！", {
+								layer.msg(data.message, {
 									icon : 1,
 									anim : 4,
 									time : 2000
-								}, function() {
-									window.location.href = "view/admin";
+								}, function() {//新增成功，重新刷新表格
+									//table.reload();
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index);
 								});
 							} else {
-								layer.msg("注册失败！请重试！"+data.message, {
+								layer.msg(data.message, {
 									icon : 5,
 									anim : 6,
 									time : 2000
 								});
 							}
 						});
+				return false;
 			});
 		});
 	
-		//发送手机验证码的方法
-		function sendVerifyCode() {
-			$("#btn1").attr("disabled", "disabled");
-			$("#btn1").addClass("layui-btn-disabled");
-
-			var i = 60;
-			$("#span1").hide();
-			$("#span2 em").text(i);
-			$("#span2").show();
-			//$("#btn1").text("重新发送(60秒)");
-			var mobileNumber = '${sessionScope.merchant_user.mobileNumber}';
-
-			$.ajax({
-				url : "<%= basePath%>merchant/verifycode",
-				type : "post",
-				dataType : "json",
-				data : {
-					mobileNumber : mobileNumber,
-					verifyType : "REGISTER_MERCHANT"
-				},
-				success : function(data) {
-					// 调用 initGeetest 初始化参数
-					// 参数1：配置参数
-					// 参数2：回调，回调的第一个参数验证码对象，之后可以使用它调用相应的接口
-				}
-			});
 
 			var close = setInterval(function() {
 				i--;
