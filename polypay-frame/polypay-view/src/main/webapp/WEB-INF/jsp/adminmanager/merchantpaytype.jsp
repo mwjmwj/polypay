@@ -20,6 +20,7 @@
 
 </head>
 <script type="text/javascript" src="../static/js/layui.all.js"></script>
+<script src="../static/js/jquery.min.js" type="text/javascript"></script>
 <body style="background-color: white">
 
 	<blockquote class="layui-elem-quote layui-text">
@@ -33,8 +34,20 @@
 		<legend>通道费率</legend>
 	</fieldset>
 
-		<table class="layui-hide" id="merchantpaytype"></table>
+		<table class="layui-hide" id="merchantpaytype" lay-filter="merchantpaytype"></table>
+<!-- 表头操作按钮 -->
+<script type="text/html" id="toolbarDemo">
+<div class="layui-btn-group">
+<button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add"><i class="layui-icon"></i></button>
+</div>
+</script>
 
+<!-- 右侧操作按钮 -->
+<script type="text/html" id="barDemo">
+	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
 
 	<script>
 		layui.use('table', function() {
@@ -56,6 +69,7 @@
 					,
 					dataName : 'data' //规定数据列表的字段名称，默认：data
 				},
+				toolbar: '#toolbarDemo',
 				cols : [ [ 
 					 {
 					field : 'name',
@@ -70,7 +84,77 @@
 					templet : function(row) {
 							return '千分之'+row.rate;
 					}
+				},{
+					field : 'merchantName',
+					width : 134,
+					title : '姓名',
+					align : 'center'
+				},{
+					field : 'right',
+					width : 165,
+					align : 'center',
+					toolbar : '#barDemo'
 				}] ]
+			});
+			
+			//头工具栏事件
+			table.on('toolbar(merchantpaytype)',function(obj){
+				var checkStatus = table.checkStatus(obj.config.id);
+				switch(obj.event){
+					case 'add': 
+						//打开新增窗口
+						layer.open({
+							type: 2,
+							title: "新增数据",
+							area: ['28%','68%'],
+							content: "../paytype/paytype_add",
+							end: function(){
+								table.reload("merchantpaytype");
+							}
+						});
+					break;
+					
+				}
+			});
+			
+			//监听行工具事件
+			table.on('tool(merchantpaytype)',function(obj){
+				var data = obj.data;
+				console.log(obj);
+				if(obj.event == 'del') {
+					layer.confirm("真的删除行吗？", function(index){
+						
+						$.ajax({
+							url: '../paytype/delete/' + data.id,
+							data: {id: data.id},
+							type: 'post',
+							success: function(obj){
+								if(obj.status == 0){
+									
+									layer.msg("删除成功！！");
+									layer.close(index);
+									table.reload("merchantpaytype");
+									//obj.del();
+								}else{
+									layer.msg(obj.message);
+								}
+							},
+							error: function(obj){
+								layer.msg("删除异常！！");
+							}
+						});
+					});
+				}else if("edit" == obj.event){
+					layer.open({
+						type: 2,
+						title: "修改",
+						area: ['28%','68%'],
+						content: "../paytype/paytype_update/"+data.id,
+						end: function(){
+							table.reload("merchantpaytype");
+						}
+					});
+				}
 			});
 		});
 	</script>
