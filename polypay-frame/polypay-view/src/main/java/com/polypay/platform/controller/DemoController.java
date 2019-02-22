@@ -1,24 +1,33 @@
-package com.polypay.platform.paychannel;
+package com.polypay.platform.controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Map;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.alibaba.druid.support.json.JSONUtils;
-import com.alibaba.druid.util.StringUtils;
-import com.google.common.collect.Maps;
-import com.polypay.platform.utils.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.polypay.platform.bean.Notice;
+import com.polypay.platform.dao.NoticeMapper;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MD5;
+import com.polypay.platform.utils.RandomUtils;
 
-public class SmartPayChannel implements IPayChannel {
+@Controller
+public class DemoController {
 
-	@Override
-	public void sendRedirect(Map<String, Object> param, HttpServletResponse response) {
+	
+	@Autowired
+	private NoticeMapper noticeMapper;
+	
+	
+	@RequestMapping("nutz.pay/ydb/toPay")
+	public void send(HttpServletResponse response,HttpServletRequest request) throws IOException {
 
 		// 接口路径
 		String basePath = "http://api.yundesun.com/apisubmit?";
@@ -30,17 +39,14 @@ public class SmartPayChannel implements IPayChannel {
 		String customerid = "10989";
 
 		// 订单金额
-		Object pay_amount = param.get("pay_amount");
-		BigDecimal total_fee = new BigDecimal(pay_amount.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal total_fee = new BigDecimal((new Random().nextInt(10) + 1)).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-		
 		// 订单号 (订单号由自己系统提供)
-		Object order_number = param.get("we_order_number");
-		String sdorderno = order_number.toString();
+		Integer sdorderno = RandomUtils.random(10);
 
 		// 返回回调
 		// 同步回调不作为订单最终状态随意回调一个
-		String returnurl = "http://xx/callback/PayInfo";
+		String returnurl = "http://212.64.72.200:8889/TradeService/PayInfo?orderid=xxx";
 
 		// apikey
 		String apiKey = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
@@ -63,7 +69,7 @@ public class SmartPayChannel implements IPayChannel {
 		 * 根据上述参数顺序 拼接参数字符串 使用MD5加密 验证参数 添加加密sign 拼接在url末端
 		 */
 		// 订单查询接口：
-		String notifyurl = "http://47.104.181.26/open/api/recharge/back";
+		String notifyurl = "http://47.104.181.26/TradeService/PayReBack";
 		// 最终平台回调为：
 		// http://212.64.72.200:8889/TradeService/PayReBack?customerid=10989&status=1&sdpayno=xxxx&sdorderno={平台订单号}&total_fee=10.0&paytype={支付类型}&95de2d2d4b2dc95efb9e9c8981dd7743a110a438&sign={加密签名}
 		// 商户需要验签后 返回 success 为确认收到回调，否则继续回调
@@ -93,88 +99,41 @@ public class SmartPayChannel implements IPayChannel {
 
 		// 拼接最终url
 		String sendPath = basePath + signBuf.toString() + "&paytype=" + paytype + "&sign=" + sign;
+		System.out.println(sendPath);
 
 		// 根据自己的代码 选择发送http请求
-		try {
-			response.sendRedirect(sendPath);
-		} catch (IOException e) {
-		}
+		
+		response.sendRedirect(sendPath);
 
 	}
 
-	@Override
-	public Map<String, Object> checkOrder(HttpServletRequest request) {
-		
-		Map<String, Object> result = Maps.newHashMap();
-		
-		String customerid = getParameter(request, "customerid");
-		
-		String status = getParameter(request, "status");
-		
-		// 商户订单号
-		String sdpayno = getParameter(request, "sdpayno");
-		
-		// 平台订单号
-		String sdorderno = getParameter(request, "sdorderno");
-		
-		String total_fee = getParameter(request, "total_fee");
-		
-		String paytype = getParameter(request, "paytype");
-		
-		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
-		
-		String sign = getParameter(request, "sign");
-		
-		StringBuffer sb = new StringBuffer();
-		sb.append("customerid="+customerid)
-		.append("&status="+status)
-		.append("&sdpayno="+sdpayno)
-		.append("&sdorderno="+sdorderno)
-		.append("&total_fee="+total_fee)
-		.append("&paytype="+paytype)
-		.append("&"+api_key);
-		
-		if(!MD5.md5(sb.toString()).equals(sign))
-		{
-			result.put("status", "-10");
-			return result;
-		}
-		
-		result.put("total_fee", total_fee);
-		result.put("merchantno", sdpayno);
-		result.put("payno", sdorderno);
-		result.put("channel", "WY");
-		result.put("status", status);
-		
-		return result;
-	}
-	
-	public String getParameter(HttpServletRequest request, String key) {
-		String parameter = request.getParameter(key);
-		return StringUtils.isEmpty(parameter) ? "" : parameter;
-	}
+	@RequestMapping("TradeService/PayReBack")
+	public String callBakc(HttpServletRequest request) {
 
-	
-	@Override
-	public Map<String, Object> getOrder(String channelOrderNumber) {
-		
-		String baseUrl = "http://api.yundesun.com/apiorderquery?";
-		StringBuffer signParam = new StringBuffer();
-		signParam.append("customerid=10989")
-		.append("&sdorderno="+channelOrderNumber)
-		.append("&reqtime"+DateUtils.getOrderTime())
-		.append("&95de2d2d4b2dc95efb9e9c8981dd7743a110a438");
-		String sign = MD5.md5(signParam.toString());
-		
-		baseUrl += baseUrl + signParam.toString()+"&sign="+sign;
-		
-		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(baseUrl);
-		
-		Map result = (Map)JSONUtils.parse(httpGet.getResultAsString());
+//		customerid={value}&status={value}&sdpayno={value}&sdorderno={value}&total_fee={value}&paytype={value}&{apikey}
+
+		String sdorderno = request.getParameter("sdorderno");
+
+//		http://api.yundesun.com/apiorderquery?customerid=10989&sdorderno=xxxx&reqtime=20190221225130&95de2d2d4b2dc95efb9e9c8981dd7743a110a438&sign={加密签名}
+
+		String basePath = "http://api.yundesun.com/apiorderquery?";
+
+		String path = "customerid=10989&sdorderno=" + sdorderno
+				+ "&reqtime=20190221225130&95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		String sign = MD5.md5(path);
+
+		basePath += basePath + path + "&sign=" + sign;
+
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(basePath);
+
 		// {"status":1,"msg":"成功订单","sdorderno":"商户订单号","total_fee":"订单金额","sdpayno":"平台订单号"}
-		// {"status":0,"msg":"失败订单"}
-		
-		return result;
+		String resultAsString = httpGet.getResultAsString();
+
+		Notice no = new Notice();
+		no.setContent(resultAsString);
+		noticeMapper.insert(no);
+
+		return "success";
 	}
 
 }

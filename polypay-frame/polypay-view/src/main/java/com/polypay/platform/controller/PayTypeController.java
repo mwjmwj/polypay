@@ -30,7 +30,6 @@ public class PayTypeController {
 	public ServiceResponse listPayType() throws ServiceException
 	{
 		ServiceResponse response = new ServiceResponse();
-		
 		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 		List<PayType> list = payTypeService.listPayType(merchant.getPayLevel());
 		response.setData(list);

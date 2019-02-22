@@ -7,7 +7,7 @@ import com.polypay.platform.exception.ServiceException;
 
 public interface IPayTypeService extends IBaseService<PayType>{
 
-	PayType getRateByLevelAndChannel(Integer payLevel, String payChannel) throws ServiceException;
+	PayType getPayTypeChannel(String merchantId,String type) throws ServiceException;
 
 	List<PayType> listPayType(Integer payLevel) throws ServiceException;
 

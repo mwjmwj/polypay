@@ -154,18 +154,32 @@
 					url:"<%= basePath%>merchantmanager/accountinfo/update",
 					type:"post",
 					data:$(".layui-form").serialize(),
-					dataType:'JSON',
+					datatype:'JSON',
 					success:function(data){
-						 if(data=="success"){
-							layer.msg('修改成功,2秒后关闭', {
-								  icon: 1,
-								  time: 2000 //2秒关闭（如果不配置，默认是3秒）
-								}, function(){
-								  //do something
-								});   
-						}else{
-							layer.msg('啊喔,修改失败!', {icon: 5});
-						} 
+						if (data == 'success') {
+							layer.alert('修改成功,确定关闭窗口?', {
+								icon : 1
+							}, function() {
+								var index = parent.layer
+										.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+								window.parent.location.reload();
+							});
+						}
+						else{
+							layer.confirm('修改失败 '+data.message, {
+								  btn: ['继续修改', '退出修改']
+							,time:2000
+							}, function(index, layero){
+								layer.close(layer.index);
+								
+							}, function(index){
+								var index = parent.layer
+										.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+								});
+						
+						}
 					}
 				});
 				return false;

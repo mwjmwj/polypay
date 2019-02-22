@@ -137,6 +137,7 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			BeanUtils.copyProperties(requestMerchantInfo, merchantAccountInfo);
 			String uuid = UUIDUtils.get32UUID();
 			merchantAccountInfo.setUuid(uuid);
+			requestMerchantInfo.setUuid(uuid);
 			merchantAccountInfo.setStatus(MerchantAccountInfoStatusConsts.PRE_AUDIT);
 			String passWord = requestMerchantInfo.getPassWord();
 			String md5Password = MD5.md5(passWord);
@@ -146,6 +147,7 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 							: merchantAccountInfo.getHelppayStatus());
 			merchantAccountInfo.setPayLevel(MerchantPayLevelConsts.VIP_SLIVE);
 			merchantAccountInfo.setRoleId(RoleConsts.MERCHANT);
+			merchantAccountInfo.setCreateTime(new Date());
 			
 			merchantAccountInfoMapper.insertSelective(merchantAccountInfo);
 

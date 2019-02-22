@@ -50,6 +50,7 @@ public class MerchantAccountInfoVO extends VO{
     
     private Integer rate;
     
+    
     public String getNewPayPassword() {
 		return newPayPassword;
 	}

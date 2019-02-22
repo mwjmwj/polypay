@@ -7,9 +7,9 @@ import com.polypay.platform.bean.PayType;
 
 public interface PayTypeMapper extends BaseMapper<PayType>{
 
-	PayType getRateByLevelAndChannel(Map<String, Object> param);
+	PayType getPayTypeChannel(Map<String, Object> param);
 
-	List<PayType> listPayType(Integer payLevel);
+	List<PayType> listPayType(String merchantid);
 
 	List<PayType> list(PayType payType);
 }  

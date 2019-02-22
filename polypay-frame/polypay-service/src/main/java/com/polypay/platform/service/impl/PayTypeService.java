@@ -8,11 +8,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
+import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.PayType;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.dao.PayTypeMapper;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IPayTypeService;
+import com.polypay.platform.utils.MerchantUtils;
 
 @Service
 public class PayTypeService implements IPayTypeService {
@@ -79,12 +81,12 @@ public class PayTypeService implements IPayTypeService {
 	}
 
 	@Override
-	public PayType getRateByLevelAndChannel(Integer payLevel, String payChannel) throws ServiceException {
+	public PayType getPayTypeChannel(String merchantId,String type) throws ServiceException {
 		try {
 			Map<String,Object> param = Maps.newHashMap();
-			param.put("payLevel", payLevel);
-			param.put("payChannel", payChannel);
-			return PayTypeMapper.getRateByLevelAndChannel(param);
+			param.put("merchantId", merchantId);
+			param.put("payChannel", type);
+			return PayTypeMapper.getPayTypeChannel(param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
@@ -93,7 +95,11 @@ public class PayTypeService implements IPayTypeService {
 	@Override
 	public List<PayType> listPayType(Integer payLevel) throws ServiceException {
 		try {
-			return PayTypeMapper.listPayType(payLevel);
+			
+			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+			String uuid = merchant.getUuid();
+			
+			return PayTypeMapper.listPayType(uuid);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

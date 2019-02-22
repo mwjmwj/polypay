@@ -10,6 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 public class DateUtils {
 
 	private static SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
+	
+	private static SimpleDateFormat ORDERSDF = new SimpleDateFormat("yyyyMMddHHmmss");
+	
+	public static String getOrderTime()
+	{
+		return ORDERSDF.format(new Date());
+	}
 
 	public static boolean comperDate(Date beforeDate, Date endDate) {
 		long btime = beforeDate.getTime();

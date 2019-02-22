@@ -55,4 +55,14 @@ public class ManagerViewController {
 	public String merchantpaytypelist() {
 		return "adminmanager/merchantpaytype";
 	}
+	@RequestMapping("allproxylist")
+	public String toProxyMerchantlist() {
+		return "adminmanager/allproxymerchantaccountinfolist";
+	}
+	
+	@RequestMapping("addproxy")
+	public String toAddProxy()
+	{
+		return "adminmanager/addproxyaccount";
+	}
 }

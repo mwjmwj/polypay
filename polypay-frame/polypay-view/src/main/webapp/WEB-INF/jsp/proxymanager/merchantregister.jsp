@@ -15,22 +15,26 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<link rel="stylesheet" href="../../static/js/css/layui.css">
+<link rel="stylesheet" href="<%=basePath%>static/js/css/layui.css">
 <!-- 注意 ：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 
 
-<script type="text/javascript" src="../../static/js/layui.js"></script>
-<script src="../../static/js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="<%=basePath%>static/js/layui.js"></script>
+<script src="<%=basePath%>static/js/jquery.min.js"
+	type="text/javascript"></script>
 
 <body>
+
+	<blockquote class="layui-elem-quote layui-text">
+		商户注册
+		<p style="color: red;">提示：默认密码：111111，支付密码666888</p>
+	</blockquote>
 
 	<fieldset class="layui-elem-field layui-field-title"
 		style="margin-top: 20px;">
 		<legend>商户注册</legend>
-		<div>
-		提示：默认密码：111111，支付密码666888
-		</div>
+
 	</fieldset>
 
 	<form class="layui-form layui-form-pane" action="" id="regForm">
@@ -41,8 +45,7 @@
 			<div class="layui-input-inline">
 				<input type="text" name="mobileNumber" id="mobile"
 					lay-verify="phone|required" placeholder="商户手机号码" autocomplete="off"
-					onchange="isPoneAvailable()" 
-					class="layui-input">
+					onchange="isPoneAvailable()" class="layui-input">
 			</div>
 			<span id="mobilespan" style="display: none"><em></em></span>
 		</div>
@@ -68,6 +71,15 @@
 		</div>
 
 		<div class="layui-form-item">
+			<label class="layui-form-label">费率 </label>
+			<div class="layui-input-inline">
+				<input type="text" name="rate" id="rate" lay-verify="required"
+					placeholder="费率" class="layui-input">
+			</div>
+			<div class="layui-form-mid layui-word-aux">以千分位为计数单位</div>
+		</div>
+
+		<div class="layui-form-item">
 			<label class="layui-form-label">开通代付</label>
 			<div class="layui-input-block">
 				<input type="checkbox" name="switch" lay-skin="switch">
@@ -90,21 +102,31 @@
 			form.on('submit(reg-submit)', function() {
 				$.post("<%= basePath%>proxy/register/merchant", $("#regForm").serialize(),
 						function(data) {
-							if (data.status == 0) {
-								layer.msg("注册成功！即将转向登陆页面！", {
-									icon : 1,
-									anim : 4,
-									time : 2000
-								}, function() {
-									window.location.href = "view/admin";
-								});
-							} else {
-								layer.msg("注册失败！请重试！"+data.message, {
-									icon : 5,
-									anim : 6,
-									time : 2000
-								});
-							}
+					if (data.status == '0') {
+						layer.alert('注册成功,确定关闭窗口?', {
+							icon : 1
+						}, function() {
+							var index = parent.layer
+									.getFrameIndex(window.name); //获取当前窗口的name
+							parent.layer.close(index);
+							window.location.reload();
+						});
+					}
+					else{
+						layer.confirm('注册失败 '+data.message, {
+							  btn: ['继续注册', '刷新页面']
+						,time:5000
+						}, function(index, layero){
+							layer.close(layer.index);
+							
+						}, function(index){
+							var index = parent.layer
+									.getFrameIndex(window.name); //获取当前窗口的name
+							parent.layer.close(index);
+							window.location.reload();
+							});
+					
+					}
 						});
 			});
 		});

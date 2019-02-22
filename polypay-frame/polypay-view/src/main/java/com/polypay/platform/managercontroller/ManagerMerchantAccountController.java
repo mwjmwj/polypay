@@ -24,8 +24,10 @@ import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantVerify;
 import com.polypay.platform.bean.PayType;
+import com.polypay.platform.consts.MerchantAccountInfoStatusConsts;
 import com.polypay.platform.consts.MerchantHelpPayConsts;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.RoleConsts;
 import com.polypay.platform.consts.VerifyTypeEnum;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
@@ -37,6 +39,7 @@ import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MD5;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.utils.UUIDUtils;
 import com.polypay.platform.vo.MerchantAccountInfoVO;
 
 @Controller
@@ -62,16 +65,20 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		boolean verifyFlag;
 		MerchantAccountInfo merchantAccountInfo;
 		try {
-
 			// 根据用户邮箱或手机号获取用户
 			merchantAccountInfo = merchantAccountInfoService.getMerchantInfo(requestMerchantInfo);
 
+			
 			// 用户存在返回
 			if (null != merchantAccountInfo) {
 				ResponseUtils.exception(response, "该用户已存在！", RequestStatus.FAILED.getStatus());
 				return response;
 			}
 
+			String helpPay = getRequest().getParameter("switch");
+			
+			requestMerchantInfo.setHelppayStatus("on".equals(helpPay)?MerchantHelpPayConsts.OPEN_HELP_PAY:MerchantHelpPayConsts.CLOSE_HELP_PAY);
+			
 			// 获取用户验证码
 			merchantVerify = new MerchantVerify();
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
@@ -132,6 +139,81 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		return response;
 	}
 	
+	@RequestMapping("manager/register/proxy")
+	@ResponseBody
+	public ServiceResponse registerProxy(MerchantAccountInfoVO requestMerchantInfo) throws ServiceException {
+
+		ServiceResponse response = new ServiceResponse();
+		MerchantVerify merchantVerify;
+		boolean verifyFlag;
+		MerchantAccountInfo merchantAccountInfo;
+		try {
+
+			// 根据用户邮箱或手机号获取用户
+			merchantAccountInfo = merchantAccountInfoService.getMerchantInfo(requestMerchantInfo);
+
+			// 用户存在返回
+			if (null != merchantAccountInfo) {
+				ResponseUtils.exception(response, "该用户已存在！", RequestStatus.FAILED.getStatus());
+				return response;
+			}
+
+			// 获取用户验证码
+			merchantVerify = new MerchantVerify();
+			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+			merchantVerify.setMobileNumber(merchant.getMobileNumber());
+			merchantVerify.setType(VerifyTypeEnum.REGISTER_PROXY);
+			
+
+			merchantVerify = merchantVerifyService.queryMerchantVerifyCode(merchantVerify);
+
+			// 没有验证码或者验证码不匹配 返回
+			if (null == merchantVerify || !requestMerchantInfo.getVerifyCode().equals(merchantVerify.getCode())) {
+				ResponseUtils.exception(response, null == merchantVerify ? "未获取验证码,获取有效验证码" : "验证码不正确,请重新输入",
+						RequestStatus.FAILED.getStatus());
+				return response;
+			}
+
+			// 验证码失效重新提示用户重新获取
+			verifyFlag = DateUtils.comperDate(new Date(), merchantVerify.getAvaliableTime());
+			if (!verifyFlag) {
+				ResponseUtils.exception(response, "验证码已失效,请重新获取", RequestStatus.FAILED.getStatus());
+				return response;
+			}
+			
+			// 代理商注册
+			MerchantAccountInfo merchantAccount = new MerchantAccountInfo();
+			String uuid = UUIDUtils.get32UUID();
+			
+			merchantAccount.setMobileNumber(requestMerchantInfo.getMobileNumber());
+			merchantAccount.setAccountName(requestMerchantInfo.getAccountName());
+			merchantAccount.setUuid(uuid);
+			merchantAccount.setStatus(MerchantAccountInfoStatusConsts.SUCCESS);
+			String passWord = "asdf@123";
+			String md5Password = MD5.md5(passWord);
+			merchantAccount.setPassWord(md5Password);
+			merchantAccount.setRoleId(RoleConsts.PROXY);
+			merchantAccount.setCreateTime(new Date());
+			merchantAccountInfoService.insertSelective(merchantAccount);
+
+			response.setMessage("注册成功!");
+
+			// 密码加密返回
+			requestMerchantInfo.setPassWord(null);;
+
+		} catch (ServiceException e) {
+			// 注册 插入数据库异常返回数据库异常信息
+			log.error(response.getRequestId() + " register Merchant fail ");
+			ResponseUtils.exception(response, e.getMessage(), RequestStatus.FAILED.getStatus());
+		} catch (Exception e) {
+			// 其他异常 捕获返回异常msg
+			log.error(response.getRequestId() + "get verifycode fail ");
+			ResponseUtils.exception(response, e.getMessage(), RequestStatus.FAILED.getStatus());
+		}
+
+		return response;
+	}
+	
 	@RequestMapping("/proxy/merchantmanager/account/list")
 	@ResponseBody
 	public ServiceResponse listProxyMerchantAccountInfo() throws ServiceException {
@@ -163,6 +245,7 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 				param.setMobileNumber(mobileNumber);
 			}
 
+			param.setRoleId(RoleConsts.MERCHANT);
 			pageList = merchantAccountInfoService.listMerchantAccountInfo(pageBounds, param);
 
 			Page<MerchantAccountInfoVO> pageData = getPageData(pageList);
@@ -212,6 +295,51 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 				param.setMobileNumber(mobileNumber);
 			}
 
+			param.setRoleId(RoleConsts.MERCHANT);
+			pageList = merchantAccountInfoService.listMerchantAccountInfo(pageBounds, param);
+
+			Page<MerchantAccountInfoVO> pageData = getPageData(pageList);
+			response = ResponseUtils.buildResult(pageData);
+		} catch (ServiceException e) {
+			log.error(response.getRequestId() + " " + e.getMessage());
+			throw new ServiceException(e.getMessage(), RequestStatus.FAILED.getStatus());
+		} catch (Exception e) {
+			log.error(response.getRequestId() + " " + e.getMessage());
+			throw new ServiceException(e.getMessage(), RequestStatus.FAILED.getStatus());
+		}
+		return response;
+
+	}
+	
+	@RequestMapping("proxy/account/list")
+	@ResponseBody
+	public ServiceResponse listProxyAccountInfo() throws ServiceException {
+
+		ServiceResponse response = new ServiceResponse();
+		try {
+			PageBounds pageBounds = this.getPageBounds();
+			PageList<MerchantAccountInfoVO> pageList = null;
+			MerchantAccountInfoVO param = new MerchantAccountInfoVO();
+			
+			// 代理商状态
+			String status = getRequest().getParameter("status");
+			if (StringUtils.isNotEmpty(status)) {
+				param.setStatus(Integer.parseInt(status));
+			}
+
+			// 代付等级
+			String paylevel = getRequest().getParameter("paylevel");
+			if (StringUtils.isNotEmpty(paylevel)) {
+				param.setPayLevel(Integer.parseInt(paylevel));
+			}
+
+			// 代理商手机号
+			String mobileNumber = getRequest().getParameter("mobileNumber");
+			if (StringUtils.isNotEmpty(mobileNumber)) {
+				param.setMobileNumber(mobileNumber);
+			}
+
+			param.setRoleId(RoleConsts.PROXY);
 			pageList = merchantAccountInfoService.listMerchantAccountInfo(pageBounds, param);
 
 			Page<MerchantAccountInfoVO> pageData = getPageData(pageList);
@@ -239,6 +367,19 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		return "adminmanager/managermerchantaccountaudit";
 
 	}
+	
+	@RequestMapping("merchantmanager/proxy/account/query")
+	public String getProxyMerchantAccountInfo(@RequestParam("id") String merchantUUId, Map<String, Object> result)
+			throws ServiceException {
+
+		MerchantAccountInfoVO param = new MerchantAccountInfoVO();
+		param.setUuid(merchantUUId);
+		MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(param);
+		result.put("merchantAccount", merchantInfoByUUID);
+
+		return "adminmanager/proxyaccountedit";
+
+	}
 
 	@RequestMapping("merchantmanager/accountinfo/update")
 	@ResponseBody
@@ -248,6 +389,16 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		} else {
 			uMerchant.setHelppayStatus(MerchantHelpPayConsts.CLOSE_HELP_PAY);
 		}
+		
+		MerchantAccountInfo updateMerchant = new MerchantAccountInfo();
+		updateMerchant.setHelppayStatus(uMerchant.getHelppayStatus());
+		updateMerchant.setAccountName(uMerchant.getAccountName());
+		updateMerchant.setMobileNumber(uMerchant.getMobileNumber());
+		updateMerchant.setPassWord(uMerchant.getPassWord());
+		updateMerchant.setPayLevel(uMerchant.getPayLevel());
+		updateMerchant.setStatus(uMerchant.getStatus());
+		updateMerchant.setId(uMerchant.getId());
+		
 		merchantAccountInfoService.updateByPrimaryKeySelective(uMerchant);
 		return "success";
 	}

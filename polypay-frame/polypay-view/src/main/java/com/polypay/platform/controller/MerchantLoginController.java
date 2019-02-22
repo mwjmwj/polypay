@@ -1,6 +1,7 @@
 package com.polypay.platform.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.util.Calendar;
@@ -437,7 +438,7 @@ public class MerchantLoginController {
 
 	@SuppressWarnings("deprecation")
 	private void sendVerifyCode(ServiceResponse response, MerchantVerify merchantVerify)
-			throws ServiceException, IllegalAccessException, InvocationTargetException {
+			throws ServiceException, IllegalAccessException, InvocationTargetException, UnsupportedEncodingException {
 		MerchantVerify tbVerifycodeVO = new MerchantVerify();
 		BeanUtils.copyProperties(tbVerifycodeVO, merchantVerify);
 		if (null != merchantVerify.getMobileNumber()) {
@@ -446,16 +447,19 @@ public class MerchantLoginController {
 			 * 发送手机验证码 成功直接return
 			 */
 
+			String utf8Str = new String(("【源盛丰】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作,请忽略").getBytes(), "GBK");
+			
 			StringBuilder url = new StringBuilder();
 			url.append("http://m.5c.com.cn/api/send/index.php?").append("username=zhang1")
 					.append("&password_md5=1adbb3178591fd5bb0c248518f39bf6d")
 					.append("&apikey=2cd1102e4b32661f0aadee35d9940985").append("&mobile=")
-					.append(merchantVerify.getMobileNumber()).append("&encode=UTF-8").append("&content=")
+					.append(merchantVerify.getMobileNumber()).append("&encode=GBK").append("&content=")
 					.append(URLEncoder
-							.encode("【源盛丰】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作，请忽略."));
+							.encode(utf8Str));
 
 			HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(url.toString());
 
+			log.debug(" send mobile " + httpGet.getResultAsString());
 			if (StringUtils.isNotEmpty(httpGet.getResultAsString())&&httpGet.getResultAsString().contains("success")) {
 				response.setMessage("发送成功");
 				return;

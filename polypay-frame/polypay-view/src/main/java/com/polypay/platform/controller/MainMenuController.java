@@ -36,8 +36,6 @@ public class MainMenuController {
 		
 		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 		
-		
-		
 		// 图标数据
 		List<MerchantMainDateVO> echarData = merchantRechargeOrderService.allTimeMerchantOrder(merchant.getUuid());
 		
@@ -73,5 +71,6 @@ public class MainMenuController {
 		
 		return "admin/indexmenu";
 	}
+	
 
 }
