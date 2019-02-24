@@ -11,6 +11,8 @@ public class MerchantPlaceAccountBindbankVO extends VO{
 
     private String merchantId;
 
+    private String bankCode;
+
     private String bankName;
 
     private String branchName;
@@ -19,9 +21,35 @@ public class MerchantPlaceAccountBindbankVO extends VO{
 
     private String accountNumber;
 
-    private String province;
+    private String city;
 
-    private Integer defaultStatus;
+    private String provice;
+
+    public String getBankCode() {
+		return bankCode;
+	}
+
+	public void setBankCode(String bankCode) {
+		this.bankCode = bankCode;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getProvice() {
+		return provice;
+	}
+
+	public void setProvice(String provice) {
+		this.provice = provice;
+	}
+
+	private Integer defaultStatus;
 
     private String remark;
     
@@ -73,14 +101,6 @@ public class MerchantPlaceAccountBindbankVO extends VO{
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber == null ? null : accountNumber.trim();
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
     }
 
     public Integer getDefaultStatus() {

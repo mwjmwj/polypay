@@ -139,4 +139,10 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 		}
 	}
 
+	@Override
+	public List<MerchantSettleOrder> listHandleOrder() {
+		// TODO Auto-generated method stub
+		return merchantSettleOrderMapper.listHandleOrder();
+	}
+
 }

@@ -30,6 +30,20 @@ public class MerchantSettleOrder {
 
     private String merchantId;
 
+    private String bankName;
+
+    private String accountName;
+
+    private String accountCity;
+
+    private String accountProvice;
+
+    private String bankCode;
+
+    private String tradeType;
+    
+    private String branchBankName;
+
     public Integer getId() {
         return id;
     }
@@ -70,6 +84,13 @@ public class MerchantSettleOrder {
         this.arrivalAmount = arrivalAmount;
     }
 
+    public String getMerchantBindBank() {
+        return merchantBindBank;
+    }
+
+    public void setMerchantBindBank(String merchantBindBank) {
+        this.merchantBindBank = merchantBindBank == null ? null : merchantBindBank.trim();
+    }
 
     public Date getCreateTime() {
         return createTime;
@@ -127,11 +148,59 @@ public class MerchantSettleOrder {
         this.merchantId = merchantId == null ? null : merchantId.trim();
     }
 
-	public String getMerchantBindBank() {
-		return merchantBindBank;
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName == null ? null : accountName.trim();
+    }
+
+    public String getAccountCity() {
+        return accountCity;
+    }
+
+    public void setAccountCity(String accountCity) {
+        this.accountCity = accountCity == null ? null : accountCity.trim();
+    }
+
+    public String getAccountProvice() {
+        return accountProvice;
+    }
+
+    public void setAccountProvice(String accountProvice) {
+        this.accountProvice = accountProvice == null ? null : accountProvice.trim();
+    }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode == null ? null : bankCode.trim();
+    }
+
+    public String getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType == null ? null : tradeType.trim();
+    }
+
+	public String getBranchBankName() {
+		return branchBankName;
 	}
 
-	public void setMerchantBindBank(String merchantBindBank) {
-		this.merchantBindBank = merchantBindBank;
+	public void setBranchBankName(String branchBankName) {
+		this.branchBankName = branchBankName;
 	}
 }

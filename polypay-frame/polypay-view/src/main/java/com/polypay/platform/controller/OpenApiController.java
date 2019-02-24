@@ -47,7 +47,6 @@ import com.polypay.platform.utils.DateUtil;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.MD5;
-import com.polypay.platform.utils.MD5Utils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantAccountInfoVO;
 

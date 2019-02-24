@@ -16,15 +16,19 @@ public class MerchantPlaceOrder {
 
     private BigDecimal arriveAmount;
 
+    private String bankCode;
+
     private String bankName;
 
-    private String branchName;
+    private String branchBankName;
 
     private String bankNumber;
 
-    private String province;
+    private String accountProvice;
 
-    private String city;
+    private String accountName;
+
+    private String accountCity;
 
     private Date createTime;
 
@@ -37,6 +41,8 @@ public class MerchantPlaceOrder {
     private Integer type;
 
     private String descreption;
+
+    private String tradeType;
 
     public Integer getId() {
         return id;
@@ -86,6 +92,14 @@ public class MerchantPlaceOrder {
         this.arriveAmount = arriveAmount;
     }
 
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode == null ? null : bankCode.trim();
+    }
+
     public String getBankName() {
         return bankName;
     }
@@ -94,12 +108,12 @@ public class MerchantPlaceOrder {
         this.bankName = bankName == null ? null : bankName.trim();
     }
 
-    public String getBranchName() {
-        return branchName;
+    public String getBranchBankName() {
+        return branchBankName;
     }
 
-    public void setBranchName(String branchName) {
-        this.branchName = branchName == null ? null : branchName.trim();
+    public void setBranchBankName(String branchBankName) {
+        this.branchBankName = branchBankName == null ? null : branchBankName.trim();
     }
 
     public String getBankNumber() {
@@ -110,20 +124,28 @@ public class MerchantPlaceOrder {
         this.bankNumber = bankNumber == null ? null : bankNumber.trim();
     }
 
-    public String getProvince() {
-        return province;
+    public String getAccountProvice() {
+        return accountProvice;
     }
 
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
+    public void setAccountProvice(String accountProvice) {
+        this.accountProvice = accountProvice == null ? null : accountProvice.trim();
     }
 
-    public String getCity() {
-        return city;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
+    public void setAccountName(String accountName) {
+        this.accountName = accountName == null ? null : accountName.trim();
+    }
+
+    public String getAccountCity() {
+        return accountCity;
+    }
+
+    public void setAccountCity(String accountCity) {
+        this.accountCity = accountCity == null ? null : accountCity.trim();
     }
 
     public Date getCreateTime() {
@@ -172,5 +194,13 @@ public class MerchantPlaceOrder {
 
     public void setDescreption(String descreption) {
         this.descreption = descreption == null ? null : descreption.trim();
+    }
+
+    public String getTradeType() {
+        return tradeType;
+    }
+
+    public void setTradeType(String tradeType) {
+        this.tradeType = tradeType == null ? null : tradeType.trim();
     }
 }

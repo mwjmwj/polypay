@@ -22,4 +22,9 @@ public interface OrderStatusConsts {
 	 * 取消
 	 */
 	int CANCEL = -4;
+	
+	/**
+	 *  处理中
+	 */
+	int HANDLE = 2;
 }

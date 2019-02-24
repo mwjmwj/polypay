@@ -11,7 +11,7 @@ public interface MerchantAccountInfoMapper extends BaseMapper<MerchantAccountInf
 	
 	MerchantAccountInfo getMerchantInfoByUUID(MerchantAccountInfoVO merchantInfo);
 
-	PageList<MerchantAccountInfoVO> listMerchantBindBank(PageBounds pageBounds, MerchantAccountInfoVO param);
+	PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param);
 	
 
 }

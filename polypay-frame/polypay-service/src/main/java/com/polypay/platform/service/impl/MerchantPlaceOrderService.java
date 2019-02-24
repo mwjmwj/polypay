@@ -144,4 +144,10 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 		}
 	}
 
+	@Override
+	public List<MerchantPlaceOrder> listHandleOrder() {
+		// TODO Auto-generated method stub
+		return merchantPlaceOrderMapper.listHandleOrder();
+	}
+
 }

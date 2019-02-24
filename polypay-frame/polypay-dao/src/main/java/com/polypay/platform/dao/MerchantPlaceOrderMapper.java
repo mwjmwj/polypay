@@ -21,4 +21,6 @@ public interface MerchantPlaceOrderMapper extends BaseMapper<MerchantPlaceOrder>
 	
 	MerchantMainDateVO managerAllMerchantPlaceOrder();
 
+	List<MerchantPlaceOrder> listHandleOrder();
+
 }

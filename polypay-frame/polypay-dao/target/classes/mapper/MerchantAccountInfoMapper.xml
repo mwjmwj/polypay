@@ -235,7 +235,7 @@
 		uuid = #{uuid,jdbcType=VARCHAR}
 	</select>
 
-	<select id="listMerchantBindBank"
+	<select id="listMerchantAccountInfo"
 		parameterType="com.polypay.platform.vo.MerchantAccountInfoVO"
 		resultMap="listResultMap">
 		select
@@ -254,6 +254,10 @@
 			and status = #{status}
 		</if>
 
+		<if test="roleId != null">
+			and role_id = #{roleId}
+		</if>
+		
 		<if test="mobileNumber != null">
 			<bind name="mobileNumber" value="'%'+mobileNumber+'%'" />
 			and mobile_number like #{mobileNumber}

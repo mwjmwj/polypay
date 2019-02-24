@@ -3,8 +3,6 @@ package com.polypay.platform.controller;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +54,6 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 	
 	@Autowired
 	private IMerchantPlaceAccountBindbankService merchantPlaceAccountBindbankService;
-	
-	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 	
 	@RequestMapping("/merchant/place/order/list")
 	@ResponseBody
@@ -312,10 +308,14 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 		String orderNumber = "P" + currentOrder + RandomUtils.random(6);
 		merchantPlaceOrder.setOrderNumber(orderNumber); //merchantAccountBindbank
 
-		merchantPlaceOrder.setBankName(merchantAccountBindbank.getBankName());
 		merchantPlaceOrder.setBankNumber(merchantAccountBindbank.getAccountNumber());
-		merchantPlaceOrder.setBranchName(merchantAccountBindbank.getBranchName());
+		merchantPlaceOrder.setBankCode(merchantAccountBindbank.getBankCode());
+		merchantPlaceOrder.setBankName(merchantAccountBindbank.getBankName());
+		merchantPlaceOrder.setBranchBankName(merchantAccountBindbank.getBranchName());
 		
+		merchantPlaceOrder.setAccountName(merchantAccountBindbank.getAccountName());
+		merchantPlaceOrder.setAccountProvice(merchantAccountBindbank.getProvice());
+		merchantPlaceOrder.setAccountCity(merchantAccountBindbank.getCity());
 		
 		merchantPlaceOrder.setMerchantId(merchantPlaceOrderVO.getMerchantId());
 		merchantPlaceOrder.setStatus(OrderStatusConsts.SUBMIT);

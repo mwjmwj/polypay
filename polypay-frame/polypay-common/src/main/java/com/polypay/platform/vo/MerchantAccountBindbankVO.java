@@ -1,102 +1,122 @@
 package com.polypay.platform.vo;
 
-public class MerchantAccountBindbankVO extends VO{
-    /**
+public class MerchantAccountBindbankVO extends VO {
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3263691138204651001L;
 
 	private Integer id;
 
-    private String merchantId;
+	private String merchantId;
 
-    private String bankName;
+	private String bankName;
 
-    private String branchName;
+	private String bankCode;
 
-    private String accountName;
+	private String branchName;
 
-    private String accountNumber;
+	private String accountName;
 
-    private String province;
+	private String accountNumber;
 
-    private Integer defaultStatus;
+	private String city;
 
-    private String remark;
-    
-    private String defaultFlag;
+	private String provice;
 
-    public Integer getId() {
-        return id;
-    }
+	public String getBankCode() {
+		return bankCode;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setBankCode(String bankCode) {
+		this.bankCode = bankCode;
+	}
 
-    public String getMerchantId() {
-        return merchantId;
-    }
+	public String getCity() {
+		return city;
+	}
 
-    public void setMerchantId(String merchantId) {
-        this.merchantId = merchantId == null ? null : merchantId.trim();
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public String getBankName() {
-        return bankName;
-    }
+	public String getProvice() {
+		return provice;
+	}
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName == null ? null : bankName.trim();
-    }
+	public void setProvice(String provice) {
+		this.provice = provice;
+	}
 
-    public String getBranchName() {
-        return branchName;
-    }
+	private Integer defaultStatus;
 
-    public void setBranchName(String branchName) {
-        this.branchName = branchName == null ? null : branchName.trim();
-    }
+	private String remark;
 
-    public String getAccountName() {
-        return accountName;
-    }
+	private String defaultFlag;
 
-    public void setAccountName(String accountName) {
-        this.accountName = accountName == null ? null : accountName.trim();
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber == null ? null : accountNumber.trim();
-    }
+	public String getMerchantId() {
+		return merchantId;
+	}
 
-    public String getProvince() {
-        return province;
-    }
+	public void setMerchantId(String merchantId) {
+		this.merchantId = merchantId == null ? null : merchantId.trim();
+	}
 
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
-    }
+	public String getBankName() {
+		return bankName;
+	}
 
-    public Integer getDefaultStatus() {
-        return defaultStatus;
-    }
+	public void setBankName(String bankName) {
+		this.bankName = bankName == null ? null : bankName.trim();
+	}
 
-    public void setDefaultStatus(Integer defaultStatus) {
-        this.defaultStatus = defaultStatus;
-    }
+	public String getBranchName() {
+		return branchName;
+	}
 
-    public String getRemark() {
-        return remark;
-    }
+	public void setBranchName(String branchName) {
+		this.branchName = branchName == null ? null : branchName.trim();
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName == null ? null : accountName.trim();
+	}
+
+	public String getAccountNumber() {
+		return accountNumber;
+	}
+
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber == null ? null : accountNumber.trim();
+	}
+
+	public Integer getDefaultStatus() {
+		return defaultStatus;
+	}
+
+	public void setDefaultStatus(Integer defaultStatus) {
+		this.defaultStatus = defaultStatus;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
 
 	public String getDefaultFlag() {
 		return defaultFlag;

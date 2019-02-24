@@ -24,11 +24,9 @@ import com.polypay.platform.service.IMerchantFrezzService;
 public class MerchantUnFrezzTask {
 	
 	private Logger log = LoggerFactory.getLogger(MerchantUnFrezzTask.class);
-
 	
 	@Autowired
 	private IMerchantFrezzService merchantFrezzService;
-	
 	
 	private ReentrantLock mainlock = new ReentrantLock();
 	
@@ -94,9 +92,7 @@ public class MerchantUnFrezzTask {
 		}finally {
 			lock.unlock();
 		}
-		
 	
-		
 	}
 	
 

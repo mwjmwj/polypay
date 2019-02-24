@@ -1,11 +1,8 @@
 package com.polypay.platform.controller;
 
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,8 +54,6 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 
 	@Autowired
 	private IMerchantAccountBindbankService merchantAccountBindbankService;
-
-	private ExecutorService executorService = Executors.newFixedThreadPool(1);
 
 	@RequestMapping("/merchant/settle/order/list")
 	@ResponseBody
@@ -256,6 +251,14 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		merchantSettleOrder.setOrderNumber(orderNumber);
 
 		merchantSettleOrder.setMerchantBindBank(merchantSettleOrderVO.getBankAccountNumber());
+		merchantSettleOrder.setBankCode(merchantSettleOrderVO.getBankCode());
+		merchantSettleOrder.setBankName(merchantSettleOrderVO.getBankName());
+		merchantSettleOrder.setBranchBankName(merchantSettleOrderVO.getBranchBankName());
+		
+		merchantSettleOrder.setAccountName(merchantSettleOrderVO.getAccountName());
+		merchantSettleOrder.setAccountProvice(merchantSettleOrderVO.getAccountProvice());
+		merchantSettleOrder.setAccountCity(merchantSettleOrderVO.getAccountCity());
+		
 		merchantSettleOrder.setMerchantId(merchantSettleOrderVO.getMerchantId());
 		merchantSettleOrder.setStatus(OrderStatusConsts.SUBMIT);
 		merchantSettleOrder.setCreateTime(new Date());

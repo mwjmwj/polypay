@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.Maps;
+import com.polypay.platform.bean.MerchantPlaceOrder;
+import com.polypay.platform.bean.MerchantSettleOrder;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
@@ -173,6 +175,118 @@ public class SmartPayChannel implements IPayChannel {
 		Map result = (Map)JSONUtils.parse(httpGet.getResultAsString());
 		// {"status":1,"msg":"成功订单","sdorderno":"商户订单号","total_fee":"订单金额","sdpayno":"平台订单号"}
 		// {"status":0,"msg":"失败订单"}
+		
+		return result;
+	}
+
+	
+	/**
+	 *  结算调用第三方
+	 */
+	 
+	@Override
+	public Map<String, Object> settleOrder(MerchantSettleOrder settleOrder) {
+		
+		String basePath = "http://api.yundesun.com/apisettle?";
+		
+		String customerid = "10989";
+		
+		String serial = settleOrder.getOrderNumber();
+		
+//		customerid={value}&serial={value}&bankname={value}&cardno={value}&accountname={value}&provice={value}&city={value}&branchname={value}&total_fee={value}&{apikey}
+		
+		String bankname = settleOrder.getBankName();
+		
+		String cardno = settleOrder.getMerchantBindBank();
+		
+		String accountname = settleOrder.getAccountName();
+		
+		String provice = settleOrder.getAccountProvice();
+		
+		String city = settleOrder.getAccountCity();
+		
+		String branchname = settleOrder.getBranchBankName();
+		
+		BigDecimal total_fee = settleOrder.getPostalAmount();
+		
+		String bankcode = settleOrder.getBankCode();
+		
+		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		
+		StringBuffer signParam = new StringBuffer();
+		signParam.append("customerid="+customerid)
+		.append("&serial="+serial)
+		.append("&bankname="+bankname)
+		.append("&cardno="+cardno)
+		.append("&accountname="+accountname)
+		.append("&provice="+provice)
+		.append("&city="+city)
+		.append("&branchname="+branchname)
+		.append("&total_fee="+total_fee)
+		.append("&"+api_key);
+		String sign = MD5.md5(signParam.toString());
+		basePath += basePath+signParam.toString()+"&sign="+sign+"&bankcode="+bankcode;
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(basePath);
+
+		String resultAsString = httpGet.getResultAsString();
+		Map result = (Map)JSONUtils.parse(resultAsString);
+		
+		//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
+		//{"status":0,"msg":"代付失败"}
+		
+		
+		return result;
+	}
+
+	@Override
+	public Map<String, Object> placeOrder(MerchantPlaceOrder settleOrder) {
+String basePath = "http://api.yundesun.com/apisettle?";
+		
+		String customerid = "10989";
+		
+		String serial = settleOrder.getOrderNumber();
+		
+//		customerid={value}&serial={value}&bankname={value}&cardno={value}&accountname={value}&provice={value}&city={value}&branchname={value}&total_fee={value}&{apikey}
+		
+		String bankname = settleOrder.getBankName();
+		
+		String cardno = settleOrder.getBankNumber();
+		
+		String accountname = settleOrder.getAccountName();
+		
+		String provice = settleOrder.getAccountProvice();
+		
+		String city = settleOrder.getAccountCity();
+		
+		String branchname = settleOrder.getBranchBankName();
+		
+		BigDecimal total_fee = settleOrder.getPayAmount();
+		
+		String bankcode = settleOrder.getBankCode();
+		
+		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		
+		StringBuffer signParam = new StringBuffer();
+		signParam.append("customerid="+customerid)
+		.append("&serial="+serial)
+		.append("&bankname="+bankname)
+		.append("&cardno="+cardno)
+		.append("&accountname="+accountname)
+		.append("&provice="+provice)
+		.append("&city="+city)
+		.append("&branchname="+branchname)
+		.append("&total_fee="+total_fee)
+		.append("&"+api_key);
+		String sign = MD5.md5(signParam.toString());
+		basePath += basePath+signParam.toString()+"&sign="+sign+"&bankcode="+bankcode;
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(basePath);
+
+		String resultAsString = httpGet.getResultAsString();
+		Map result = (Map)JSONUtils.parse(resultAsString);
+		
+		//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
+		//{"status":0,"msg":"代付失败"}
+		
 		
 		return result;
 	}

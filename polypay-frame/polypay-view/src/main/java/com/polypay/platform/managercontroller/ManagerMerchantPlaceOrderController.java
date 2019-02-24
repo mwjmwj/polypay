@@ -15,27 +15,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantFinance;
-import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.bean.MerchantPlaceOrder;
-import com.polypay.platform.consts.MerchantOrderTypeConsts;
+import com.polypay.platform.bean.SystemConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.paychannel.IPayChannel;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
-import com.polypay.platform.utils.DateUtil;
+import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtils;
-import com.polypay.platform.utils.HttpClientUtil;
-import com.polypay.platform.utils.HttpRequestDetailVo;
-import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
 
@@ -51,6 +48,9 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 	private IMerchantFinanceService merchantFinanceService;
 
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
+	
+	@Autowired
+	private ISystemConstsService systemConstsService;
 
 	@RequestMapping("/merchantmanager/place/order/list")
 	@ResponseBody
@@ -191,17 +191,20 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 					return;
 				}
 
-				Thread.currentThread().sleep(5000);
+				SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
+				
+				String constsValue = consts.getConstsValue();
+				Class<?> payBean = Class.forName(constsValue);
+				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
+				
+				//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
+				//{"status":0,"msg":"代付失败"}
+				Map<String,Object> result = paychannel.placeOrder(selectByPrimaryKey);
 
-				// 调第三方
-				HttpRequestDetailVo httpGet = HttpClientUtil.httpGet("");
-
-				// 处理返回结果
-				Map parseObject = JSON.parseObject(httpGet.getResultAsString(), Map.class);
-				Object status = parseObject.get("status");
+				Object status = result.get("status");
 
 				// 返回结果失败 回滚订单
-				if (null == status || !status.toString().equals("200")) {
+				if (null == status || !status.toString().equals("1")) {
 
 					// 回滚
 					rollBackPlaceOrder(merchantPlaceOrder);
@@ -209,7 +212,7 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 				}
 
 				// 成功修改订单状态
-				merchantPlaceOrder.setStatus(OrderStatusConsts.SUCCESS);
+				merchantPlaceOrder.setStatus(OrderStatusConsts.HANDLE);
 				merchantPlaceOrderService.updateByPrimaryKeySelective(merchantPlaceOrder);
 			}
 		} catch (Exception e) {
@@ -231,7 +234,8 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 
 			MerchantPlaceOrder selectByPrimaryKey = merchantPlaceOrderService
 					.selectByPrimaryKey(merchantPlaceOrder.getId());
-			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)) {
+			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)
+					||selectByPrimaryKey.getStatus().equals(OrderStatusConsts.HANDLE)) {
 				// 回滚金额
 				MerchantFinance merchantFinance = merchantFinanceService
 						.getMerchantFinanceByUUID(merchantPlaceOrder.getMerchantId());
@@ -248,26 +252,5 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 		}
 	}
 
-	private MerchantPlaceOrder generatorPlaceOrder(MerchantPlaceOrderVO merchantPlaceOrderVO,
-			MerchantPlaceAccountBindbank merchantAccountBindbank) throws ServiceException {
-
-		MerchantPlaceOrder merchantPlaceOrder = new MerchantPlaceOrder();
-		String currentOrder = DateUtil.getCurrentDate();
-		String orderNumber = "P" + currentOrder + RandomUtils.random(6);
-		merchantPlaceOrder.setOrderNumber(orderNumber); // merchantAccountBindbank
-
-		merchantPlaceOrder.setBankName(merchantAccountBindbank.getBankName());
-		merchantPlaceOrder.setBankNumber(merchantAccountBindbank.getAccountNumber());
-		merchantPlaceOrder.setBranchName(merchantAccountBindbank.getBranchName());
-
-		merchantPlaceOrder.setMerchantId(merchantPlaceOrderVO.getMerchantId());
-		merchantPlaceOrder.setStatus(OrderStatusConsts.SUBMIT);
-		merchantPlaceOrder.setCreateTime(new Date());
-		merchantPlaceOrder.setPayAmount(merchantPlaceOrderVO.getPayAmount());
-		merchantPlaceOrder.setType(MerchantOrderTypeConsts.PLACE_ORDER);
-		merchantPlaceOrderService.insertSelective(merchantPlaceOrder);
-
-		return merchantPlaceOrder;
-	}
 
 }

@@ -20,4 +20,6 @@ public interface MerchantSettleOrderMapper extends BaseMapper<MerchantSettleOrde
 	MerchantMainDateVO allMerchantSettle(String uuid);
 
 	MerchantMainDateVO managerAllMerchantSettleOrder();
+
+	List<MerchantSettleOrder> listHandleOrder();
 }

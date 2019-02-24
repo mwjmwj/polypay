@@ -11,31 +11,39 @@ public class MerchantSettleOrderVO extends VO {
 
 	private Integer id;
 
-	private String orderNumber;
+    private String orderNumber;
 
-	private BigDecimal postalAmount;
+    private BigDecimal postalAmount;
 
-	private BigDecimal serviceAmount;
+    private BigDecimal serviceAmount;
 
-	private BigDecimal arrivalAmount;
+    private BigDecimal arrivalAmount;
 
-	private String merchantBindBank;
-	
-	private Integer merchantBindBankId;
+    private String merchantBindBank;
 
-	private Date createTime;
+    private Date createTime;
 
-	private Date payTime;
+    private Date payTime;
 
-	private Integer status;
+    private Integer status;
 
-	private Integer type;
+    private Integer type;
 
-	private Integer descreption;
+    private Integer descreption;
 
-	private String handlePeople;
+    private String handlePeople;
 
-	private String merchantId;
+    private String merchantId;
+
+    private String accountName;
+
+    private String accountCity;
+
+    private String accountProvice;
+
+    private String bankCode;
+
+    private String tradeType;
 
 	private Date beginTime;
 
@@ -57,6 +65,50 @@ public class MerchantSettleOrderVO extends VO {
     
     private Date sEndTime;
     
+    private String branchBankName;
+    
+    private Integer merchantBindBankId;
+    
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getAccountCity() {
+		return accountCity;
+	}
+
+	public void setAccountCity(String accountCity) {
+		this.accountCity = accountCity;
+	}
+
+	public String getAccountProvice() {
+		return accountProvice;
+	}
+
+	public void setAccountProvice(String accountProvice) {
+		this.accountProvice = accountProvice;
+	}
+
+	public String getBankCode() {
+		return bankCode;
+	}
+
+	public void setBankCode(String bankCode) {
+		this.bankCode = bankCode;
+	}
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+
 	public Date getcBeginTime() {
 		return cBeginTime;
 	}
@@ -239,6 +291,14 @@ public class MerchantSettleOrderVO extends VO {
 
 	public void setMerchantBindBank(String merchantBindBank) {
 		this.merchantBindBank = merchantBindBank;
+	}
+
+	public String getBranchBankName() {
+		return branchBankName;
+	}
+
+	public void setBranchBankName(String branchBankName) {
+		this.branchBankName = branchBankName;
 	}
 
 	public Integer getMerchantBindBankId() {

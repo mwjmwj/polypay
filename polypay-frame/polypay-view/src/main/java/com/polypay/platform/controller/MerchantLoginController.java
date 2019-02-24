@@ -338,6 +338,7 @@ public class MerchantLoginController {
 				return response;
 			}*/
 
+			merchantVerify.setCode(newVerifyCode);
 			this.sendVerifyCode(response, merchantVerify);
 
 			if (response.getStatus() != RequestStatus.SUCCESS.getStatus()) {
@@ -447,13 +448,13 @@ public class MerchantLoginController {
 			 * 发送手机验证码 成功直接return
 			 */
 
-			String utf8Str = new String(("【源盛丰】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作,请忽略").getBytes(), "GBK");
+			String utf8Str = new String(("【源盛丰】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作,请忽略").getBytes(), "UTF-8");
 			
 			StringBuilder url = new StringBuilder();
 			url.append("http://m.5c.com.cn/api/send/index.php?").append("username=zhang1")
 					.append("&password_md5=1adbb3178591fd5bb0c248518f39bf6d")
 					.append("&apikey=2cd1102e4b32661f0aadee35d9940985").append("&mobile=")
-					.append(merchantVerify.getMobileNumber()).append("&encode=GBK").append("&content=")
+					.append(merchantVerify.getMobileNumber()).append("&encode=UTF-8").append("&content=")
 					.append(URLEncoder
 							.encode(utf8Str));
 

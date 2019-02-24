@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
@@ -23,15 +22,17 @@ import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantSettleOrder;
+import com.polypay.platform.bean.SystemConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.paychannel.IPayChannel;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
+import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtils;
-import com.polypay.platform.utils.HttpClientUtil;
-import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
@@ -47,7 +48,8 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 	private IMerchantFinanceService merchantFinanceService;
 
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
-	
+	@Autowired
+	private ISystemConstsService systemConstsService;
 
 	@RequestMapping("/merchantmanager/settle/order/list")
 	@ResponseBody
@@ -187,6 +189,7 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 			selectByPrimaryKey = merchantSettleOrderService.selectByPrimaryKey(merchantSettleOrder.getId());
 			
 
+			
 			if(null==selectByPrimaryKey)
 			{
 				return;
@@ -198,17 +201,21 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 			}
 			
 			
-			Thread.currentThread().sleep(5000);
+			SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
+			
+			String constsValue = consts.getConstsValue();
+			Class<?> payBean = Class.forName(constsValue);
+			IPayChannel paychannel = (IPayChannel) payBean.newInstance();
+			
+			
+			//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
+			//{"status":0,"msg":"代付失败"}
+			Map<String,Object> result = paychannel.settleOrder(selectByPrimaryKey);
 
-			// 调第三方
-			HttpRequestDetailVo httpGet = HttpClientUtil.httpGet("");
-
-			// 处理返回结果
-			Map parseObject = JSON.parseObject(httpGet.getResultAsString(), Map.class);
-			Object status = parseObject.get("status");
-
+			Object status = result.get("status");
+			
 			// 返回结果失败 回滚订单
-			if (null == status || !status.toString().equals("200")) {
+			if (null == status || !status.toString().equals("0")) {
 
 				// 回滚
 				rollBackSettlerOrder(merchantSettleOrder);
@@ -216,7 +223,7 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 			}
 
 			// 成功修改订单状态
-			merchantSettleOrder.setStatus(OrderStatusConsts.SUCCESS);
+			merchantSettleOrder.setStatus(OrderStatusConsts.HANDLE);
 			merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
 			}
 
@@ -239,7 +246,8 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 
 			MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService
 					.selectByPrimaryKey(merchantSettleOrder.getId());
-			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)) {
+			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)
+					||selectByPrimaryKey.getStatus().equals(OrderStatusConsts.HANDLE)) {
 				// 回滚金额
 				MerchantFinance merchantFinance = merchantFinanceService
 						.getMerchantFinanceByUUID(merchantSettleOrder.getMerchantId());

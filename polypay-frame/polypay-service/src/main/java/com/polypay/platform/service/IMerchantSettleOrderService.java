@@ -21,4 +21,6 @@ public interface IMerchantSettleOrderService extends IBaseService<MerchantSettle
 
 	MerchantMainDateVO managerAllMerchantSettleOrder() throws ServiceException;
 
+	List<MerchantSettleOrder> listHandleOrder();
+
 }

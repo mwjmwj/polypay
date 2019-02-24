@@ -5,6 +5,8 @@ public class MerchantPlaceAccountBindbank {
 
     private String merchantId;
 
+    private String bankCode;
+
     private String bankName;
 
     private String branchName;
@@ -13,7 +15,9 @@ public class MerchantPlaceAccountBindbank {
 
     private String accountNumber;
 
-    private String province;
+    private String city;
+
+    private String provice;
 
     private Integer defaultStatus;
 
@@ -33,6 +37,14 @@ public class MerchantPlaceAccountBindbank {
 
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId == null ? null : merchantId.trim();
+    }
+
+    public String getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(String bankCode) {
+        this.bankCode = bankCode == null ? null : bankCode.trim();
     }
 
     public String getBankName() {
@@ -67,12 +79,20 @@ public class MerchantPlaceAccountBindbank {
         this.accountNumber = accountNumber == null ? null : accountNumber.trim();
     }
 
-    public String getProvince() {
-        return province;
+    public String getCity() {
+        return city;
     }
 
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
+    public void setCity(String city) {
+        this.city = city == null ? null : city.trim();
+    }
+
+    public String getProvice() {
+        return provice;
+    }
+
+    public void setProvice(String provice) {
+        this.provice = provice == null ? null : provice.trim();
     }
 
     public Integer getDefaultStatus() {
