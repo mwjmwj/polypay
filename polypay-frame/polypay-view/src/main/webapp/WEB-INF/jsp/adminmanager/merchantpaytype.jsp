@@ -55,7 +55,7 @@
 
 			table.render({
 				elem : '#merchantpaytype',
-				url : '<%=basePath %>manager/paytype/list',
+				url : '<%=basePath %>/mpaytype/list',
 				cellMinWidth : 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
 				,
 				response : {

@@ -48,7 +48,7 @@ public class SmartPayChannel implements IPayChannel {
 		String apiKey = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
 
 		// 支付类型
-		String paytype = "usdt";
+		String paytype = param.get("pay_channel").toString();
 
 		// 异步回调
 		// 异步回调为最终订单状态
@@ -143,8 +143,8 @@ public class SmartPayChannel implements IPayChannel {
 		}
 		
 		result.put("total_fee", total_fee);
-		result.put("merchantno", sdpayno);
-		result.put("payno", sdorderno);
+		result.put("payno", sdpayno);
+		result.put("orderno", sdorderno);
 		result.put("channel", "WY");
 		result.put("status", status);
 		
@@ -164,11 +164,11 @@ public class SmartPayChannel implements IPayChannel {
 		StringBuffer signParam = new StringBuffer();
 		signParam.append("customerid=10989")
 		.append("&sdorderno="+channelOrderNumber)
-		.append("&reqtime"+DateUtils.getOrderTime())
+		.append("&reqtime="+DateUtils.getOrderTime())
 		.append("&95de2d2d4b2dc95efb9e9c8981dd7743a110a438");
 		String sign = MD5.md5(signParam.toString());
 		
-		baseUrl += baseUrl + signParam.toString()+"&sign="+sign;
+		baseUrl +=  signParam.toString()+"&sign="+sign;
 		
 		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(baseUrl);
 		
@@ -187,7 +187,7 @@ public class SmartPayChannel implements IPayChannel {
 	@Override
 	public Map<String, Object> settleOrder(MerchantSettleOrder settleOrder) {
 		
-		String basePath = "http://api.yundesun.com/apisettle?";
+		String basePath = "http://api.yundesun.com/apisettle";
 		
 		String customerid = "10989";
 		
@@ -207,12 +207,15 @@ public class SmartPayChannel implements IPayChannel {
 		
 		String branchname = settleOrder.getBranchBankName();
 		
-		BigDecimal total_fee = settleOrder.getPostalAmount();
+		// 100 - 5 + 3 
+		BigDecimal total_fee = settleOrder.getPostalAmount().subtract(settleOrder.getServiceAmount()).add(new BigDecimal(3)).setScale(2, BigDecimal.ROUND_DOWN);
 		
 		String bankcode = settleOrder.getBankCode();
 		
 		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
 		
+//		customerid={value}&serial={value}&bankname={value}&cardno={value}&
+//				accountname={value}&provice={value}&city={value}&branchname={value}&total_fee={value}&{apikey}
 		StringBuffer signParam = new StringBuffer();
 		signParam.append("customerid="+customerid)
 		.append("&serial="+serial)
@@ -224,23 +227,42 @@ public class SmartPayChannel implements IPayChannel {
 		.append("&branchname="+branchname)
 		.append("&total_fee="+total_fee)
 		.append("&"+api_key);
-		String sign = MD5.md5(signParam.toString());
-		basePath += basePath+signParam.toString()+"&sign="+sign+"&bankcode="+bankcode;
-		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(basePath);
+		
+		
+		String sign = MD5.encryption(signParam.toString());
 
+		Map<String,String> param = Maps.newHashMap();
+		param.put("customerid", customerid);
+		param.put("serial", serial);
+		param.put("bankname", bankname);
+		param.put("cardno", cardno);
+		param.put("accountname", accountname);
+		param.put("provice", provice);
+		param.put("city", city);
+		param.put("branchname", branchname);
+		param.put("total_fee", total_fee.toString());
+		param.put("sign", sign);
+		param.put("bankcode", bankcode);
+		
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpPost(basePath, null, param);
+
+		
 		String resultAsString = httpGet.getResultAsString();
 		Map result = (Map)JSONUtils.parse(resultAsString);
 		
 		//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
 		//{"status":0,"msg":"代付失败"}
-		
+		if("代付订单号重复".equals(result.get("msg")))
+		{
+			result.put("status", 2);
+		}
 		
 		return result;
 	}
 
 	@Override
 	public Map<String, Object> placeOrder(MerchantPlaceOrder settleOrder) {
-String basePath = "http://api.yundesun.com/apisettle?";
+		String basePath = "http://api.yundesun.com/apisettle?";
 		
 		String customerid = "10989";
 		
@@ -260,7 +282,7 @@ String basePath = "http://api.yundesun.com/apisettle?";
 		
 		String branchname = settleOrder.getBranchBankName();
 		
-		BigDecimal total_fee = settleOrder.getPayAmount();
+		BigDecimal total_fee = settleOrder.getPayAmount().subtract(settleOrder.getServiceAmount()).add(new BigDecimal(3)).setScale(2, BigDecimal.ROUND_DOWN);
 		
 		String bankcode = settleOrder.getBankCode();
 		
@@ -277,15 +299,34 @@ String basePath = "http://api.yundesun.com/apisettle?";
 		.append("&branchname="+branchname)
 		.append("&total_fee="+total_fee)
 		.append("&"+api_key);
-		String sign = MD5.md5(signParam.toString());
-		basePath += basePath+signParam.toString()+"&sign="+sign+"&bankcode="+bankcode;
-		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(basePath);
+
+		String sign = MD5.encryption(signParam.toString());
+
+		Map<String,String> param = Maps.newHashMap();
+		param.put("customerid", customerid);
+		param.put("serial", serial);
+		param.put("bankname", bankname);
+		param.put("cardno", cardno);
+		param.put("accountname", accountname);
+		param.put("provice", provice);
+		param.put("city", city);
+		param.put("branchname", branchname);
+		param.put("total_fee", total_fee.toString());
+		param.put("sign", sign);
+		param.put("bankcode", bankcode);
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpPost(basePath, null, param);
+
 
 		String resultAsString = httpGet.getResultAsString();
 		Map result = (Map)JSONUtils.parse(resultAsString);
 		
 		//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
 		//{"status":0,"msg":"代付失败"}
+		
+		if("代付订单号重复".equals(result.get("msg")))
+		{
+			result.put("status", 2);
+		}
 		
 		
 		return result;

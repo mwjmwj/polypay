@@ -31,7 +31,7 @@
 				<label class="layui-form-label">账户名</label>
 				<div class="layui-input-block">
 					<div class="layui-inline">
-						<input type="text" name="accountName" placeholder="卡号所属人"
+						<input type="text" name="accountName" placeholder="开户姓名"
 							autocomplete="off" id="accountName" class="layui-input"
 							style="width: 300px" lay-filter="account">
 					</div>
@@ -48,17 +48,11 @@
 				</div>
 			</div>
 
-			<div class="layui-form-item layui-form-pane">
-				<label class="layui-form-label">设置为默认</label>
-				<div class="layui-input-block">
-					<input type="checkbox" id="defaultStatus" name="defaultFlag" lay-skin="switch">
-				</div>
-			</div>
 
 
 
 			<div class="layui-form-item layui-form-pane">
-				<label class="layui-form-label">银行名称</label>
+				<label class="layui-form-label">收款银行</label>
 				<div class="layui-input-block">
 					<div class="layui-inline">
 						<input type="text" name="bankName" autocomplete="off"
@@ -69,13 +63,43 @@
 
 
 			<div class="layui-form-item layui-form-pane">
-				<label class="layui-form-label">分行全称</label>
+				<label class="layui-form-label">开户行名称</label>
 				<div class="layui-input-block">
 					<div class="layui-inline">
 						<input type="text" name="branchName" autocomplete="off"
 							class="layui-input" style="width: 300px"
 							placeholder="例：湖北省武汉市八一路支行">
 					</div>
+				</div>
+			</div>
+			
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">省</label>
+				<div class="layui-input-block">
+					<div class="layui-inline">
+						<input type="text" name="provice" autocomplete="off"
+							id="provice" class="layui-input" style="width: 300px">
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">城市</label>
+				<div class="layui-input-block">
+					<div class="layui-inline">
+						<input type="text" name="city" autocomplete="off"
+							id="city" class="layui-input" style="width: 300px">
+					</div>
+				</div>
+			</div>
+			
+			
+			
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">设置为默认</label>
+				<div class="layui-input-block">
+					<input type="checkbox" id="defaultStatus" name="defaultFlag" lay-skin="switch">
 				</div>
 			</div>
 
@@ -122,7 +146,7 @@
 										.getFrameIndex(window.name); //获取当前窗口的name
 								parent.layer.close(index);
 								window.location.reload();
-
+								window.parent.location.reload();
 							});
 						}
 						else{

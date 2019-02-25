@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ManagerMainMenuController {
 
 	
-	@RequestMapping("manager/mainmenu")
+	@RequestMapping("main/mainmenu")
 	public String getManagetMainMenu()
 	{
 		

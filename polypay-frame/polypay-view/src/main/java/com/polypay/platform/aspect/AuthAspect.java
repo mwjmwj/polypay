@@ -34,7 +34,8 @@ public class AuthAspect {
 	@Pointcut("execution(* com.polypay.platform.controller.*.*(..)) && !execution(* com.polypay.platform.controller.MerchantLoginController.*(..))"
 			+ "&& !execution(* com.polypay.platform.controller.ViewController.toAdmin(..))"
 			+ "&& !execution(* com.polypay.platform.controller.ViewController.toRegister(..))"
-			+ "&& !execution(* com.polypay.platform.controller.DemoController.*(..))")
+			+ "&& !execution(* com.polypay.platform.controller.DemoController.*(..))"
+			+ "&& !execution(* com.polypay.platform.controller.OpenApiController.*(..))")
 	public void pointCut()
 	{
 		

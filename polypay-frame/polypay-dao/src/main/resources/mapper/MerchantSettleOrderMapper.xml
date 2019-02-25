@@ -13,7 +13,7 @@
     <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="descreption" property="descreption" jdbcType="INTEGER" />
+    <result column="descreption" property="descreption" jdbcType="VARCHAR" />
     <result column="handle_people" property="handlePeople" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
@@ -38,7 +38,7 @@
     <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="descreption" property="descreption" jdbcType="INTEGER" />
+    <result column="descreption" property="descreption" jdbcType="VARCHAR" />
     <result column="handle_people" property="handlePeople" jdbcType="VARCHAR" />
     <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
     <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
@@ -79,7 +79,7 @@
     values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{postalAmount,jdbcType=DECIMAL}, 
       #{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL}, #{merchantBindBank,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{type,jdbcType=INTEGER}, #{descreption,jdbcType=INTEGER}, #{handlePeople,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{descreption,jdbcType=VARCHAR}, #{handlePeople,jdbcType=VARCHAR}, 
       #{merchantId,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
       #{accountCity,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, #{accountProvice,jdbcType=VARCHAR}, 
       #{bankCode,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR})
@@ -180,7 +180,7 @@
         #{type,jdbcType=INTEGER},
       </if>
       <if test="descreption != null" >
-        #{descreption,jdbcType=INTEGER},
+        #{descreption,jdbcType=VARCHAR},
       </if>
       <if test="handlePeople != null" >
         #{handlePeople,jdbcType=VARCHAR},
@@ -242,7 +242,7 @@
         type = #{type,jdbcType=INTEGER},
       </if>
       <if test="descreption != null" >
-        descreption = #{descreption,jdbcType=INTEGER},
+        descreption = #{descreption,jdbcType=VARCHAR},
       </if>
       <if test="handlePeople != null" >
         handle_people = #{handlePeople,jdbcType=VARCHAR},
@@ -285,7 +285,7 @@
       pay_time = #{payTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
-      descreption = #{descreption,jdbcType=INTEGER},
+      descreption = #{descreption,jdbcType=VARCHAR},
       handle_people = #{handlePeople,jdbcType=VARCHAR},
       merchant_id = #{merchantId,jdbcType=VARCHAR},
       bank_name = #{bankName,jdbcType=VARCHAR},

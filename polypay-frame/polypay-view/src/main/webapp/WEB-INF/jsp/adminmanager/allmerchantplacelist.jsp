@@ -154,7 +154,7 @@
 				}, {
 					field : 'status',
 					title : '状态',
-					width : 80,
+					width : 100,
 					align : 'center',
 					templet : function(row) {
 						if (row.status == 0) {
@@ -165,6 +165,9 @@
 						else if (row.status == 1) {
 							return '<span style="color: orange;">审核中</span>';
 						}
+						else if (row.status == 2) {
+								return '<span style="color: #00FF00;">处理</span>';
+							}
 					}
 				}, {
 					field : 'payAmount',

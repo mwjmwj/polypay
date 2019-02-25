@@ -112,7 +112,7 @@
 					
 					<c:if test="${sessionScope.merchant_user.roleId == 2 || sessionScope.merchant_user.roleId == 3 }">
 					
-					<iframe src='./manager/mainmenu' frameborder="0" scrolling="yes"
+					<iframe src='./main/mainmenu' frameborder="0" scrolling="yes"
 						class="weIframe"></iframe>
 						
 					</c:if>

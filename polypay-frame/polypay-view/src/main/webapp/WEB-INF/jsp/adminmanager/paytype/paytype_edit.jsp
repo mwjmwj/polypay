@@ -56,7 +56,7 @@
 		</div>
 		
 		<div class="layui-form-item">
-			<label class="layui-form-label">姓名
+			<label class="layui-form-label">商户ID
 			</label>
 			<div class="layui-input-inline">
 				<input type="text" name="merchantId" id="merchantId" value="${item.merchantId }"
@@ -65,6 +65,19 @@
 			</div>
 			<span id="merchantIdspan" style="display: none"><em></em></span>
 		</div>
+		
+			<div class="layui-form-item">
+			<label class="layui-form-label">姓名
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="merchantName" id="merchantName" value="${item.merchantName }"
+					lay-verify="required" placeholder="姓名" 
+					class="layui-input">
+			</div>
+			<span id="merchantIdspan" style="display: none"><em></em></span>
+		</div>
+		
+		
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">状态

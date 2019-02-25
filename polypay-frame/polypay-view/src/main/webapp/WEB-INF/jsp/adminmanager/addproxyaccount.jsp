@@ -98,7 +98,7 @@
 			
 			form.on('submit(reg-submit)', function() {
 			$.ajax({
-				url : '<%=basePath%>manager/register/proxy',
+				url : '<%=basePath%>managerregister/proxy',
 				type : 'POST',
 				datatype : 'json',
 				data : $("#regForm").serialize(),

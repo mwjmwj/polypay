@@ -151,13 +151,20 @@
 				}, {
 					field : 'status',
 					title : '状态',
-					width : 60,
+					width : 100,
+					align:'center',
 					templet : function(row) {
 						if (row.status == 0) {
 							return '<span style="color: green;">成功</span>';
 						} else if (row.status == -1) {
 							return '<span style="color: red;">失败</span>';
 						}
+						else if (row.status == 1) {
+							return '<span style="color: orange;">审核中</span>';
+						}
+						else if (row.status == 2) {
+								return '<span style="color: #00FF00;">处理</span>';
+							}
 					}
 				}, {
 					field : 'postalAmount',

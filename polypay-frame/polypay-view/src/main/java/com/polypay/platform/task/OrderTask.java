@@ -110,6 +110,7 @@ public class OrderTask {
 
 				if ("1".equals(status)) {
 					porder.setStatus(OrderStatusConsts.SUCCESS);
+					porder.setArriveAmount(porder.getPayAmount().subtract(porder.getServiceAmount()));
 					merchantPlaceOrderService.updateByPrimaryKeySelective(porder);
 				}
 			} catch (ServiceException e) {
@@ -151,13 +152,15 @@ public class OrderTask {
 
 			try {
 				// 失敗
-				if ("0".equals(status)) {
+				if ("0".equals(status.toString())) {
 					rollBackSettlerOrder(sorder);
 					return;
 				}
 
-				if ("1".equals(status)) {
+				if ("1".equals(status.toString())) {
 					sorder.setStatus(OrderStatusConsts.SUCCESS);
+					
+					sorder.setArrivalAmount(sorder.getPostalAmount().subtract(sorder.getServiceAmount()));
 					merchantSettleOrderService.updateByPrimaryKeySelective(sorder);
 				}
 			} catch (ServiceException e) {

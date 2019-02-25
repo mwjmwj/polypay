@@ -24,6 +24,7 @@ import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantSettleOrder;
+import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
@@ -133,6 +134,12 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 					ResponseUtils.exception(response, "未有財務信息", RequestStatus.FAILED.getStatus());
 					return response;
 				}
+				
+				if (merchantFinance.getStatus().equals(MerchantFinanceStatusConsts.FREEZE)) {
+					ResponseUtils.exception(response, "财务已冻结", RequestStatus.FAILED.getStatus());
+					return response;
+				}
+
 
 				// 结算必须有结算金额
 				BigDecimal settleAmount = merchantSettleOrderVO.getSettleAmount();
@@ -140,7 +147,13 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 					ResponseUtils.exception(response, "请输入结算金额", RequestStatus.FAILED.getStatus());
 					return response;
 				}
-
+				
+				if(settleAmount.compareTo(new BigDecimal(20))<0)
+				{
+					ResponseUtils.exception(response, "最低金额20", RequestStatus.FAILED.getStatus());
+					return response;
+				}
+				
 				// 结算必须有支付密码
 				String payPassword = merchantSettleOrderVO.getPayPassword();
 				if (null == payPassword) {
@@ -174,7 +187,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 					return response;
 				}
 				merchantSettleOrderVO.setMerchantId(merchant.getUuid());
-				merchantSettleOrder = generatorSettleOrder(merchantSettleOrderVO);
+				merchantSettleOrder = generatorSettleOrder(merchantSettleOrderVO,merchantAccountBindbank);
 				// 扣除余额
 				merchantFinance.setBlanceAmount(blanceAmount.subtract(settleAmount));
 				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
@@ -242,7 +255,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 	
 	
 
-	private MerchantSettleOrder generatorSettleOrder(MerchantSettleOrderVO merchantSettleOrderVO)
+	private MerchantSettleOrder generatorSettleOrder(MerchantSettleOrderVO merchantSettleOrderVO, MerchantAccountBindbank merchantAccountBindbank)
 			throws ServiceException {
 
 		MerchantSettleOrder merchantSettleOrder = new MerchantSettleOrder();
@@ -250,14 +263,14 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		String orderNumber = "S" + currentOrder + RandomUtils.random(6);
 		merchantSettleOrder.setOrderNumber(orderNumber);
 
-		merchantSettleOrder.setMerchantBindBank(merchantSettleOrderVO.getBankAccountNumber());
-		merchantSettleOrder.setBankCode(merchantSettleOrderVO.getBankCode());
-		merchantSettleOrder.setBankName(merchantSettleOrderVO.getBankName());
-		merchantSettleOrder.setBranchBankName(merchantSettleOrderVO.getBranchBankName());
+		merchantSettleOrder.setMerchantBindBank(merchantAccountBindbank.getAccountNumber());
+		merchantSettleOrder.setBankCode(merchantAccountBindbank.getBankCode());
+		merchantSettleOrder.setBankName(merchantAccountBindbank.getBankName());
+		merchantSettleOrder.setBranchBankName(merchantAccountBindbank.getBranchName());
 		
-		merchantSettleOrder.setAccountName(merchantSettleOrderVO.getAccountName());
-		merchantSettleOrder.setAccountProvice(merchantSettleOrderVO.getAccountProvice());
-		merchantSettleOrder.setAccountCity(merchantSettleOrderVO.getAccountCity());
+		merchantSettleOrder.setAccountName(merchantAccountBindbank.getAccountName());
+		merchantSettleOrder.setAccountProvice(merchantAccountBindbank.getProvice());
+		merchantSettleOrder.setAccountCity(merchantAccountBindbank.getCity());
 		
 		merchantSettleOrder.setMerchantId(merchantSettleOrderVO.getMerchantId());
 		merchantSettleOrder.setStatus(OrderStatusConsts.SUBMIT);

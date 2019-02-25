@@ -1,5 +1,6 @@
 package com.polypay.platform.managercontroller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -33,6 +34,7 @@ import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
 import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtils;
+import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
@@ -43,7 +45,7 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 
 	@Autowired
 	private IMerchantSettleOrderService merchantSettleOrderService;
-	
+
 	@Autowired
 	private IMerchantFinanceService merchantFinanceService;
 
@@ -126,105 +128,102 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 	@ResponseBody
 	public ServiceResponse settleOrder(MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException {
 		ServiceResponse response = new ServiceResponse();
-		
-		MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService.selectByPrimaryKey(merchantSettleOrderVO.getId());
-		
-		if(null==selectByPrimaryKey)
-		{
+
+		MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService
+				.selectByPrimaryKey(merchantSettleOrderVO.getId());
+
+		if (null == selectByPrimaryKey) {
 			ResponseUtils.exception(response, "订单不存在!", RequestStatus.FAILED.getStatus());
 			return response;
 		}
-		
-		if(OrderStatusConsts.SUBMIT != selectByPrimaryKey.getStatus())
-		{
+
+		if (OrderStatusConsts.SUBMIT != selectByPrimaryKey.getStatus()) {
 			ResponseUtils.exception(response, "订单状态非待审核!", RequestStatus.FAILED.getStatus());
 			return response;
 		}
-		
-		
+
 		// 异步执行该订单修改该订单状态
-		executorService.execute(()->submitSettleOrder(selectByPrimaryKey));
-		
+		executorService.execute(() -> submitSettleOrder(selectByPrimaryKey));
+
 		response.setMessage("提交成功");
 
 		return response;
 	}
-	
-	
+
 	@RequestMapping("merchantmanager/settleorder/fail")
 	@ResponseBody
 	public ServiceResponse failSettleOrder(MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException {
 		ServiceResponse response = new ServiceResponse();
-		
-		MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService.selectByPrimaryKey(merchantSettleOrderVO.getId());
-		
-		if(null==selectByPrimaryKey)
-		{
+
+		MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService
+				.selectByPrimaryKey(merchantSettleOrderVO.getId());
+
+		if (null == selectByPrimaryKey) {
 			ResponseUtils.exception(response, "订单不存在!", RequestStatus.FAILED.getStatus());
 			return response;
 		}
-		
-		if(OrderStatusConsts.SUBMIT != selectByPrimaryKey.getStatus())
-		{
+
+		if (OrderStatusConsts.SUBMIT != selectByPrimaryKey.getStatus()) {
 			ResponseUtils.exception(response, "订单状态非待审核!", RequestStatus.FAILED.getStatus());
 			return response;
 		}
-		
+
+		selectByPrimaryKey.setDescreption("系统审核不通过");
+		selectByPrimaryKey.setHandlePeople(MerchantUtils.getMerchant().getAccountName());
 		// 回滚订单
 		rollBackSettlerOrder(selectByPrimaryKey);
-		
+
 		response.setMessage("提交成功");
 
 		return response;
 	}
-	
-	
+
 	private void submitSettleOrder(MerchantSettleOrder merchantSettleOrder) {
 
 		try {
-			
+
 			MerchantSettleOrder selectByPrimaryKey;
 			synchronized (merchantSettleOrder.getMerchantId().intern()) {
-				
-			selectByPrimaryKey = merchantSettleOrderService.selectByPrimaryKey(merchantSettleOrder.getId());
-			
 
-			
-			if(null==selectByPrimaryKey)
-			{
-				return;
-			}
-			
-			if(OrderStatusConsts.SUBMIT != selectByPrimaryKey.getStatus())
-			{
-				return;
-			}
-			
-			
-			SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-			
-			String constsValue = consts.getConstsValue();
-			Class<?> payBean = Class.forName(constsValue);
-			IPayChannel paychannel = (IPayChannel) payBean.newInstance();
-			
-			
-			//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
-			//{"status":0,"msg":"代付失败"}
-			Map<String,Object> result = paychannel.settleOrder(selectByPrimaryKey);
+				selectByPrimaryKey = merchantSettleOrderService.selectByPrimaryKey(merchantSettleOrder.getId());
 
-			Object status = result.get("status");
-			
-			// 返回结果失败 回滚订单
-			if (null == status || !status.toString().equals("0")) {
+				if (null == selectByPrimaryKey) {
+					return;
+				}
 
-				// 回滚
-				rollBackSettlerOrder(merchantSettleOrder);
-				return;
-			}
+				if (OrderStatusConsts.SUBMIT != selectByPrimaryKey.getStatus()) {
+					return;
+				}
 
-			// 成功修改订单状态
-			merchantSettleOrder.setStatus(OrderStatusConsts.HANDLE);
-			merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
+				SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
+
+				String constsValue = consts.getConstsValue();
+				Class<?> payBean = Class.forName(constsValue);
+				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
+
+				// {"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
+				// {"status":0,"msg":"代付失败"}
+
+				String settleAmount = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT).getConstsValue();
+				selectByPrimaryKey.setServiceAmount(new BigDecimal(settleAmount));
+				Map<String, Object> result = paychannel.settleOrder(selectByPrimaryKey);
+
+				Object status = result.get("status");
+
+				// 返回结果失败 回滚订单
+				if (null == status || status.toString().equals("0")) {
+
+					// 回滚
+					rollBackSettlerOrder(merchantSettleOrder);
+					return;
+				}
+				if (status.toString().equals("2")) {
+					return;
+				}
+
+				// 成功修改订单状态
+				merchantSettleOrder.setStatus(OrderStatusConsts.HANDLE);
+				merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
 			}
 
 		} catch (Exception e) {
@@ -247,7 +246,7 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 			MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService
 					.selectByPrimaryKey(merchantSettleOrder.getId());
 			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)
-					||selectByPrimaryKey.getStatus().equals(OrderStatusConsts.HANDLE)) {
+					|| selectByPrimaryKey.getStatus().equals(OrderStatusConsts.HANDLE)) {
 				// 回滚金额
 				MerchantFinance merchantFinance = merchantFinanceService
 						.getMerchantFinanceByUUID(merchantSettleOrder.getMerchantId());

@@ -166,4 +166,13 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 		}
 	}
 
+	@Override
+	public List<MerchantRechargeOrder> listHandleOrder() throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.listHandleOrder();
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

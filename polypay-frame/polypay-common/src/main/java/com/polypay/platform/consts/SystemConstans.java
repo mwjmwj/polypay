@@ -10,4 +10,6 @@ public interface SystemConstans {
 	 * 充值第四方地址
 	 */
 	String SMART_RECHARGE_BEAN = "SMART_RECHARGE_BEAN";
+
+	String SETTLE_AMOUNT = "SETTLE_AMOUNT";
 }

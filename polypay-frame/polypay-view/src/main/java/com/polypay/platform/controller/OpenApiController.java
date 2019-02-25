@@ -28,7 +28,6 @@ import com.polypay.platform.bean.MerchantFrezzon;
 import com.polypay.platform.bean.MerchantRechargeOrder;
 import com.polypay.platform.bean.PayType;
 import com.polypay.platform.bean.SystemConsts;
-import com.polypay.platform.consts.MerchantAccountInfoStatusConsts;
 import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
@@ -86,6 +85,9 @@ public class OpenApiController {
 	public ServiceResponse recharge(Map<String, Object> paramMap, HttpServletRequest request,
 			HttpServletResponse response) {
 		ServiceResponse result = new ServiceResponse();
+		// http://localhost:8080/polypay-view/open/api/recharge?
+
+//		merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=11&pay_amount=10.00&time=5522541&pay_channel&notify_url&api_key
 
 		try {
 			List<String> keys = Lists.newArrayList();
@@ -132,14 +134,6 @@ public class OpenApiController {
 			}
 			keys.add("time");
 
-			String bankCode = getParameter(request, "bank_code");
-			signMap.put("bank_code", bankCode);
-			if (StringUtils.isEmpty(bankCode)) {
-				ResponseUtils.exception(result, "银行号不能为空！", RequestStatus.FAILED.getStatus());
-				return result;
-			}
-			keys.add("bank_code");
-
 			String payChannel = getParameter(request, "pay_channel");
 			signMap.put("pay_channel", payChannel);
 			if (StringUtils.isEmpty(payChannel)) {
@@ -147,8 +141,7 @@ public class OpenApiController {
 				return result;
 			}
 			keys.add("pay_channel");
-			
-			
+
 			String notify_url = getParameter(request, "notify_url");
 			signMap.put("notify_url", notify_url);
 			if (StringUtils.isEmpty(notify_url)) {
@@ -163,8 +156,6 @@ public class OpenApiController {
 				return result;
 			}
 
-			String securityKey = getParameter(request, "security_key");
-
 			// 校验商户资格
 			checkMerchantId(merchantUUID, result);
 			if (!RequestStatus.SUCCESS.getStatus().equals(result.getStatus())) {
@@ -172,13 +163,13 @@ public class OpenApiController {
 			}
 
 			// 校验商户秘钥
-			MerchantApi merchantApi = checkSerurityKey(result, merchantUUID, securityKey);
-			if (!RequestStatus.SUCCESS.getStatus().equals(result.getStatus())) {
-				return result;
-			}
+			MerchantApi merchantApi = getMerchantApi(merchantUUID);
+
+			keys.add("api_key");
+			signMap.put("api_key", merchantApi.getSecretKey());
 
 			// 校验签名是否正确
-			if (!checkSign(signMap, sign, keys, merchantApi.getMd5Key())) {
+			if (!checkSign(signMap, sign, keys)) {
 				ResponseUtils.exception(result, "簽名不正确！", RequestStatus.FAILED.getStatus());
 				return result;
 			}
@@ -199,7 +190,7 @@ public class OpenApiController {
 			MerchantRechargeOrder generatorOrder = generatorOrder(merchantUUID, signMap);
 
 			// 请求转发到第三方
-			sendRediect(response, signMap,generatorOrder);
+			sendRediect(response, signMap, generatorOrder);
 
 		} catch (Exception e) {
 			result.setMessage(e.getMessage());
@@ -208,38 +199,40 @@ public class OpenApiController {
 
 		return result;
 	}
+	
+	public static void main(String[] args) {
+		String url = "http://localhost:8080/polypay-view/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999996&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74&sign=3f80785b52ab226d7c106819c61034cd";
+		
+		System.out.println(MD5.encryption("merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999996&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74"));
+	}
 
 	@RequestMapping("/open/api/recharge/back")
-	public String rechargeOrderBack(HttpServletRequest request, HttpServletResponse response) throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public String rechargeOrderBack(HttpServletRequest request, HttpServletResponse response)
+			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
 		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-		
+
 		String constsValue = consts.getConstsValue();
-		
-		
+
 		Class<?> payBean = Class.forName(constsValue);
-		
+
 		IPayChannel paychannel = (IPayChannel) payBean.newInstance();
-		
+
 		/**
-		 * result.put("total_fee", total_fee);
-		result.put("merchantno", sdpayno);
-		result.put("payno", sdorderno);
-		result.put("channel", "WY");
-		result.put("status", status);
+		 * result.put("total_fee", total_fee); result.put("merchantno", sdpayno);
+		 * result.put("payno", sdorderno); result.put("channel", "WY");
+		 * result.put("status", status);
 		 */
 		Map<String, Object> result = paychannel.checkOrder(request);
-		
+
 		Object payStatus = result.get("status");
-		
-		if(null == payStatus || "-10".equals(payStatus))
-		{
+
+		if (null == payStatus || "-10".equals(payStatus)) {
 			return "fail";
 		}
-	
-		String merchantOrderNumber = result.get("merchantno").toString();
-		
-		
+
+		String merchantOrderNumber = result.get("orderno").toString();
+
 		MerchantRechargeOrder orderByMerchantOrderNumber = merchantRechargeOrderService
 				.getOrderByOrderNumber(merchantOrderNumber);
 
@@ -247,46 +240,48 @@ public class OpenApiController {
 			return "fail";
 		}
 
-		
-		// 除去1 为 订单成功处理失败 
-		if (!(OrderStatusConsts.SUBMIT+"").equals(payStatus)) {
+		// 除去1 为 订单成功处理失败
+		if (!(OrderStatusConsts.SUBMIT + "").equals(payStatus)) {
 			orderByMerchantOrderNumber.setStatus(OrderStatusConsts.FAIL);
 			merchantRechargeOrderService.updateByPrimaryKeySelective(orderByMerchantOrderNumber);
-			
+
 			// callbackurl
 			String callbackurl = orderByMerchantOrderNumber.getDescreption();
-			
-			String param = "status="+payStatus+"&merchantno="+orderByMerchantOrderNumber.getMerchantOrderNumber()+"&payno="+orderByMerchantOrderNumber.getOrderNumber()+"&merchantid="+orderByMerchantOrderNumber.getMerchantId();
+
+			String param = "status=" + payStatus + "&merchantno=" + orderByMerchantOrderNumber.getMerchantOrderNumber()
+					+ "&payno=" + orderByMerchantOrderNumber.getOrderNumber() + "&merchantid="
+					+ orderByMerchantOrderNumber.getMerchantId();
 			String sign = MD5.md5(param);
-			
-			HttpClientUtil.httpGet(callbackurl+"?"+param+"&sign="+sign);
-			
+
+			HttpClientUtil.httpGet(callbackurl + "?" + param + "&sign=" + sign);
+
 			return "success";
 		}
-		
-		
-		Map<String, Object> order = paychannel.getOrder(result.get("payno").toString());
-		
-		
+
+		Map<String, Object> order = paychannel.getOrder(result.get("orderno").toString());
+
 		// {"status":1,"msg":"成功订单","sdorderno":"商户订单号","total_fee":"订单金额","sdpayno":"平台订单号"}
 		// {"status":0,"msg":"失败订单"}
-		
+
 		// 失败订单 直接回调商户 并修改订单状态
-		if(!"1".equals(order.get("status")))
-		{
+		if (!"1".equals(order.get("status"))) {
+			if (!(OrderStatusConsts.SUBMIT == orderByMerchantOrderNumber.getStatus().intValue())) {
+				return "success";
+			}
 			orderByMerchantOrderNumber.setStatus(OrderStatusConsts.FAIL);
 			merchantRechargeOrderService.updateByPrimaryKeySelective(orderByMerchantOrderNumber);
-			
+
 			// callbackurl
 			String callbackurl = orderByMerchantOrderNumber.getDescreption();
-			String param = "status="+payStatus+"&merchantno="+orderByMerchantOrderNumber.getMerchantOrderNumber()+"&payno="+orderByMerchantOrderNumber.getOrderNumber()+"&merchantid="+orderByMerchantOrderNumber.getMerchantId();
+			String param = "status=" + payStatus + "&merchantno=" + orderByMerchantOrderNumber.getMerchantOrderNumber()
+					+ "&payno=" + orderByMerchantOrderNumber.getOrderNumber() + "&merchantid="
+					+ orderByMerchantOrderNumber.getMerchantId();
 			String sign = MD5.md5(param);
-			HttpClientUtil.httpGet(callbackurl+"?"+param+"&sign="+sign);
-			
+			HttpClientUtil.httpGet(callbackurl + "?" + param + "&sign=" + sign);
+
 			return "success";
 		}
-		
-		
+
 		String merchantId = orderByMerchantOrderNumber.getMerchantId();
 
 		// 原有资金
@@ -309,7 +304,7 @@ public class OpenApiController {
 		synchronized (merchantId.intern()) {
 
 			MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchantId);
-			
+
 			// 冻结费率
 			SystemConsts frezzRate = systemConstsService.getConsts(FREZZ_RATE);
 			String frezzrate = frezzRate.getConstsValue();
@@ -339,97 +334,88 @@ public class OpenApiController {
 			frezzAmount = arrivalAmount.multiply(new BigDecimal(frezzrate)).setScale(4, BigDecimal.ROUND_HALF_UP);
 
 			Integer status = orderByMerchantOrderNumber.getStatus();
-			if(OrderStatusConsts.SUBMIT == status)
-			{
+			if (OrderStatusConsts.SUBMIT == status) {
 				// 统一入库
 				endInsertOrder(orderByMerchantOrderNumber, resourceAmount, resourceFrezzAmount, poundage, arrivalAmount,
 						frezzAmount, merchantFinance);
 			}
-			
+
 			// callbackurl
 			String callbackurl = orderByMerchantOrderNumber.getDescreption();
-			
-			String param = "status="+payStatus+"&merchantno="+orderByMerchantOrderNumber.getMerchantOrderNumber()+"&payno="+orderByMerchantOrderNumber.getOrderNumber()+"&merchantid="+orderByMerchantOrderNumber.getMerchantId();
+
+			String param = "status=" + payStatus + "&merchantno=" + orderByMerchantOrderNumber.getMerchantOrderNumber()
+					+ "&payno=" + orderByMerchantOrderNumber.getOrderNumber() + "&merchantid="
+					+ orderByMerchantOrderNumber.getMerchantId();
 			String sign = MD5.md5(param);
-			HttpClientUtil.httpGet(callbackurl+"?"+param+"&sign="+sign);
+			HttpClientUtil.httpGet(callbackurl + "?" + param + "&sign=" + sign);
 		}
-		
+
 		return "success";
 	}
-	
+
 	@RequestMapping("/getway/order/query")
-	public Map<String,Object> getOrder(HttpServletRequest request) throws ServiceException
-	{
-		
-		Map<String,Object> result = Maps.newHashMap();
-		
+	public Map<String, Object> getOrder(HttpServletRequest request) throws ServiceException {
+
+		Map<String, Object> result = Maps.newHashMap();
+
 		String merchantid = getParameter(request, "merchantid");
-		
+
 		String orderNumber = getParameter(request, "payno");
 
 		String time = getParameter(request, "time");
-		
+
 		String apikey = getParameter(request, "apikey");
-		
+
 		String sign = getParameter(request, "sign");
-		
+
 		StringBuffer signParam = new StringBuffer();
-		
-		signParam.append("merchantid="+merchantid)
-		.append("&payno="+orderNumber)
-		.append("&time="+time)
-		.append("&"+apikey);
-		
-		if(!sign.equals(MD5.md5(signParam.toString())))
-		{
+
+		signParam.append("merchantid=" + merchantid).append("&payno=" + orderNumber).append("&time=" + time)
+				.append("&" + apikey);
+
+		if (!sign.equals(MD5.md5(signParam.toString()))) {
 			result.put("status", -1);
 			result.put("msg", "签名错误");
 			return result;
 		}
-		
+
 		MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
 		merchantInfo.setUuid(merchantid);
 		MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
-		
-		
-		if(null==merchantInfoByUUID)
-		{
+
+		if (null == merchantInfoByUUID) {
 			result.put("status", -1);
 			result.put("msg", "商户不存在");
 			return result;
 		}
-		
-		
-		MerchantRechargeOrder orderByMerchantOrderNumber = merchantRechargeOrderService.getOrderByMerchantOrderNumber(orderNumber);
-		if(null==orderByMerchantOrderNumber)
-		{
+
+		MerchantRechargeOrder orderByMerchantOrderNumber = merchantRechargeOrderService
+				.getOrderByMerchantOrderNumber(orderNumber);
+		if (null == orderByMerchantOrderNumber) {
 			result.put("status", -1);
 			result.put("msg", "订单不存在");
 			return result;
 		}
-		
-		
-		if(!merchantid.equals(orderByMerchantOrderNumber.getMerchantId()))
-		{
+
+		if (!merchantid.equals(orderByMerchantOrderNumber.getMerchantId())) {
 			result.put("status", -1);
 			result.put("msg", "订单不存在");
 			return result;
 		}
-		
+
 		MerchantApi merchantApiByUUID = merchantApiService.getMerchantApiByUUID(merchantid);
-		
-		if(!merchantApiByUUID.getSecretKey().equals(apikey))
-		{
+
+		if (!merchantApiByUUID.getSecretKey().equals(apikey)) {
 			result.put("status", -1);
 			result.put("msg", "apikey不正确");
 			return result;
 		}
-		result.put("status",1);
+		result.put("status", 1);
 		result.put("msg", "成功订单");
 		result.put("merchantno", orderByMerchantOrderNumber.getMerchantOrderNumber());
 		result.put("payno", orderByMerchantOrderNumber.getOrderNumber());
 		result.put("amount", orderByMerchantOrderNumber.getPayAmount());
-		
+
 		return null;
 	}
 
@@ -444,7 +430,7 @@ public class OpenApiController {
 
 			MerchantFrezzon merchantFrezzon = new MerchantFrezzon();
 			merchantFrezzon.setAmount(frezzAmount);
-			merchantFrezzon.setFrezzTime(new Date()); 
+			merchantFrezzon.setFrezzTime(new Date());
 			merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
 			merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
 
@@ -467,7 +453,7 @@ public class OpenApiController {
 	}
 
 	private Double getRate(MerchantRechargeOrder orderByMerchantOrderNumber) throws ServiceException {
-		
+
 		PayType payType = payTypeService.getPayTypeChannel(orderByMerchantOrderNumber.getMerchantId(), "WY");
 		if (null == payType) {
 			return 0.02;
@@ -488,33 +474,33 @@ public class OpenApiController {
 		return payLevel;
 	}
 
-	private void sendRediect(HttpServletResponse response, Map<String, Object> signMap, MerchantRechargeOrder generatorOrder)
-			throws ServiceException, IOException {
-		
+	private void sendRediect(HttpServletResponse response, Map<String, Object> signMap,
+			MerchantRechargeOrder generatorOrder) throws ServiceException, IOException {
+
 		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-		
+
 		// 根据配置的四方平台
-		sendRedirectUrl(response,consts.getConstsValue(), signMap,generatorOrder);
+		sendRedirectUrl(response, consts.getConstsValue(), signMap, generatorOrder);
 	}
 
-	private void sendRedirectUrl(HttpServletResponse response, String bean, Map<String, Object> signMap, MerchantRechargeOrder generatorOrder) {
-		
+	private void sendRedirectUrl(HttpServletResponse response, String bean, Map<String, Object> signMap,
+			MerchantRechargeOrder generatorOrder) {
+
 		try {
-			
+
 			Class<?> forName = Class.forName(bean);
-			
+
 			IPayChannel payChannel = (IPayChannel) forName.newInstance();
-			
-			//通道关闭
-			if(null==payChannel)
-			{
+
+			// 通道关闭
+			if (null == payChannel) {
 				generatorOrder.setStatus(OrderStatusConsts.FAIL);
 				merchantRechargeOrderService.updateByPrimaryKeySelective(generatorOrder);
 				return;
 			}
-			
+
 			payChannel.sendRedirect(signMap, response);
-			
+
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
@@ -524,8 +510,7 @@ public class OpenApiController {
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	private void checkMerchantOrderNumber(ServiceResponse result, String merchantOrderNumber) throws ServiceException {
@@ -539,9 +524,8 @@ public class OpenApiController {
 
 	}
 
-
-
-	private MerchantRechargeOrder generatorOrder(String merchantUUID, Map<String, Object> signMap) throws ServiceException {
+	private MerchantRechargeOrder generatorOrder(String merchantUUID, Map<String, Object> signMap)
+			throws ServiceException {
 
 		MerchantRechargeOrder order = new MerchantRechargeOrder();
 		String currentOrder = DateUtil.getCurrentDate();
@@ -556,7 +540,7 @@ public class OpenApiController {
 		order.setType(MerchantOrderTypeConsts.RECHARGE_ORDER);
 
 		order.setDescreption(getValue(signMap, "notify_url"));
-		
+
 		order.setMerchantId(merchantUUID);
 		order.setMerchantOrderNumber(getValue(signMap, "order_number"));
 		signMap.put("we_order_number", orderNumber);
@@ -581,28 +565,14 @@ public class OpenApiController {
 
 	}
 
-	private MerchantApi checkSerurityKey(ServiceResponse result, String merchantUUID, String securityKey)
-			throws ServiceException {
-		if (StringUtils.isEmpty(securityKey)) {
-			ResponseUtils.exception(result, "请输入秘钥！", RequestStatus.FAILED.getStatus());
-			return null;
-		}
+	private MerchantApi getMerchantApi(String merchantUUID) throws ServiceException {
 
 		MerchantApi merchantApi = merchantApiService.getMerchantApiByUUID(merchantUUID);
 
-		if (null == merchantApi) {
-			ResponseUtils.exception(result, "賬戶失效，未有財務信息！", RequestStatus.FAILED.getStatus());
-			return null;
-		}
-
-		if (!securityKey.equals(merchantApi.getSecretKey())) {
-			ResponseUtils.exception(result, "秘钥不正确！", RequestStatus.FAILED.getStatus());
-		}
 		return merchantApi;
 	}
 
-	private static boolean checkSign(Map<String, Object> signMap, String sign, List<String> keys, String md5Key)
-			throws Exception {
+	private static boolean checkSign(Map<String, Object> signMap, String sign, List<String> keys) throws Exception {
 
 		StringBuffer newSign = new StringBuffer();
 		keys.forEach(key -> {
@@ -628,14 +598,15 @@ public class OpenApiController {
 			return;
 		}
 
-		if (MerchantAccountInfoStatusConsts.PRE_AUDIT == merchantAccountInfo.getStatus()) {
-			ResponseUtils.exception(result, "该商户未审核！", RequestStatus.FAILED.getStatus());
-			return;
-		}
-
-		if (MerchantAccountInfoStatusConsts.FAIL == merchantAccountInfo.getStatus()) {
-			ResponseUtils.exception(result, "该商户审核失败！", RequestStatus.FAILED.getStatus());
-		}
+		/*
+		 * if (MerchantAccountInfoStatusConsts.PRE_AUDIT ==
+		 * merchantAccountInfo.getStatus()) { ResponseUtils.exception(result, "该商户未审核！",
+		 * RequestStatus.FAILED.getStatus()); return; }
+		 * 
+		 * if (MerchantAccountInfoStatusConsts.FAIL == merchantAccountInfo.getStatus())
+		 * { ResponseUtils.exception(result, "该商户审核失败！",
+		 * RequestStatus.FAILED.getStatus()); }
+		 */
 	}
 
 	public String getParameter(HttpServletRequest request, String key) {

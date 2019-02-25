@@ -483,6 +483,12 @@
 		merchant_recharge_order mro where mro.`status` = 0
 	</select>
 
+		<select id="listHandleOrder" resultMap="BaseResultMap">
+			select
+			<include refid="Base_Column_List" />
+			from merchant_recharge_order
+			where status = 1
+		</select>
 
 
 

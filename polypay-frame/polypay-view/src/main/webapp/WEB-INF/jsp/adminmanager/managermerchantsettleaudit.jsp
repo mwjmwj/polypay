@@ -149,7 +149,7 @@
 					data:$("#settleform").serialize(),
 					datatype:'JSON',
 					success:function(data){
-						if (data == 'success') {
+						if (data.status == '0') {
 							layer.alert('修改成功,确定关闭窗口?', {
 								icon : 1
 							}, function() {
@@ -160,7 +160,7 @@
 							});
 						}
 						else{
-							layer.confirm('修改失败 '+data.message, {
+							layer.confirm('审核失败 '+data.message, {
 								  btn: ['继续修改', '退出修改']
 							,time:2000
 							}, function(index, layero){

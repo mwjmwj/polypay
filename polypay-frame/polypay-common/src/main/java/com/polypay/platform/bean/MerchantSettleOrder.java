@@ -24,7 +24,7 @@ public class MerchantSettleOrder {
 
     private Integer type;
 
-    private Integer descreption;
+    private String descreption;
 
     private String handlePeople;
 
@@ -124,11 +124,11 @@ public class MerchantSettleOrder {
         this.type = type;
     }
 
-    public Integer getDescreption() {
+    public String getDescreption() {
         return descreption;
     }
 
-    public void setDescreption(Integer descreption) {
+    public void setDescreption(String descreption) {
         this.descreption = descreption;
     }
 

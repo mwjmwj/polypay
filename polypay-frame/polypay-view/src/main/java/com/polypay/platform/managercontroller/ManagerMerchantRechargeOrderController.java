@@ -34,9 +34,6 @@ public class ManagerMerchantRechargeOrderController extends BaseController<Merch
 	@Autowired
 	private IMerchantRechargeOrderService merchantRechargeOrderService;
 
-	
-	public static void main(String[] args) {
-	}
 	@RequestMapping("/merchantmanager/recharge/order/list")
 	@ResponseBody
 	public ServiceResponse listMerchantRechargeOrder(HttpServletRequest request) throws ServiceException {
@@ -50,27 +47,25 @@ public class ManagerMerchantRechargeOrderController extends BaseController<Merch
 			if (!StringUtils.isEmpty(status)) {
 				merchantRechargeOrderVO.setStatus(Integer.parseInt(status));
 			}
-			
+
 			merchantRechargeOrderVO.setOrderNumber(getRequest().getParameter("orderNumber"));
-			
+
 			String createTime = getRequest().getParameter("beginTime");
 			String successTime = getRequest().getParameter("endTime");
-			
+
 			Date[] datas;
-			if(!StringUtils.isEmpty(createTime))
-			{
+			if (!StringUtils.isEmpty(createTime)) {
 				datas = DateUtils.changeDate(createTime);
 				merchantRechargeOrderVO.setcBeginTime(datas[0]);
 				merchantRechargeOrderVO.setcEndTime(datas[1]);
 			}
-			
-			if(!StringUtils.isEmpty(successTime))
-			{
+
+			if (!StringUtils.isEmpty(successTime)) {
 				datas = DateUtils.changeDate(successTime);
 				merchantRechargeOrderVO.setsBeginTime(datas[0]);
 				merchantRechargeOrderVO.setsEndTime(datas[1]);
 			}
-			
+
 			PageBounds pageBounds = this.getPageBounds();
 			PageList<MerchantRechargeOrderVO> pageList = null;
 			pageList = merchantRechargeOrderService.listMerchantRechargeOrder(pageBounds, merchantRechargeOrderVO);
@@ -86,16 +81,15 @@ public class ManagerMerchantRechargeOrderController extends BaseController<Merch
 		return response;
 
 	}
-	
+
 	@GetMapping("managermerchant/recharge/all")
 	@ResponseBody
-	public ServiceResponse allMerchantRecharge() throws ServiceException
-	{
+	public ServiceResponse allMerchantRecharge() throws ServiceException {
 		ServiceResponse response = new ServiceResponse();
-		
+
 		MerchantMainDateVO merchantGroupDate = merchantRechargeOrderService.managerAllMerchantRechargeOrder();
 		response.setData(merchantGroupDate);
-		
+
 		return response;
 	}
 

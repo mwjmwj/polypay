@@ -13,14 +13,13 @@ import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IPayTypeService;
 
 @Controller
-@RequestMapping("manager")
 public class ManagerPayTypeController {
 	
 	@Autowired
 	private IPayTypeService payTypeService;
 	
 	
-	@RequestMapping("paytype/list")
+	@RequestMapping("mpaytype/list")
 	@ResponseBody
 	public ServiceResponse list(PayType payType) throws ServiceException
 	{

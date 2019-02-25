@@ -104,16 +104,6 @@
 					fixed : 'left',
 					totalRowText: '合计',
 					templet : '#zizeng'
-				},{
-					field : 'tradeType',
-					title : '交易方式',
-					width : 86,
-					align : 'center',
-					fixed : 'left',
-					style : 'color:red',
-					templet : function(row) {
-						return "T+1"
-					}
 				}, {
 					field : 'orderNumber',
 					title : '订单号',
@@ -133,13 +123,20 @@
 				}, {
 					field : 'status',
 					title : '状态',
-					width : 60,
+					width : 100,
+					align :'center',
 					templet : function(row) {
 						if (row.status == 0) {
 							return '<span style="color: green;">成功</span>';
 						} else if (row.status == -1) {
 							return '<span style="color: red;">失败</span>';
 						}
+						else if (row.status == 1) {
+							return '<span style="color: orange;">审核中</span>';
+						}
+						else if (row.status == 2) {
+								return '<span style="color: #00FF00;">已处理</span>';
+							}
 					}
 				}, {
 					field : 'postalAmount',

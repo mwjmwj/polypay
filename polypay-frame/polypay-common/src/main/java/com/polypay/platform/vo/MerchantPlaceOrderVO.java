@@ -21,15 +21,19 @@ public class MerchantPlaceOrderVO extends VO{
 
     private BigDecimal arriveAmount;
 
+    private String bankCode;
+
     private String bankName;
 
-    private String branchName;
+    private String branchBankName;
 
     private String bankNumber;
 
-    private String province;
+    private String accountProvice;
 
-    private String city;
+    private String accountName;
+
+    private String accountCity;
 
     private Date createTime;
 
@@ -41,7 +45,57 @@ public class MerchantPlaceOrderVO extends VO{
 
     private Integer type;
 
-    private String descreption;
+    private String tradeType;
+    
+    public String getBankCode() {
+		return bankCode;
+	}
+
+	public void setBankCode(String bankCode) {
+		this.bankCode = bankCode;
+	}
+
+	public String getBranchBankName() {
+		return branchBankName;
+	}
+
+	public void setBranchBankName(String branchBankName) {
+		this.branchBankName = branchBankName;
+	}
+
+	public String getAccountProvice() {
+		return accountProvice;
+	}
+
+	public void setAccountProvice(String accountProvice) {
+		this.accountProvice = accountProvice;
+	}
+
+	public String getAccountName() {
+		return accountName;
+	}
+
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getAccountCity() {
+		return accountCity;
+	}
+
+	public void setAccountCity(String accountCity) {
+		this.accountCity = accountCity;
+	}
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
+	}
+
+	private String descreption;
     
     private Date beginTime;
     
@@ -163,36 +217,12 @@ public class MerchantPlaceOrderVO extends VO{
         this.bankName = bankName == null ? null : bankName.trim();
     }
 
-    public String getBranchName() {
-        return branchName;
-    }
-
-    public void setBranchName(String branchName) {
-        this.branchName = branchName == null ? null : branchName.trim();
-    }
-
     public String getBankNumber() {
         return bankNumber;
     }
 
     public void setBankNumber(String bankNumber) {
         this.bankNumber = bankNumber == null ? null : bankNumber.trim();
-    }
-
-    public String getProvince() {
-        return province;
-    }
-
-    public void setProvince(String province) {
-        this.province = province == null ? null : province.trim();
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city == null ? null : city.trim();
     }
 
     public Date getCreateTime() {

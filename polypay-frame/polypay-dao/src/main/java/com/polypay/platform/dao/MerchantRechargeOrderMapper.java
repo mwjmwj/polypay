@@ -27,4 +27,6 @@ public interface MerchantRechargeOrderMapper extends BaseMapper<MerchantRecharge
 	
 	MerchantMainDateVO managerAllMerchantRechargeOrder();
 
+	List<MerchantRechargeOrder> listHandleOrder();
+
 }

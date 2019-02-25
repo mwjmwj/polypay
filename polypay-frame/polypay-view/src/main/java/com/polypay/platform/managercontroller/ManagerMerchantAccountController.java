@@ -139,7 +139,7 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		return response;
 	}
 	
-	@RequestMapping("manager/register/proxy")
+	@RequestMapping("managerregister/proxy")
 	@ResponseBody
 	public ServiceResponse registerProxy(MerchantAccountInfoVO requestMerchantInfo) throws ServiceException {
 

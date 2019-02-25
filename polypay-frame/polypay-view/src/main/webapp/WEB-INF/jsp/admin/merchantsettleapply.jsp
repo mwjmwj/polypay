@@ -29,6 +29,7 @@
 		<p style="color: red;">1. 结算申请流程需后台审批，注意查看订单状态。</p>
 		<p style="color: red;">2. 结算申请，后台审核通过后，2个工作日内到账,节假日顺延。</p>
 		<p style="color: red;">3. 结算金额 单笔 最高49999元. 当日最高 单卡 20万</p>
+		<p style="color: red;">4.最低提现金额 20元.</p>
 	</blockquote>
 
 	<fieldset class="layui-elem-field layui-field-title"
@@ -55,12 +56,13 @@
 						placeholder="${merchantfinance.blanceAmount }元 "
 						autocomplete="off" class="layui-input" id="postamount" onblur="textamount(this)"="textamount()" name="settleAmount">
 				</div>
+				
 			</div>
 			<div class="layui-inline">
 				<label class="layui-form-label">手续费</label>
 				<div class="layui-input-inline">
 					<input type="text" id="serviceamount"
-						autocomplete="off" class="layui-input" readonly="readonly">
+						autocomplete="off" class="layui-input" readonly="readonly" value="3">
 				</div>
 			</div>
 		</div>
@@ -109,22 +111,6 @@
 		  ,layedit = layui.layedit
 		  ,laydate = layui.laydate;
 		
-		  //自定义验证规则
-		  form.verify({
-		    title: function(value){
-		      if(value.length < 5){
-		        return '标题至少得5个字符啊';
-		      }
-		    }
-		    ,pass: [
-		      /^[\S]{6,12}$/
-		      ,'密码必须6到12位，且不能出现空格'
-		    ]
-		    ,content: function(value){
-		      layedit.sync(editIndex);
-		    }
-		  });
-  
   //监听提交
   form.on('submit(settlesubmit)', function(data){
 	  $("#securitypwd").val(MD5($("#paypwd").val()));
@@ -141,6 +127,7 @@
 						var index = parent.layer.getFrameIndex(window.name); //获取当前窗口的name
 						parent.layer.close(index);
 						window.location.reload();
+						window.parent.location.reload();
 					});
 				}
 				else{
@@ -181,10 +168,11 @@
 			$("#postamount").val('${merchantfinance.blanceAmount}');
 	  }
 	  
-	  postamount = $("#postamount").val();
+	  if (postamount <= 20){
+			$("#postamount").val(20);
+	  }
+	}
 	  
-      $("#serviceamount").val(postamount * 0.01);
-      };
 	</script>
 
 </body>

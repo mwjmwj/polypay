@@ -48,13 +48,6 @@
 				</div>
 			</div>
 
-			<div class="layui-form-item layui-form-pane">
-				<label class="layui-form-label">设置为默认</label>
-				<div class="layui-input-block">
-					<input type="checkbox" id="defaultStatus" name="defaultFlag" lay-skin="switch">
-				</div>
-			</div>
-
 
 
 			<div class="layui-form-item layui-form-pane">
@@ -78,6 +71,35 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">省</label>
+				<div class="layui-input-block">
+					<div class="layui-inline">
+						<input type="text" name="provice" autocomplete="off"
+							id="provice" class="layui-input" style="width: 300px">
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">城市</label>
+				<div class="layui-input-block">
+					<div class="layui-inline">
+						<input type="text" name="city" autocomplete="off"
+							id="city" class="layui-input" style="width: 300px">
+					</div>
+				</div>
+			</div>
+			
+				<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">设置为默认</label>
+				<div class="layui-input-block">
+					<input type="checkbox" id="defaultStatus" name="defaultFlag" lay-skin="switch">
+				</div>
+			</div>
+			
 
 			<div class="layui-form-item">
 				<div class="layui-input-block">

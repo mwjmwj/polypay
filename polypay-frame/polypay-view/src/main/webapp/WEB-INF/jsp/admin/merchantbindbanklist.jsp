@@ -77,7 +77,7 @@
 					fixed : 'left'
 				}, {
 					field : 'branchName',
-					title : '分行名称',
+					title : '开户行全称',
 					width : 250,
 					align : 'center',
 					fixed : 'left'
@@ -85,8 +85,19 @@
 					field : 'accountNumber',
 					title : '卡号',
 					align : 'center',
-					width : 200,
-					sort : true
+					width : 200
+				}
+				, {
+					field : 'provice',
+					title : '省',
+					align : 'center',
+					width : 140
+				}
+				, {
+					field : 'city',
+					title : '市',
+					align : 'center',
+					width : 140
 				}
 				, {
 					field : 'accountName',

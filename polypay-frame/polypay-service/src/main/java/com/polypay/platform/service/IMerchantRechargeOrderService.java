@@ -27,4 +27,6 @@ public interface IMerchantRechargeOrderService extends IBaseService<MerchantRech
 
 	MerchantMainDateVO managerAllMerchantRechargeOrder() throws ServiceException;
 
+	List<MerchantRechargeOrder> listHandleOrder() throws ServiceException;
+
 }

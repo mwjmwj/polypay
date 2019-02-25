@@ -14,8 +14,10 @@ import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.PayType;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IPayTypeService;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantAccountInfoVO;
 
 @Controller
 @RequestMapping("paytype")
@@ -23,6 +25,9 @@ public class PayTypeController {
 	
 	@Autowired
 	private IPayTypeService payTypeService;
+	
+	@Autowired
+	private IMerchantAccountInfoService merchantAccountInfoService;
 	
 	
 	@RequestMapping("list")
@@ -74,6 +79,11 @@ public class PayTypeController {
 	@RequestMapping("paytype_update/{id}")
 	public String updateById(@PathVariable Integer id,ModelMap modelMap) throws ServiceException {
 		PayType payType = payTypeService.selectByPrimaryKey(id);
+		
+		MerchantAccountInfoVO merchantAccountInfoVO = new MerchantAccountInfoVO();
+		merchantAccountInfoVO.setUuid(payType.getMerchantId());
+		MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantAccountInfoVO);
+		payType.setMerchantName(null!=merchantInfoByUUID?merchantInfoByUUID.getAccountName():null);
 		modelMap.put("item", payType);
 		return "adminmanager/paytype/paytype_edit";
 	}

@@ -1,5 +1,7 @@
 package com.polypay.platform.utils;
 
+import net.sf.json.util.JSONUtils;
+
 public class BankUtils {
 
 	/**
@@ -426,6 +428,11 @@ public class BankUtils {
 			luhmSum += k;
 		}
 		return (luhmSum % 10 == 0) ? '0' : (char) ((10 - luhmSum % 10) + '0'); // 这边+'0'，不是拼接，在Java和C#中是8+0的ASCII码得到8在ASCII中的编码值，然后通过(char)转成字符'8'
+	}
+
+	public static String getCode(String accountNumber) {
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet("https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo="+accountNumber+"&cardBinCheck=true");
+		return httpGet.getResultAsString();
 	}
 
 }

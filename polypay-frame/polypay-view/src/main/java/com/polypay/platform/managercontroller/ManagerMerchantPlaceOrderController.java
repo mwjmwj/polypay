@@ -1,5 +1,6 @@
 package com.polypay.platform.managercontroller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -48,7 +49,7 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 	private IMerchantFinanceService merchantFinanceService;
 
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
-	
+
 	@Autowired
 	private ISystemConstsService systemConstsService;
 
@@ -192,19 +193,21 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 				}
 
 				SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-				
+
 				String constsValue = consts.getConstsValue();
 				Class<?> payBean = Class.forName(constsValue);
 				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
-				
-				//{"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
-				//{"status":0,"msg":"代付失败"}
-				Map<String,Object> result = paychannel.placeOrder(selectByPrimaryKey);
+
+				// {"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
+				// {"status":0,"msg":"代付失败"}
+				String settleAmount = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT).getConstsValue();
+				selectByPrimaryKey.setServiceAmount(new BigDecimal(settleAmount));
+				Map<String, Object> result = paychannel.placeOrder(selectByPrimaryKey);
 
 				Object status = result.get("status");
 
 				// 返回结果失败 回滚订单
-				if (null == status || !status.toString().equals("1")) {
+				if (null == status || status.toString().equals("0")) {
 
 					// 回滚
 					rollBackPlaceOrder(merchantPlaceOrder);
@@ -235,7 +238,7 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 			MerchantPlaceOrder selectByPrimaryKey = merchantPlaceOrderService
 					.selectByPrimaryKey(merchantPlaceOrder.getId());
 			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)
-					||selectByPrimaryKey.getStatus().equals(OrderStatusConsts.HANDLE)) {
+					|| selectByPrimaryKey.getStatus().equals(OrderStatusConsts.HANDLE)) {
 				// 回滚金额
 				MerchantFinance merchantFinance = merchantFinanceService
 						.getMerchantFinanceByUUID(merchantPlaceOrder.getMerchantId());
@@ -251,6 +254,5 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 			}
 		}
 	}
-
 
 }

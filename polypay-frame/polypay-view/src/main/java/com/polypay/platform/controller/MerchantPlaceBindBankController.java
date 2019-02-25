@@ -1,5 +1,7 @@
 package com.polypay.platform.controller;
 
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.druid.util.StringUtils;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
@@ -80,6 +83,9 @@ public class MerchantPlaceBindBankController extends BaseController<MerchantPlac
 			MerchantPlaceAccountBindbank.setDefaultStatus(MerchantBindBankConsts.NOT_DEFAULT_BIND_BANK);
 		}
 		
+		String code = BankUtils.getCode(accountNumber);
+		Map codeMap = (Map)JSONUtils.parse(code);
+		MerchantPlaceAccountBindbank.setBankCode(codeMap.get("bank").toString());
 		
 		
 		merchantPlaceAccountBindbankService.insertSelective(MerchantPlaceAccountBindbank);
