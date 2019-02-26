@@ -201,9 +201,9 @@ public class OpenApiController {
 	}
 	
 	public static void main(String[] args) {
-		String url = "http://localhost:8080/polypay-view/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999996&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74&sign=3f80785b52ab226d7c106819c61034cd";
+		String url = "http://localhost:8080/polypay-view/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999995&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74&sign=3f80785b52ab226d7c106819c61034cd";
 		
-		System.out.println(MD5.encryption("merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999996&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74"));
+		System.out.println(MD5.encryption("merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999995&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74"));
 	}
 
 	@RequestMapping("/open/api/recharge/back")

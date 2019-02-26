@@ -61,6 +61,7 @@ public class OrderTask {
 				places.forEach(porder -> executorPlaceOrder(porder));
 			}
 
+			log.debug("结算订单 轮循结束");
 //			{"status":1,"msg":"代付成功","serial":"代付订单号","total_fee":"代付金额"}
 //			{"status":2,"msg":"代付处理中"}，{"status":0,"msg":"代付失败"}
 		} finally {
