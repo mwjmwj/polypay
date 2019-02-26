@@ -29,6 +29,8 @@ public class MerchantAccountInfo {
     
     private Integer roleId;
     
+    private Integer channelId;
+    
     private String helppayoff;
 
     public Integer getId() {
@@ -141,5 +143,13 @@ public class MerchantAccountInfo {
 
 	public void setHelppayoff(String helppayoff) {
 		this.helppayoff = helppayoff;
+	}
+
+	public Integer getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(Integer channelId) {
+		this.channelId = channelId;
 	}
 }

@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper
+	namespace="com.polypay.platform.dao.MerchantPlaceOrderMapper">
+	<resultMap id="BaseResultMap" type="com.polypay.platform.bean.MerchantPlaceOrder" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="CHAR" />
+    <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+    <result column="service_amount" property="serviceAmount" jdbcType="DECIMAL" />
+    <result column="arrive_amount" property="arriveAmount" jdbcType="DECIMAL" />
+    <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
+    <result column="bank_number" property="bankNumber" jdbcType="VARCHAR" />
+    <result column="account_provice" property="accountProvice" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_city" property="accountCity" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="handler_time" property="handlerTime" jdbcType="TIMESTAMP" />
+    <result column="handler_name" property="handlerName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="descreption" property="descreption" jdbcType="VARCHAR" />
+    <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+  </resultMap>
+  
+	<resultMap id="listResult"
+		type="com.polypay.platform.vo.MerchantPlaceOrderVO">
+		<id column="id" property="id" jdbcType="INTEGER" />
+    <result column="order_number" property="orderNumber" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="CHAR" />
+    <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
+    <result column="service_amount" property="serviceAmount" jdbcType="DECIMAL" />
+    <result column="arrive_amount" property="arriveAmount" jdbcType="DECIMAL" />
+    <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
+    <result column="bank_number" property="bankNumber" jdbcType="VARCHAR" />
+    <result column="account_provice" property="accountProvice" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_city" property="accountCity" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="handler_time" property="handlerTime" jdbcType="TIMESTAMP" />
+    <result column="handler_name" property="handlerName" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="descreption" property="descreption" jdbcType="VARCHAR" />
+    <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List" >
+    id, order_number, merchant_id, pay_amount, service_amount, arrive_amount, bank_code, 
+    bank_name, branch_bank_name, bank_number, account_provice, account_name, account_city, 
+    create_time, handler_time, handler_name, status, type, descreption, trade_type
+  </sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_place_order
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from merchant_place_order
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+<insert id="insert" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
+    insert into merchant_place_order (id, order_number, merchant_id, 
+      pay_amount, service_amount, arrive_amount, 
+      bank_code, bank_name, branch_bank_name, 
+      bank_number, account_provice, account_name, 
+      account_city, create_time, handler_time, 
+      handler_name, status, type, 
+      descreption, trade_type)
+    values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{merchantId,jdbcType=CHAR}, 
+      #{payAmount,jdbcType=DECIMAL}, #{serviceAmount,jdbcType=DECIMAL}, #{arriveAmount,jdbcType=DECIMAL}, 
+      #{bankCode,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, 
+      #{bankNumber,jdbcType=VARCHAR}, #{accountProvice,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
+      #{accountCity,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{handlerTime,jdbcType=TIMESTAMP}, 
+      #{handlerName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
+      #{descreption,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
+    insert into merchant_place_order
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNumber != null" >
+        order_number,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="payAmount != null" >
+        pay_amount,
+      </if>
+      <if test="serviceAmount != null" >
+        service_amount,
+      </if>
+      <if test="arriveAmount != null" >
+        arrive_amount,
+      </if>
+      <if test="bankCode != null" >
+        bank_code,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="branchBankName != null" >
+        branch_bank_name,
+      </if>
+      <if test="bankNumber != null" >
+        bank_number,
+      </if>
+      <if test="accountProvice != null" >
+        account_provice,
+      </if>
+      <if test="accountName != null" >
+        account_name,
+      </if>
+      <if test="accountCity != null" >
+        account_city,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="handlerTime != null" >
+        handler_time,
+      </if>
+      <if test="handlerName != null" >
+        handler_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="descreption != null" >
+        descreption,
+      </if>
+      <if test="tradeType != null" >
+        trade_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderNumber != null" >
+        #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=CHAR},
+      </if>
+      <if test="payAmount != null" >
+        #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceAmount != null" >
+        #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="arriveAmount != null" >
+        #{arriveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="bankCode != null" >
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null" >
+        #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNumber != null" >
+        #{bankNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvice != null" >
+        #{accountProvice,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCity != null" >
+        #{accountCity,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handlerTime != null" >
+        #{handlerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handlerName != null" >
+        #{handlerName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="descreption != null" >
+        #{descreption,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null" >
+        #{tradeType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
+    update merchant_place_order
+    <set >
+      <if test="orderNumber != null" >
+        order_number = #{orderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=CHAR},
+      </if>
+      <if test="payAmount != null" >
+        pay_amount = #{payAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceAmount != null" >
+        service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="arriveAmount != null" >
+        arrive_amount = #{arriveAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="bankCode != null" >
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null" >
+        branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNumber != null" >
+        bank_number = #{bankNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvice != null" >
+        account_provice = #{accountProvice,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCity != null" >
+        account_city = #{accountCity,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handlerTime != null" >
+        handler_time = #{handlerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handlerName != null" >
+        handler_name = #{handlerName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="descreption != null" >
+        descreption = #{descreption,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null" >
+        trade_type = #{tradeType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
+    update merchant_place_order
+    set order_number = #{orderNumber,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=CHAR},
+      pay_amount = #{payAmount,jdbcType=DECIMAL},
+      service_amount = #{serviceAmount,jdbcType=DECIMAL},
+      arrive_amount = #{arriveAmount,jdbcType=DECIMAL},
+      bank_code = #{bankCode,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+      bank_number = #{bankNumber,jdbcType=VARCHAR},
+      account_provice = #{accountProvice,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      account_city = #{accountCity,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      handler_time = #{handlerTime,jdbcType=TIMESTAMP},
+      handler_name = #{handlerName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      descreption = #{descreption,jdbcType=VARCHAR},
+      trade_type = #{tradeType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+	<select id="listMerchantPlaceOrder"
+		parameterType="com.polypay.platform.vo.MerchantPlaceOrderVO"
+		resultMap="listResult">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_place_order
+		where 1 =1
+		<if test="merchantId != null">
+			and merchant_id = #{merchantId,jdbcType=INTEGER}
+		</if>
+
+		<if test="status != null">
+			and status = #{status,jdbcType=INTEGER}
+		</if>
+
+		<if test="orderNumber != null">
+			<bind name="orderNumber" value="'%'+orderNumber+'%'" />
+			and order_number like #{orderNumber}
+		</if>
+
+		<if test="cBeginTime != null">
+			and create_time <![CDATA[>=]]>
+			#{cBeginTime}
+		</if>
+
+		<if test="cEndTime != null">
+			and create_time <![CDATA[<=]]>
+			#{cEndTime}
+		</if>
+
+		<if test="sBeginTime != null">
+			and handler_time <![CDATA[>=]]>
+			#{sBeginTime}
+		</if>
+
+		<if test="sEndTime != null">
+			and handler_time <![CDATA[<=]]>
+			#{sEndTime}
+		</if>
+
+		order by create_time desc
+	</select>
+
+
+	<select id="getMerchantPlaceMonthBill"
+		parameterType="java.util.Map"
+		resultType="com.polypay.platform.bean.MerchantBill">
+		SELECT
+		merchant_id as merchantId,
+		count(1) as placeNumber,
+		sum(pay_amount) as placeAmount,
+		sum(service_amount) as placeServiceAmount
+		from
+		merchant_place_order where status = 0
+		<if test="beginTime != null">
+			and create_time <![CDATA[>=]]>
+			#{beginTime}
+		</if>
+
+		<if test="endTime != null">
+			and create_time <![CDATA[<=]]>
+			#{endTime}
+		</if>
+
+		group by merchant_id
+	</select>
+
+	<select id="allMerchantPlace" parameterType="java.lang.String"
+		resultType="com.polypay.platform.vo.MerchantMainDateVO">
+
+		SELECT
+		SUM(mro.`pay_amount`) AS merchantAllPlaceAmount,
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS
+		merchantAllServiceAmount
+		FROM merchant_place_order mro WHERE
+		mro.`merchant_id` = #{merchantUUID}
+		AND mro.`status` = 0
+		GROUP BY
+		mro.`merchant_id`
+
+	</select>
+
+
+	<select id="managerAllMerchantPlaceOrder" resultType="com.polypay.platform.vo.MerchantMainDateVO">
+		select 
+		sum(mro.`pay_amount`) AS merchantAllPlaceAmount,
+		COUNT(1) AS merchantAllOrderNumber,
+		sum(mro.`service_amount`) AS
+		merchantAllServiceAmount
+		from merchant_place_order mro where mro.`status` = 0
+	</select>
+	
+	<select id="listHandleOrder" resultMap = "BaseResultMap">
+	select
+		<include refid="Base_Column_List" />
+		from merchant_place_order
+		where status = 2
+	</select>
+
+
+</mapper>

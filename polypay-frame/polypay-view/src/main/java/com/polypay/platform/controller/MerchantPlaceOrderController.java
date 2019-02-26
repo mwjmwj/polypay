@@ -24,13 +24,16 @@ import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.bean.MerchantPlaceOrder;
+import com.polypay.platform.bean.SystemConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantPlaceAccountBindbankService;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
+import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtil;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
@@ -54,6 +57,9 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 	
 	@Autowired
 	private IMerchantPlaceAccountBindbankService merchantPlaceAccountBindbankService;
+	
+	@Autowired
+	private ISystemConstsService systemConstsService;
 	
 	@RequestMapping("/merchant/place/order/list")
 	@ResponseBody
@@ -321,6 +327,12 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 		merchantPlaceOrder.setStatus(OrderStatusConsts.SUBMIT);
 		merchantPlaceOrder.setCreateTime(new Date());
 		merchantPlaceOrder.setPayAmount(merchantPlaceOrderVO.getPayAmount());
+		
+		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT);
+		merchantPlaceOrder.setServiceAmount(new BigDecimal(consts.getConstsValue()));
+		
+		merchantPlaceOrder.setType(MerchantOrderTypeConsts.SETTLE_ORDER);
+		
 		merchantPlaceOrder.setType(MerchantOrderTypeConsts.PLACE_ORDER);
 		merchantPlaceOrderService.insertSelective(merchantPlaceOrder);
 

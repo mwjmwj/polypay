@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.polypay.platform.dao.MerchantBillMapper" >
+  <resultMap id="BaseResultMap" type="com.polypay.platform.bean.MerchantBill" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+    <result column="bill_name" property="billName" jdbcType="VARCHAR" />
+    <result column="recharge_amount" property="rechargeAmount" jdbcType="DECIMAL" />
+    <result column="recharge_number" property="rechargeNumber" jdbcType="INTEGER" />
+    <result column="recharge_service_amount" property="rechargeServiceAmount" jdbcType="DECIMAL" />
+    <result column="settle_amount" property="settleAmount" jdbcType="DECIMAL" />
+    <result column="settle_number" property="settleNumber" jdbcType="INTEGER" />
+    <result column="settle_service_amount" property="settleServiceAmount" jdbcType="DECIMAL" />
+    <result column="place_amount" property="placeAmount" jdbcType="DECIMAL" />
+    <result column="place_number" property="placeNumber" jdbcType="INTEGER" />
+    <result column="place_service_amount" property="placeServiceAmount" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, merchant_id, bill_name, recharge_amount, recharge_number, recharge_service_amount, 
+    settle_amount, settle_number, settle_service_amount, place_amount, place_number, 
+    place_service_amount, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_bill
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from merchant_bill
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.polypay.platform.bean.MerchantBill" >
+    insert into merchant_bill (id, merchant_id, bill_name, 
+      recharge_amount, recharge_number, recharge_service_amount, 
+      settle_amount, settle_number, settle_service_amount, 
+      place_amount, place_number, place_service_amount, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{merchantId,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
+      #{rechargeAmount,jdbcType=DECIMAL}, #{rechargeNumber,jdbcType=INTEGER}, #{rechargeServiceAmount,jdbcType=DECIMAL}, 
+      #{settleAmount,jdbcType=DECIMAL}, #{settleNumber,jdbcType=INTEGER}, #{settleServiceAmount,jdbcType=DECIMAL}, 
+      #{placeAmount,jdbcType=DECIMAL}, #{placeNumber,jdbcType=INTEGER}, #{placeServiceAmount,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantBill" >
+    insert into merchant_bill
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+      <if test="billName != null" >
+        bill_name,
+      </if>
+      <if test="rechargeAmount != null" >
+        recharge_amount,
+      </if>
+      <if test="rechargeNumber != null" >
+        recharge_number,
+      </if>
+      <if test="rechargeServiceAmount != null" >
+        recharge_service_amount,
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount,
+      </if>
+      <if test="settleNumber != null" >
+        settle_number,
+      </if>
+      <if test="settleServiceAmount != null" >
+        settle_service_amount,
+      </if>
+      <if test="placeAmount != null" >
+        place_amount,
+      </if>
+      <if test="placeNumber != null" >
+        place_number,
+      </if>
+      <if test="placeServiceAmount != null" >
+        place_service_amount,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="billName != null" >
+        #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeAmount != null" >
+        #{rechargeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeNumber != null" >
+        #{rechargeNumber,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeServiceAmount != null" >
+        #{rechargeServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAmount != null" >
+        #{settleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleNumber != null" >
+        #{settleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="settleServiceAmount != null" >
+        #{settleServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="placeAmount != null" >
+        #{placeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="placeNumber != null" >
+        #{placeNumber,jdbcType=INTEGER},
+      </if>
+      <if test="placeServiceAmount != null" >
+        #{placeServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.polypay.platform.bean.MerchantBill" >
+    update merchant_bill
+    <set >
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="billName != null" >
+        bill_name = #{billName,jdbcType=VARCHAR},
+      </if>
+      <if test="rechargeAmount != null" >
+        recharge_amount = #{rechargeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="rechargeNumber != null" >
+        recharge_number = #{rechargeNumber,jdbcType=INTEGER},
+      </if>
+      <if test="rechargeServiceAmount != null" >
+        recharge_service_amount = #{rechargeServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleAmount != null" >
+        settle_amount = #{settleAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settleNumber != null" >
+        settle_number = #{settleNumber,jdbcType=INTEGER},
+      </if>
+      <if test="settleServiceAmount != null" >
+        settle_service_amount = #{settleServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="placeAmount != null" >
+        place_amount = #{placeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="placeNumber != null" >
+        place_number = #{placeNumber,jdbcType=INTEGER},
+      </if>
+      <if test="placeServiceAmount != null" >
+        place_service_amount = #{placeServiceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.polypay.platform.bean.MerchantBill" >
+    update merchant_bill
+    set merchant_id = #{merchantId,jdbcType=VARCHAR},
+      bill_name = #{billName,jdbcType=VARCHAR},
+      recharge_amount = #{rechargeAmount,jdbcType=DECIMAL},
+      recharge_number = #{rechargeNumber,jdbcType=INTEGER},
+      recharge_service_amount = #{rechargeServiceAmount,jdbcType=DECIMAL},
+      settle_amount = #{settleAmount,jdbcType=DECIMAL},
+      settle_number = #{settleNumber,jdbcType=INTEGER},
+      settle_service_amount = #{settleServiceAmount,jdbcType=DECIMAL},
+      place_amount = #{placeAmount,jdbcType=DECIMAL},
+      place_number = #{placeNumber,jdbcType=INTEGER},
+      place_service_amount = #{placeServiceAmount,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <select id="getBeforeMonthBill" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	
+  	select 
+    <include refid="Base_Column_List" />
+    from merchant_bill
+    where create_time <![CDATA[>=]]>#{beginTime,jdbcType=TIMESTAMP}
+  </select>
+  
+  <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="false">
+  	insert into merchant_bill
+    			( <include refid="Base_Column_List"></include>)
+    			values
+    			<foreach collection="list" item="item" index="index" separator=",">
+    				(
+    					#{item.id,jdbcType=INTEGER}, 
+    					#{item.merchantId,jdbcType=VARCHAR}, 
+    					#{item.billName,jdbcType=VARCHAR}, 
+     					 #{item.rechargeAmount,jdbcType=DECIMAL},
+    					   #{item.rechargeNumber,jdbcType=INTEGER},
+      					  #{item.rechargeServiceAmount,jdbcType=DECIMAL}, 
+     					 #{item.settleAmount,jdbcType=DECIMAL},
+      					 #{item.settleNumber,jdbcType=INTEGER},
+     					   #{item.settleServiceAmount,jdbcType=DECIMAL}, 
+    					  #{item.placeAmount,jdbcType=DECIMAL},
+     					  #{item.placeNumber,jdbcType=INTEGER},
+     					   #{item.placeServiceAmount,jdbcType=DECIMAL}, 
+     					 #{item.createTime,jdbcType=TIMESTAMP}
+    				)
+    		     </foreach>	
+  
+  </insert>
+  
+  
+  <select id="listMerchantBill" parameterType="com.polypay.platform.bean.MerchantBill" resultMap="BaseResultMap">
+	  
+	  select 
+	    <include refid="Base_Column_List" />
+	    from merchant_bill
+	    where merchant_id = #{merchantId,jdbcType=VARCHAR}
+	  </select>
+  
+</mapper>

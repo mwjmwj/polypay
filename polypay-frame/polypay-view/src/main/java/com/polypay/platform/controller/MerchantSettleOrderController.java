@@ -24,14 +24,17 @@ import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantSettleOrder;
+import com.polypay.platform.bean.SystemConsts;
 import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
+import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountBindbankService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
+import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtil;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
@@ -55,6 +58,9 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 
 	@Autowired
 	private IMerchantAccountBindbankService merchantAccountBindbankService;
+	
+	@Autowired
+	private ISystemConstsService systemConstsService;
 
 	@RequestMapping("/merchant/settle/order/list")
 	@ResponseBody
@@ -148,9 +154,9 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 					return response;
 				}
 				
-				if(settleAmount.compareTo(new BigDecimal(20))<0)
+				if(settleAmount.compareTo(new BigDecimal(10))<0)
 				{
-					ResponseUtils.exception(response, "最低金额20", RequestStatus.FAILED.getStatus());
+					ResponseUtils.exception(response, "最低金额10", RequestStatus.FAILED.getStatus());
 					return response;
 				}
 				
@@ -276,6 +282,10 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		merchantSettleOrder.setStatus(OrderStatusConsts.SUBMIT);
 		merchantSettleOrder.setCreateTime(new Date());
 		merchantSettleOrder.setPostalAmount(merchantSettleOrderVO.getSettleAmount());
+		
+		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT);
+		merchantSettleOrder.setServiceAmount(new BigDecimal(consts.getConstsValue()));
+		
 		merchantSettleOrder.setType(MerchantOrderTypeConsts.SETTLE_ORDER);
 		merchantSettleOrderService.insertSelective(merchantSettleOrder);
 

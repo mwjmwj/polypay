@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.polypay.platform.dao.MerchantLoginLogMapper" >
+  <resultMap id="BaseResultMap" type="com.polypay.platform.bean.MerchantLoginLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="login_time" property="loginTime" jdbcType="TIMESTAMP" />
+    <result column="login_address" property="loginAddress" jdbcType="VARCHAR" />
+    <result column="IP" property="ip" jdbcType="VARCHAR" />
+    <result column="merchant_id" property="merchantId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, login_time, login_address, IP, merchant_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_login_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from merchant_login_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.polypay.platform.bean.MerchantLoginLog" >
+    insert into merchant_login_log (id, login_time, login_address, 
+      IP, merchant_id)
+    values (#{id,jdbcType=INTEGER}, #{loginTime,jdbcType=TIMESTAMP}, #{loginAddress,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{merchantId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantLoginLog" >
+    insert into merchant_login_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+      <if test="loginAddress != null" >
+        login_address,
+      </if>
+      <if test="ip != null" >
+        IP,
+      </if>
+      <if test="merchantId != null" >
+        merchant_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginAddress != null" >
+        #{loginAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.polypay.platform.bean.MerchantLoginLog" >
+    update merchant_login_log
+    <set >
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginAddress != null" >
+        login_address = #{loginAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null" >
+        IP = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantId != null" >
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.polypay.platform.bean.MerchantLoginLog" >
+    update merchant_login_log
+    set login_time = #{loginTime,jdbcType=TIMESTAMP},
+      login_address = #{loginAddress,jdbcType=VARCHAR},
+      IP = #{ip,jdbcType=VARCHAR},
+      merchant_id = #{merchantId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="listMerchantLoginLog" parameterType="com.polypay.platform.vo.MerchantLoginLogVO" resultMap="BaseResultMap">
+      select 
+    <include refid="Base_Column_List" />
+    from merchant_login_log
+    where merchant_id = #{merchantId,jdbcType=VARCHAR} order by login_time desc
+  </select>
+</mapper>

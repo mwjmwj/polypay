@@ -29,7 +29,7 @@ public class SmartPayChannel implements IPayChannel {
 		String version = "1.0";
 
 		// 商户号
-		String customerid = "10989";
+		String customerid = "10990";
 
 		// 订单金额
 		Object pay_amount = param.get("pay_amount");
@@ -45,7 +45,7 @@ public class SmartPayChannel implements IPayChannel {
 		String returnurl = "http://xx/callback/PayInfo";
 
 		// apikey
-		String apiKey = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		String apiKey = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
 
 		// 支付类型
 		String paytype = param.get("pay_channel").toString();
@@ -65,7 +65,7 @@ public class SmartPayChannel implements IPayChannel {
 		 * 根据上述参数顺序 拼接参数字符串 使用MD5加密 验证参数 添加加密sign 拼接在url末端
 		 */
 		// 订单查询接口：
-		String notifyurl = "http://47.104.181.26/open/api/recharge/back";
+		String notifyurl = param.get("call_back").toString();
 		// 最终平台回调为：
 		// http://212.64.72.200:8889/TradeService/PayReBack?customerid=10989&status=1&sdpayno=xxxx&sdorderno={平台订单号}&total_fee=10.0&paytype={支付类型}&95de2d2d4b2dc95efb9e9c8981dd7743a110a438&sign={加密签名}
 		// 商户需要验签后 返回 success 为确认收到回调，否则继续回调
@@ -113,17 +113,17 @@ public class SmartPayChannel implements IPayChannel {
 		
 		String status = getParameter(request, "status");
 		
-		// 商户订单号
+		// 平台订单号
 		String sdpayno = getParameter(request, "sdpayno");
 		
-		// 平台订单号
+		// 商户订单号
 		String sdorderno = getParameter(request, "sdorderno");
 		
 		String total_fee = getParameter(request, "total_fee");
 		
 		String paytype = getParameter(request, "paytype");
 		
-		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		String api_key = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
 		
 		String sign = getParameter(request, "sign");
 		
@@ -162,10 +162,10 @@ public class SmartPayChannel implements IPayChannel {
 		
 		String baseUrl = "http://api.yundesun.com/apiorderquery?";
 		StringBuffer signParam = new StringBuffer();
-		signParam.append("customerid=10989")
+		signParam.append("customerid=10990")
 		.append("&sdorderno="+channelOrderNumber)
 		.append("&reqtime="+DateUtils.getOrderTime())
-		.append("&95de2d2d4b2dc95efb9e9c8981dd7743a110a438");
+		.append("&025aa2a5204cc469e3bd34a5d1836cea9a11defa");
 		String sign = MD5.md5(signParam.toString());
 		
 		baseUrl +=  signParam.toString()+"&sign="+sign;
@@ -189,7 +189,7 @@ public class SmartPayChannel implements IPayChannel {
 		
 		String basePath = "http://api.yundesun.com/apisettle";
 		
-		String customerid = "10989";
+		String customerid = "10990";
 		
 		String serial = settleOrder.getOrderNumber();
 		
@@ -212,7 +212,7 @@ public class SmartPayChannel implements IPayChannel {
 		
 		String bankcode = settleOrder.getBankCode();
 		
-		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		String api_key = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
 		
 //		customerid={value}&serial={value}&bankname={value}&cardno={value}&
 //				accountname={value}&provice={value}&city={value}&branchname={value}&total_fee={value}&{apikey}
@@ -264,7 +264,7 @@ public class SmartPayChannel implements IPayChannel {
 	public Map<String, Object> placeOrder(MerchantPlaceOrder settleOrder) {
 		String basePath = "http://api.yundesun.com/apisettle?";
 		
-		String customerid = "10989";
+		String customerid = "10990";
 		
 		String serial = settleOrder.getOrderNumber();
 		
@@ -286,7 +286,7 @@ public class SmartPayChannel implements IPayChannel {
 		
 		String bankcode = settleOrder.getBankCode();
 		
-		String api_key = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+		String api_key = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
 		
 		StringBuffer signParam = new StringBuffer();
 		signParam.append("customerid="+customerid)

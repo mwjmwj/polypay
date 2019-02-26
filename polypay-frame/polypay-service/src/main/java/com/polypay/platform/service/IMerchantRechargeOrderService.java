@@ -1,6 +1,7 @@
 package com.polypay.platform.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
@@ -15,7 +16,7 @@ public interface IMerchantRechargeOrderService extends IBaseService<MerchantRech
 	PageList<MerchantRechargeOrderVO> listMerchantRechargeOrder(PageBounds pageBounds,
 			MerchantRechargeOrderVO merchantPlaceOrderVO) throws ServiceException;
 
-	MerchantRechargeOrder getOrderByMerchantOrderNumber(String merchantOrderNumber) throws ServiceException;
+	MerchantRechargeOrder getOrderByMerchantOrderNumber(Map<String,Object> param) throws ServiceException;
 	
 	MerchantRechargeOrder getOrderByOrderNumber(String merchantOrderNumber) throws ServiceException;
 

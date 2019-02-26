@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.polypay.platform.bean.Menu;
 
-public interface MenuMapper {
+public interface MenuMapper extends BaseMapper<Menu>{
     int deleteByPrimaryKey(Integer menuId);
 
     int insert(Menu record);

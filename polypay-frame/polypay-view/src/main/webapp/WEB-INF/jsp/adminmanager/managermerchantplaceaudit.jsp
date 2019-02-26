@@ -89,6 +89,20 @@
 			</div>
 		</div>
 		
+		<div class="layui-form-item">
+			<label class="layui-form-label">银行</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" value="${placeorder.bankName }" class="layui-input"> 
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">账户名</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" value="${placeorder.accountName }" class="layui-input"> 
+			</div>
+		</div>
+		
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">服务费</label>
@@ -131,6 +145,7 @@
 		<div class="layui-form-item">
     		<div class="layui-input-block">
 	      		<button class="layui-btn" lay-submit lay-filter="audit">确认结算</button>
+	      		<button class="layui-btn" lay-submit lay-filter="success">确认成功订单</button>
 	      		<button class="layui-btn" lay-submit lay-filter="fail">取消订单</button>
 	   		 </div>
   		</div>

@@ -21,6 +21,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
+import com.polypay.platform.bean.Channel;
+import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantSettleOrder;
 import com.polypay.platform.bean.SystemConsts;
@@ -30,11 +32,14 @@ import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.paychannel.IPayChannel;
+import com.polypay.platform.service.IChannelService;
+import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
 import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantAccountInfoVO;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
@@ -52,6 +57,14 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
 	@Autowired
 	private ISystemConstsService systemConstsService;
+	
+	
+	@Autowired
+	private IChannelService channelService;
+
+	@Autowired
+	private IMerchantAccountInfoService merchantAccountInfoService;
+	
 
 	@RequestMapping("/merchantmanager/settle/order/list")
 	@ResponseBody
@@ -195,10 +208,14 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 					return;
 				}
 
-				SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-
-				String constsValue = consts.getConstsValue();
-				Class<?> payBean = Class.forName(constsValue);
+				
+				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
+				merchantInfo.setUuid(merchantSettleOrder.getMerchantId());
+				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
+				
+				Channel channel = channelService.selectByPrimaryKey(merchantInfoByUUID.getChannelId());
+				
+				Class<?> payBean = Class.forName(channel.getBean());
 				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
 
 				// {"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
@@ -223,6 +240,12 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 
 				// 成功修改订单状态
 				merchantSettleOrder.setStatus(OrderStatusConsts.HANDLE);
+				
+				MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+				if(null!=merchant)
+				{
+					merchantSettleOrder.setHandlePeople(merchant.getAccountName());
+				}
 				merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
 			}
 

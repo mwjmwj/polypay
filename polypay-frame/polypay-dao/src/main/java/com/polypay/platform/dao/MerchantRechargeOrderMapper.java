@@ -15,7 +15,7 @@ public interface MerchantRechargeOrderMapper extends BaseMapper<MerchantRecharge
 	PageList<MerchantRechargeOrderVO> listMerchantRechargeOrder(PageBounds pageBounds,
 			MerchantRechargeOrderVO merchantPlaceOrderVO);
 
-	MerchantRechargeOrder getOrderByMerchantOrderNumber(String merchantOrderNumber);
+	MerchantRechargeOrder getOrderByMerchantOrderNumber(Map<String,Object> param);
 	
 	MerchantRechargeOrder getOrderByOrderNumber(String merchantOrderNumber);
 

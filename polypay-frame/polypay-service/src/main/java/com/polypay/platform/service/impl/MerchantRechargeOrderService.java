@@ -109,9 +109,10 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 	}
 
 	@Override
-	public MerchantRechargeOrder getOrderByMerchantOrderNumber(String merchantOrderNumber) throws ServiceException {
+	public MerchantRechargeOrder getOrderByMerchantOrderNumber(Map<String,Object> param) throws ServiceException {
 		try {
-			return merchantRechargeOrderMapper.getOrderByMerchantOrderNumber(merchantOrderNumber);
+			
+			return merchantRechargeOrderMapper.getOrderByMerchantOrderNumber(param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

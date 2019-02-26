@@ -394,12 +394,13 @@
 	</select>
 
 	<select id="getOrderByMerchantOrderNumber"
-		parameterType="java.lang.String" resultMap="BaseResultMap">
+		parameterType="java.util.Map" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from merchant_recharge_order
 		where merchant_order_number =
 		#{merchantOrderNumber}
+		and merchant_id = #{merchantId}
 
 	</select>
 

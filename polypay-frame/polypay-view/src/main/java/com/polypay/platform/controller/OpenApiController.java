@@ -21,6 +21,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
+import com.polypay.platform.bean.Channel;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantApi;
 import com.polypay.platform.bean.MerchantFinance;
@@ -35,6 +36,8 @@ import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.paychannel.IPayChannel;
+import com.polypay.platform.paychannel.SmartPayChannel;
+import com.polypay.platform.service.IChannelService;
 import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantApiService;
 import com.polypay.platform.service.IMerchantFinanceService;
@@ -80,6 +83,11 @@ public class OpenApiController {
 
 	@Autowired
 	private IPayTypeService payTypeService;
+	
+	@Autowired
+	private IChannelService channelService;
+	
+	
 
 	@RequestMapping("/open/api/recharge")
 	public ServiceResponse recharge(Map<String, Object> paramMap, HttpServletRequest request,
@@ -181,10 +189,11 @@ public class OpenApiController {
 			}
 
 			// 校验订单是否重复
-			checkMerchantOrderNumber(result, merchantOrderNumber);
+			checkMerchantOrderNumber(result, merchantOrderNumber,merchantUUID);
 			if (!RequestStatus.SUCCESS.getStatus().equals(result.getStatus())) {
 				return result;
 			}
+			
 
 			// 生成订单
 			MerchantRechargeOrder generatorOrder = generatorOrder(merchantUUID, signMap);
@@ -201,20 +210,27 @@ public class OpenApiController {
 	}
 	
 	public static void main(String[] args) {
-		String url = "http://localhost:8080/polypay-view/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999995&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74&sign=3f80785b52ab226d7c106819c61034cd";
+		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=3&pay_amount=1.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=abc&sign=1ecd9ae423ce16805577721b3c19ef26";
 		
-		System.out.println(MD5.encryption("merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=999999995&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74"));
+		System.out.println(MD5.encryption("merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=3&pay_amount=1.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=abc"));
 	}
 
+	
+	/**
+	 *  smartPay CallBack
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ServiceException
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	@RequestMapping("/open/api/recharge/back")
 	public String rechargeOrderBack(HttpServletRequest request, HttpServletResponse response)
 			throws ServiceException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-
-		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-
-		String constsValue = consts.getConstsValue();
-
-		Class<?> payBean = Class.forName(constsValue);
+		
+		Class<?> payBean = SmartPayChannel.class;
 
 		IPayChannel paychannel = (IPayChannel) payBean.newInstance();
 
@@ -264,7 +280,7 @@ public class OpenApiController {
 		// {"status":0,"msg":"失败订单"}
 
 		// 失败订单 直接回调商户 并修改订单状态
-		if (!"1".equals(order.get("status"))) {
+		if (!"1".equals(order.get("status").toString())) {
 			if (!(OrderStatusConsts.SUBMIT == orderByMerchantOrderNumber.getStatus().intValue())) {
 				return "success";
 			}
@@ -282,6 +298,8 @@ public class OpenApiController {
 			return "success";
 		}
 
+		orderByMerchantOrderNumber.setBankOrderNumber(order.get("sdpayno").toString());
+		
 		String merchantId = orderByMerchantOrderNumber.getMerchantId();
 
 		// 原有资金
@@ -360,7 +378,7 @@ public class OpenApiController {
 
 		String merchantid = getParameter(request, "merchantid");
 
-		String orderNumber = getParameter(request, "payno");
+		String orderNumber = getParameter(request, "orderno");
 
 		String time = getParameter(request, "time");
 
@@ -389,8 +407,12 @@ public class OpenApiController {
 			return result;
 		}
 
+		Map<String,Object> param = Maps.newHashMap();
+		param.put("merchantid", merchantid);
+		param.put("merchantOrderNumber", orderNumber);
+		
 		MerchantRechargeOrder orderByMerchantOrderNumber = merchantRechargeOrderService
-				.getOrderByMerchantOrderNumber(orderNumber);
+				.getOrderByMerchantOrderNumber(param);
 		if (null == orderByMerchantOrderNumber) {
 			result.put("status", -1);
 			result.put("msg", "订单不存在");
@@ -416,7 +438,7 @@ public class OpenApiController {
 		result.put("payno", orderByMerchantOrderNumber.getOrderNumber());
 		result.put("amount", orderByMerchantOrderNumber.getPayAmount());
 
-		return null;
+		return result;
 	}
 
 	@Transactional(rollbackFor = Exception.class)
@@ -433,6 +455,8 @@ public class OpenApiController {
 			merchantFrezzon.setFrezzTime(new Date());
 			merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
 			merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
+			merchantFrezzon.setMerchantId(orderByMerchantOrderNumber.getMerchantId());
+			merchantFrezzon.setOrderNumber(orderByMerchantOrderNumber.getOrderNumber());
 
 			merchantFrezzService.insertSelective(merchantFrezzon);
 			merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
@@ -461,26 +485,20 @@ public class OpenApiController {
 		return payType.getRate() / 1000.0;
 	}
 
-	private Integer getPayLevel(String merchantId) throws ServiceException {
-		MerchantAccountInfo merchantInfo;
-		Integer payLevel;
-		MerchantAccountInfoVO merchantAccountInfoVO = new MerchantAccountInfoVO();
-		merchantAccountInfoVO.setUuid(merchantId);
-		merchantInfo = merchantAccountInfoService.getMerchantInfoByUUID(merchantAccountInfoVO);
-		payLevel = merchantInfo.getPayLevel();
-		if (null == payLevel) {
-			payLevel = DEFAULT_LEVEL;
-		}
-		return payLevel;
-	}
 
 	private void sendRediect(HttpServletResponse response, Map<String, Object> signMap,
 			MerchantRechargeOrder generatorOrder) throws ServiceException, IOException {
 
-		SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-
+		MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
+		merchantInfo.setUuid(generatorOrder.getMerchantId());
+		MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
+		
+		Channel selectByPrimaryKey = channelService.selectByPrimaryKey(merchantInfoByUUID.getChannelId());
+		signMap.put("call_back", selectByPrimaryKey.getCallBack());
+		
 		// 根据配置的四方平台
-		sendRedirectUrl(response, consts.getConstsValue(), signMap, generatorOrder);
+		sendRedirectUrl(response, selectByPrimaryKey.getBean(), signMap, generatorOrder);
+		
 	}
 
 	private void sendRedirectUrl(HttpServletResponse response, String bean, Map<String, Object> signMap,
@@ -513,10 +531,17 @@ public class OpenApiController {
 
 	}
 
-	private void checkMerchantOrderNumber(ServiceResponse result, String merchantOrderNumber) throws ServiceException {
+	private void checkMerchantOrderNumber(ServiceResponse result, String merchantOrderNumber, String merchantUUID) throws ServiceException {
 
+		
+		Map<String,Object> param = Maps.newHashMap();
+		
+		param.put("merchantOrderNumber", merchantOrderNumber);
+		
+		param.put("merchantId", merchantOrderNumber);
+		
 		MerchantRechargeOrder merchantRechargeOrder = merchantRechargeOrderService
-				.getOrderByMerchantOrderNumber(merchantOrderNumber);
+				.getOrderByMerchantOrderNumber(param);
 
 		if (null != merchantRechargeOrder) {
 			ResponseUtils.exception(result, "订单已提交！", RequestStatus.FAILED.getStatus());

@@ -19,5 +19,5 @@ public interface IPayChannel {
 	public Map<String, Object> settleOrder(MerchantSettleOrder selectByPrimaryKey);
 	
 	public Map<String, Object> placeOrder(MerchantPlaceOrder selectByPrimaryKey);
-	
+
 }

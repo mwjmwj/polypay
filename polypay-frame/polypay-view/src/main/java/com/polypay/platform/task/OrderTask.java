@@ -78,10 +78,10 @@ public class OrderTask {
 
 //			customerid={value}&serial={value}&reqtime={value}&{apikey}
 
-			String costomerid = "10989";
+			String costomerid = "10990";
 			String serial = porder.getOrderNumber();
 			String reqtime = DateUtils.getOrderTime();
-			String apikey = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+			String apikey = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
 			StringBuffer signp = new StringBuffer();
 			signp.append("customerid=" + costomerid).append("&serial=" + serial).append("&reqtime=" + reqtime)
 					.append("&" + apikey);
@@ -112,6 +112,7 @@ public class OrderTask {
 				if ("1".equals(status)) {
 					porder.setStatus(OrderStatusConsts.SUCCESS);
 					porder.setArriveAmount(porder.getPayAmount().subtract(porder.getServiceAmount()));
+					porder.setHandlerTime(new Date());
 					merchantPlaceOrderService.updateByPrimaryKeySelective(porder);
 				}
 			} catch (ServiceException e) {
@@ -127,10 +128,10 @@ public class OrderTask {
 
 //			customerid={value}&serial={value}&reqtime={value}&{apikey}
 
-			String costomerid = "10989";
+			String costomerid = "10990";
 			String serial = sorder.getOrderNumber();
 			String reqtime = DateUtils.getOrderTime();
-			String apikey = "95de2d2d4b2dc95efb9e9c8981dd7743a110a438";
+			String apikey = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
 			StringBuffer signp = new StringBuffer();
 			signp.append("customerid=" + costomerid).append("&serial=" + serial).append("&reqtime=" + reqtime)
 					.append("&" + apikey);
@@ -161,6 +162,7 @@ public class OrderTask {
 				if ("1".equals(status.toString())) {
 					sorder.setStatus(OrderStatusConsts.SUCCESS);
 					
+					sorder.setPayTime(new Date());
 					sorder.setArrivalAmount(sorder.getPostalAmount().subtract(sorder.getServiceAmount()));
 					merchantSettleOrderService.updateByPrimaryKeySelective(sorder);
 				}
@@ -171,6 +173,7 @@ public class OrderTask {
 
 	}
 
+	
 	// 同步回滚订单
 	private void rollBackSettlerOrder(MerchantSettleOrder merchantSettleOrder) throws ServiceException {
 		synchronized (merchantSettleOrder.getMerchantId().intern()) {
