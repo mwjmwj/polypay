@@ -225,7 +225,8 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 	@Override
 	public PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param) throws ServiceException {
 		try {
-
+			
+			
 			return merchantAccountInfoMapper.listMerchantAccountInfo(pageBounds,param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());

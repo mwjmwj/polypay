@@ -13,11 +13,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.druid.support.json.JSONUtils;
+import com.polypay.platform.bean.Channel;
+import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.bean.MerchantSettleOrder;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.paychannel.IPayChannel;
+import com.polypay.platform.service.IChannelService;
+import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
@@ -25,6 +30,7 @@ import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MD5;
+import com.polypay.platform.vo.MerchantAccountInfoVO;
 
 @Component
 public class OrderTask {
@@ -41,6 +47,12 @@ public class OrderTask {
 
 	@Autowired
 	private IMerchantFinanceService merchantFinanceService;
+
+	@Autowired
+	private IChannelService channelService;
+
+	@Autowired
+	private IMerchantAccountInfoService merchantAccountInfoService;
 
 	@Scheduled(cron = "0 */1 * * * ?")
 	public void executor() {
@@ -70,6 +82,7 @@ public class OrderTask {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void executorPlaceOrder(MerchantPlaceOrder porder) {
 
 		synchronized (porder.getOrderNumber().intern()) {
@@ -124,35 +137,24 @@ public class OrderTask {
 	private void executorSettleOrder(MerchantSettleOrder sorder) {
 
 		synchronized (sorder.getOrderNumber().intern()) {
-			String baseUrl = "http://api.yundesun.com/apisettlequery?";
-
-//			customerid={value}&serial={value}&reqtime={value}&{apikey}
-
-			String costomerid = "10990";
-			String serial = sorder.getOrderNumber();
-			String reqtime = DateUtils.getOrderTime();
-			String apikey = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
-			StringBuffer signp = new StringBuffer();
-			signp.append("customerid=" + costomerid).append("&serial=" + serial).append("&reqtime=" + reqtime)
-					.append("&" + apikey);
-			String sign = MD5.md5(signp.toString());
-
-			baseUrl += signp.toString() + "&sign=" + sign;
-
-//			{"status":1,"msg":"代付成功","serial":"代付订单号","total_fee":"代付金额"}
-//			{"status":2,"msg":"代付处理中"}
-//			{"status":0,"msg":"代付失败"}
-			HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(baseUrl);
-
-			Map result = (Map) JSONUtils.parse(httpGet.getResultAsString());
-
-			Object status = result.get("status");
-
-			if (null == status) {
-				return;
-			}
-
 			try {
+				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
+				merchantInfo.setUuid(sorder.getMerchantId());
+				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
+
+				Channel channel = channelService.selectByPrimaryKey(merchantInfoByUUID.getChannelId());
+
+				Class<?> payBean = Class.forName(channel.getBean());
+				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
+
+				Map<String, Object> result = paychannel.taskPayOrderNumber(sorder.getOrderNumber());
+
+				Object status = result.get("status");
+
+				if (null == status) {
+					return;
+				}
+
 				// 失敗
 				if ("0".equals(status.toString())) {
 					rollBackSettlerOrder(sorder);
@@ -161,19 +163,20 @@ public class OrderTask {
 
 				if ("1".equals(status.toString())) {
 					sorder.setStatus(OrderStatusConsts.SUCCESS);
-					
+
 					sorder.setPayTime(new Date());
 					sorder.setArrivalAmount(sorder.getPostalAmount().subtract(sorder.getServiceAmount()));
 					merchantSettleOrderService.updateByPrimaryKeySelective(sorder);
 				}
+
 			} catch (ServiceException e) {
+			} catch (ClassNotFoundException e) {
+			} catch (InstantiationException e) {
+			} catch (IllegalAccessException e) {
 			}
-
 		}
-
 	}
 
-	
 	// 同步回滚订单
 	private void rollBackSettlerOrder(MerchantSettleOrder merchantSettleOrder) throws ServiceException {
 		synchronized (merchantSettleOrder.getMerchantId().intern()) {

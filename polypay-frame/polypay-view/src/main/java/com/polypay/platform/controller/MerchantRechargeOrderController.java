@@ -21,7 +21,6 @@ import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantRechargeOrder;
-import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;

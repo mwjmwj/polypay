@@ -25,7 +25,6 @@ import com.polypay.platform.bean.Channel;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceOrder;
-import com.polypay.platform.bean.SystemConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.SystemConstans;
@@ -203,9 +202,6 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 					return;
 				}
 
-				SystemConsts consts = systemConstsService.getConsts(SystemConstans.SMART_RECHARGE_BEAN);
-
-				
 				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
 				merchantInfo.setUuid(merchantPlaceOrder.getMerchantId());
 				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);

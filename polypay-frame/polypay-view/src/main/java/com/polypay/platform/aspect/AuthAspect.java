@@ -28,7 +28,6 @@ import com.polypay.platform.exception.ServiceException;
 @Component
 @Aspect
 public class AuthAspect {
-	private final static Integer PERMISSION_DENIED = -9007;
 	public final static String TOKEN = "token";
 
 	@Pointcut("execution(* com.polypay.platform.controller.*.*(..)) && !execution(* com.polypay.platform.controller.MerchantLoginController.*(..))"

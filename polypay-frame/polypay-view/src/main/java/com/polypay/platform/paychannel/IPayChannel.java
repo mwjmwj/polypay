@@ -11,13 +11,15 @@ import com.polypay.platform.bean.MerchantSettleOrder;
 public interface IPayChannel {
 
 	public void sendRedirect(Map<String, Object> param, HttpServletResponse response);
-	
-	public Map<String,Object> checkOrder(HttpServletRequest request);
-	
-	public Map<String,Object> getOrder(String orderNumber);
+
+	public Map<String, Object> checkOrder(HttpServletRequest request);
+
+	public Map<String, Object> getOrder(String orderNumber);
 
 	public Map<String, Object> settleOrder(MerchantSettleOrder selectByPrimaryKey);
-	
+
 	public Map<String, Object> placeOrder(MerchantPlaceOrder selectByPrimaryKey);
+
+	public Map<String, Object> taskPayOrderNumber(String orderNumber);
 
 }

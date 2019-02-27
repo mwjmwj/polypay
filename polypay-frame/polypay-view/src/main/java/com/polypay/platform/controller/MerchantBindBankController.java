@@ -39,6 +39,7 @@ public class MerchantBindBankController extends BaseController<MerchantAccountBi
 	@Autowired
 	private IMerchantAccountBindbankService merchantAccountBindbankService;
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping("/merchant/bindbank/save")
 	@ResponseBody
 	public ServiceResponse saveBindBank(MerchantAccountBindbankVO merchantAccountBindbankVO)throws ServiceException

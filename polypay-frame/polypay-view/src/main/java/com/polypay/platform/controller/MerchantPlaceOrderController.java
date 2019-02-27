@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
@@ -36,8 +35,6 @@ import com.polypay.platform.service.IMerchantPlaceOrderService;
 import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtil;
 import com.polypay.platform.utils.DateUtils;
-import com.polypay.platform.utils.HttpClientUtil;
-import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantMainDateVO;
@@ -242,68 +239,6 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 	}
 	
 	
-	
-	
-	private void submitPlaceOrder(MerchantPlaceOrder merchantPlaceOrder) {
-
-		try {
-
-			Thread.currentThread().sleep(5000);
-
-			// 调第三方
-			HttpRequestDetailVo httpGet = HttpClientUtil.httpGet("");
-
-			// 处理返回结果
-			Map parseObject = JSON.parseObject(httpGet.getResultAsString(), Map.class);
-			Object status = parseObject.get("status");
-
-			// 返回结果失败 回滚订单
-			if (null == status || !status.toString().equals("200")) {
-
-				// 回滚
-				rollBackPlaceOrder(merchantPlaceOrder);
-				return;
-			}
-
-			// 成功修改订单状态
-			merchantPlaceOrder.setStatus(OrderStatusConsts.SUCCESS);
-			merchantPlaceOrderService.updateByPrimaryKeySelective(merchantPlaceOrder);
-
-		} catch (Exception e) {
-			// 回滚
-			try {
-				rollBackPlaceOrder(merchantPlaceOrder);
-			} catch (ServiceException e1) {
-				log.error(" settle order fail: " + merchantPlaceOrder.getMerchantId() + " - "
-						+ merchantPlaceOrder.getId());
-
-			}
-
-		}
-	}
-
-	// 同步回滚订单
-	private void rollBackPlaceOrder(MerchantPlaceOrder merchantPlaceOrder) throws ServiceException {
-		synchronized (merchantPlaceOrder.getMerchantId().intern()) {
-
-			MerchantPlaceOrder selectByPrimaryKey = merchantPlaceOrderService
-					.selectByPrimaryKey(merchantPlaceOrder.getId());
-			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)) {
-				// 回滚金额
-				MerchantFinance merchantFinance = merchantFinanceService
-						.getMerchantFinanceByUUID(merchantPlaceOrder.getMerchantId());
-				merchantFinance
-						.setBlanceAmount(merchantFinance.getBlanceAmount().add(merchantPlaceOrder.getPayAmount()));
-				merchantPlaceOrder.setStatus(OrderStatusConsts.FAIL);
-				merchantPlaceOrder.setHandlerTime(new Date());
-				merchantPlaceOrder.setDescreption("订单提交操作异常！");
-				merchantPlaceOrder.setHandlerName("系统");
-				
-				merchantPlaceOrderService.updateByPrimaryKeySelective(merchantPlaceOrder);
-				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
-			}
-		}
-	}
 	
 	
 	private MerchantPlaceOrder generatorPlaceOrder(MerchantPlaceOrderVO merchantPlaceOrderVO, MerchantPlaceAccountBindbank merchantAccountBindbank)

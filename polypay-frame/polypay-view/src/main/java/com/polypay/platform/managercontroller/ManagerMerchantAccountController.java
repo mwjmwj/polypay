@@ -433,6 +433,7 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		return response;
 	}
 
+	@SuppressWarnings("deprecation")
 	private void sendVerifyCode(ServiceResponse response, MerchantVerify merchantVerify)
 			throws ServiceException, IllegalAccessException, InvocationTargetException {
 		MerchantVerify tbVerifycodeVO = new MerchantVerify();

@@ -70,5 +70,10 @@
 		<context:property-placeholder
 			location="classpath:config/dev/jdbc.properties" />
 	</beans>
+	
+	<beans profile="test">
+		<context:property-placeholder
+			location="classpath:config/test/jdbc.properties" />
+	</beans>
 
 </beans>

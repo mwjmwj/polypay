@@ -157,6 +157,7 @@ public class SmartPayChannel implements IPayChannel {
 	}
 
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map<String, Object> getOrder(String channelOrderNumber) {
 		
@@ -184,6 +185,7 @@ public class SmartPayChannel implements IPayChannel {
 	 *  结算调用第三方
 	 */
 	 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<String, Object> settleOrder(MerchantSettleOrder settleOrder) {
 		
@@ -260,6 +262,7 @@ public class SmartPayChannel implements IPayChannel {
 		return result;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Map<String, Object> placeOrder(MerchantPlaceOrder settleOrder) {
 		String basePath = "http://api.yundesun.com/apisettle?";
@@ -329,6 +332,35 @@ public class SmartPayChannel implements IPayChannel {
 		}
 		
 		
+		return result;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Map<String, Object> taskPayOrderNumber(String orderNumber) {
+		
+		String baseUrl = "http://api.yundesun.com/apisettlequery?";
+
+//		customerid={value}&serial={value}&reqtime={value}&{apikey}
+
+		String costomerid = "10990";
+		String serial = orderNumber;
+		String reqtime = DateUtils.getOrderTime();
+		String apikey = "025aa2a5204cc469e3bd34a5d1836cea9a11defa";
+		StringBuffer signp = new StringBuffer();
+		signp.append("customerid=" + costomerid).append("&serial=" + serial).append("&reqtime=" + reqtime)
+				.append("&" + apikey);
+		String sign = MD5.md5(signp.toString());
+
+		baseUrl += signp.toString() + "&sign=" + sign;
+
+//		{"status":1,"msg":"代付成功","serial":"代付订单号","total_fee":"代付金额"}
+//		{"status":2,"msg":"代付处理中"}
+//		{"status":0,"msg":"代付失败"}
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(baseUrl);
+
+		Map result = (Map) JSONUtils.parse(httpGet.getResultAsString());
+
 		return result;
 	}
 

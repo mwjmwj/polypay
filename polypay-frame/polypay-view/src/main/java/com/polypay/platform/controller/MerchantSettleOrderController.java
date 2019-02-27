@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.druid.util.StringUtils;
-import com.alibaba.fastjson.JSON;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
@@ -37,8 +36,6 @@ import com.polypay.platform.service.IMerchantSettleOrderService;
 import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtil;
 import com.polypay.platform.utils.DateUtils;
-import com.polypay.platform.utils.HttpClientUtil;
-import com.polypay.platform.utils.HttpRequestDetailVo;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantAccountBindbankVO;
@@ -292,61 +289,5 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		return merchantSettleOrder;
 	}
 
-	private void submitSettleOrder(MerchantSettleOrder merchantSettleOrder) {
-
-		try {
-
-			Thread.currentThread().sleep(5000);
-
-			// 调第三方
-			HttpRequestDetailVo httpGet = HttpClientUtil.httpGet("");
-
-			// 处理返回结果
-			Map parseObject = JSON.parseObject(httpGet.getResultAsString(), Map.class);
-			Object status = parseObject.get("status");
-
-			// 返回结果失败 回滚订单
-			if (null == status || !status.toString().equals("200")) {
-
-				// 回滚
-				rollBackSettlerOrder(merchantSettleOrder);
-				return;
-			}
-
-			// 成功修改订单状态
-			merchantSettleOrder.setStatus(OrderStatusConsts.SUCCESS);
-			merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
-
-		} catch (Exception e) {
-			// 回滚
-			try {
-				rollBackSettlerOrder(merchantSettleOrder);
-			} catch (ServiceException e1) {
-				log.error(" settle order fail: " + merchantSettleOrder.getMerchantId() + " - "
-						+ merchantSettleOrder.getId());
-
-			}
-
-		}
-	}
-
-	// 同步回滚订单
-	private void rollBackSettlerOrder(MerchantSettleOrder merchantSettleOrder) throws ServiceException {
-		synchronized (merchantSettleOrder.getMerchantId().intern()) {
-
-			MerchantSettleOrder selectByPrimaryKey = merchantSettleOrderService
-					.selectByPrimaryKey(merchantSettleOrder.getId());
-			if (selectByPrimaryKey.getStatus().equals(OrderStatusConsts.SUBMIT)) {
-				// 回滚金额
-				MerchantFinance merchantFinance = merchantFinanceService
-						.getMerchantFinanceByUUID(merchantSettleOrder.getMerchantId());
-				merchantFinance
-						.setBlanceAmount(merchantFinance.getBlanceAmount().add(merchantSettleOrder.getPostalAmount()));
-				merchantSettleOrder.setStatus(OrderStatusConsts.FAIL);
-				merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
-				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
-			}
-		}
-	}
 	
 }

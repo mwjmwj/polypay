@@ -17,9 +17,10 @@
 	   http://www.springframework.org/schema/task/spring-task-3.2.xsd ">
 
     <mvc:annotation-driven/>
+    
+    
     <!--<aop:aspectj-autoproxy />-->
     <context:annotation-config/>
-    
     <!-- 定时任务注解开启 -->
     <task:annotation-driven />
     
@@ -38,12 +39,14 @@
     <context:component-scan base-package="com.polypay.platform.controller,com.polypay.platform.managercontroller,com.polypay.platform.advice" use-default-filters="false">
         <!--  base-package 如果多个，用“,”分隔 -->
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        
         <!--  控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常 -->
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
     </context:component-scan>
 
 	
 	<context:component-scan base-package="com.polypay.platform.aspect"></context:component-scan>
+	
 	<context:component-scan base-package="com.polypay.platform.task"></context:component-scan>
 	
 	
