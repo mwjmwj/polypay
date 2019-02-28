@@ -101,8 +101,8 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 				ResponseUtils.exception(response, "验证码已失效,请重新获取", RequestStatus.FAILED.getStatus());
 				return response;
 			}
-			requestMerchantInfo.setPassWord("111111");
-			requestMerchantInfo.setPayPassword("666888");
+			requestMerchantInfo.setPassWord("123456");
+			requestMerchantInfo.setPayPassword("123456");
 			requestMerchantInfo.setProxyId(MerchantUtils.getMerchant().getUuid());
 			
 			try {

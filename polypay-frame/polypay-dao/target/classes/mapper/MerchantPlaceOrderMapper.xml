@@ -53,6 +53,13 @@
     bank_name, branch_bank_name, bank_number, account_provice, account_name, account_city, 
     create_time, handler_time, handler_name, status, type, descreption, trade_type
   </sql>
+  
+  	<sql id="proxy_list" >
+    mpo.id, mpo.order_number, mpo.merchant_id, mpo.pay_amount, mpo.service_amount, mpo.arrive_amount, mpo.bank_code, 
+    mpo.bank_name, mpo.branch_bank_name, mpo.bank_number, mpo.account_provice, mpo.account_name, mpo.account_city, 
+    mpo.create_time, mpo.handler_time, mpo.handler_name, mpo.status, mpo.type, mpo.descreption, mpo.trade_type
+  </sql>
+  
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
 		select
@@ -394,6 +401,53 @@
 		from merchant_place_order
 		where status = 2
 	</select>
+	
+	<select id="listProxyMerchantPlaceOrder"
+		parameterType="com.polypay.platform.vo.MerchantPlaceOrderVO"
+		resultMap="listResult">
+		select
+		<include refid="proxy_list" />
+		from merchant_account_info mai left join
+		merchant_place_order mpo on mai.uuid = mpo.merchant_id 
+		where 1 =1
+		
+		and mai.proxy_id = #{proxyId}
+		<if test="merchantId != null">
+			and mpo.merchant_id = #{merchantId,jdbcType=INTEGER}
+		</if>
+
+		<if test="status != null">
+			and mpo.status = #{status,jdbcType=INTEGER}
+		</if>
+
+		<if test="orderNumber != null">
+			<bind name="orderNumber" value="'%'+orderNumber+'%'" />
+			and mpo.order_number like #{orderNumber}
+		</if>
+
+		<if test="cBeginTime != null">
+			and mpo.create_time <![CDATA[>=]]>
+			#{cBeginTime}
+		</if>
+
+		<if test="cEndTime != null">
+			and mpo.create_time <![CDATA[<=]]>
+			#{cEndTime}
+		</if>
+
+		<if test="sBeginTime != null">
+			and mpo.handler_time <![CDATA[>=]]>
+			#{sBeginTime}
+		</if>
+
+		<if test="sEndTime != null">
+			and mpo.handler_time <![CDATA[<=]]>
+			#{sEndTime}
+		</if>
+
+		order by mpo.create_time desc
+	</select>
+	
 
 
 </mapper>

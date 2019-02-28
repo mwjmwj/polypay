@@ -33,7 +33,7 @@ public class SmartPayChannel implements IPayChannel {
 
 		// 订单金额
 		Object pay_amount = param.get("pay_amount");
-		BigDecimal total_fee = new BigDecimal(pay_amount.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+		BigDecimal total_fee = new BigDecimal(pay_amount.toString()).setScale(2, BigDecimal.ROUND_DOWN);
 
 		
 		// 订单号 (订单号由自己系统提供)

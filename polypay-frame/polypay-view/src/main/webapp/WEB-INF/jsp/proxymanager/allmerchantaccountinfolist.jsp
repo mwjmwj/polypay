@@ -52,17 +52,7 @@
 		
 </div>
 	<table class="layui-hide" id="merchantaccountlist" lay-filter="merchantaccountlist"></table>
-
-
-
-	<script type="text/html" id="accountBar">
-		{{#  if(d.status != '1'){ }}
- 		 <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">查看</a>
-		{{#  } }}
-	</script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
-
-
 	<script type="text/html" id="zizeng">
     {{d.LAY_TABLE_INDEX+1}}
 </script>
@@ -101,23 +91,25 @@
 					fixed : 'left',
 					style : 'color:red'
 				}, {
-					field : 'proxyId',
-					title : '代理ID',
-					align : 'center',
-					width : 195,
-					sort : true
+					field : 'accountName',
+					title : '账户名',
+					width : 200,
+					align : 'center'
+					
 				}, {
 					field : 'mobileNumber',
 					title : '手机号码',
 					width : 200,
 					align : 'center'
 					
-				}
-				, {
-					field : 'passWord',
-					title : '登录密码',
-					width : 300,
-					align : 'center'
+				}, {
+					field : 'createTime',
+					title : '创建时间',
+					width : 200,
+					align : 'center',
+					templet : function(row) {
+						return createTime(row.createTime);
+					}
 					
 				}
 				, {
@@ -149,16 +141,17 @@
 						}
 					}
 				}, {
-					field : 'payLevel',
-					title : '支付等级',
+					field : 'channelId',
+					title : '支付通道',
 					width : 100,
-					align : 'center'
+					align : 'center',
+					templet : function(row) {
+						if (row.channelId == 1) {
+							return '<span style="color: green;">熊猫代币</span>';
+						} else if (row.channelId == 2) {
+							return '<span style="color: green;">新网支付</span>';
+						}
 					}
-				, {
-					fixed : 'right',
-					title : '操作',
-					toolbar : '#accountBar',
-					width : 120
 				}
 				] ],
 				page : true,
@@ -199,44 +192,6 @@
 				$("#orderNumber").val("");
 				$("#begintime").val("");
 				$("#endtime").val("");
-			});
-			
-			
-			//监听工具条
-			table.on('tool(merchantaccountlist)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
-			  var data = obj.data; //获得当前行数据
-			  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-			  var tr = obj.tr; //获得当前行 tr 的DOM对象
-			 
-			  if(layEvent === 'edit'){ //查看
-			    //do somehing
-				  layer.open({
-					  area:['500px','700px'],
-					  type: 2,
-					  icon:1,
-						anim:5,
-						maxmin: true,
-					  title:'商户详细信息',
-					  content: '../merchantmanager/account/query?id='+data.uuid
-					}); 
-			  } else if(layEvent === 'del'){ //删除
-			    layer.confirm('真的删除行么', function(index){
-			      obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-			      layer.close(index);
-			      //向服务端发送删除指令
-			    });
-			  } else if(layEvent === 'audit'){ //编辑
-				  
-				  layer.open({
-					  area:['500px','700px'],
-					  type: 2,
-						icon:1,
-						anim:5,
-						maxmin: true,
-					  title:'商户审核信息',
-					  content: '../merchantmanager/account/query?id='+data.uuid
-					}); 
-			  }
 			});
 			
 		});

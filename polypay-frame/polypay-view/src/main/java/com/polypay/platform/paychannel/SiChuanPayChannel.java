@@ -246,12 +246,11 @@ public class SiChuanPayChannel implements IPayChannel {
 		sParam.put("paytype", paytype);
 
 		// 异步通知回调
-		String notify_url = "www.baidu.com";
+		String notify_url = "http://47.104.181.26/getway/settleorder";
 		sParam.put("notify_url", notify_url);
 
 		// 支付金额
-		String total_amount = settleOrder.getPostalAmount().subtract(settleOrder.getServiceAmount())
-				.add(new BigDecimal(3)).toString();
+		String total_amount = settleOrder.getPostalAmount().subtract(settleOrder.getServiceAmount()).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString();
 		sParam.put("total_amount", total_amount);
 
 		// 订单编号
@@ -275,7 +274,7 @@ public class SiChuanPayChannel implements IPayChannel {
 		sParam.put("sendbankcode", sendbankcode);
 
 		// 充值账户：100000，支付宝：100010
-		String cashtype = "100000";
+		String cashtype = "100050";
 		sParam.put("cashtype", cashtype);
 
 		// 省
@@ -453,7 +452,7 @@ public class SiChuanPayChannel implements IPayChannel {
 	@Override
 	public Map<String, Object> taskPayOrderNumber(String orderNumber) {
 
-		String baseUrl = "http://119.23.50.98/querybill/refund";
+		String baseUrl = "http://39.108.126.141/querybill/refund";
 		
 		Map<String,String> sParam = Maps.newHashMap();
 		
@@ -469,8 +468,18 @@ public class SiChuanPayChannel implements IPayChannel {
 		
 		sParam.put("sign_type", "MD5");
 		
-		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(baseUrl,null,sParam);
+		HttpRequestDetailVo httpGet = HttpClientUtil.httpPost(baseUrl,null,sParam);
 
+		String resultAsString = httpGet.getResultAsString();
+		
+		if(StringUtils.isEmpty(resultAsString))
+		{
+			Map result = Maps.newHashMap();
+			
+			result.put("status", "0");
+			return result;
+		}
+		
 		Map result = (Map) JSONUtils.parse(httpGet.getResultAsString());
 		
 		String bxcode = result.get("bxcode").toString();
@@ -478,7 +487,7 @@ public class SiChuanPayChannel implements IPayChannel {
 		if("200".equals(bxcode))
 		{
 			String bxstatus = result.get("bxstatus").toString();
-			if("success".equals(bxstatus))
+			if("SUCCESS".equals(bxstatus))
 			{
 				result.put("status", "1");
 			}

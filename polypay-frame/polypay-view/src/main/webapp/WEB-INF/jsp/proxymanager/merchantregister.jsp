@@ -28,7 +28,7 @@
 
 	<blockquote class="layui-elem-quote layui-text">
 		商户注册
-		<p style="color: red;">提示：默认密码：111111，支付密码666888</p>
+		<p style="color: red;">提示：默认密码：123456，支付密码123456</p>
 	</blockquote>
 
 	<fieldset class="layui-elem-field layui-field-title"

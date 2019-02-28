@@ -22,4 +22,7 @@ public interface MerchantSettleOrderMapper extends BaseMapper<MerchantSettleOrde
 	MerchantMainDateVO managerAllMerchantSettleOrder();
 
 	List<MerchantSettleOrder> listHandleOrder();
+
+	PageList<MerchantSettleOrderVO> listProxyMerchantSettleOrder(PageBounds pageBounds,
+			MerchantSettleOrderVO merchantSettleOrderVO);
 }

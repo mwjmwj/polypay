@@ -87,6 +87,18 @@
 		trade_type, account_mobile_number,
 		account_bank_number, account_name
 	</sql>
+	
+	<sql id="proxy_list">
+		mro.id, mro.order_number, mro.merchant_order_number, mro.bank_order_number,
+		mro.merchant_id,
+		mro.type, mro.pay_amount,
+		mro.service_amount, mro.arrival_amount,
+		mro.create_time, mro.success_time, mro.pay_channel, mro.pay_bank,
+		mro.descreption, mro.status,
+		mro.trade_type, mro.account_mobile_number,
+		mro.account_bank_number, mro.account_name
+	</sql>
+	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
 		select
@@ -484,12 +496,57 @@
 		merchant_recharge_order mro where mro.`status` = 0
 	</select>
 
-		<select id="listHandleOrder" resultMap="BaseResultMap">
-			select
-			<include refid="Base_Column_List" />
-			from merchant_recharge_order
-			where status = 1
-		</select>
+	<select id="listHandleOrder" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_recharge_order
+		where status = 1
+	</select>
+	
+	<select id="listProxyMerchantRechargeOrder"
+		parameterType="com.polypay.platform.vo.MerchantRechargeOrderVO"
+		resultMap="listResult">
+		select
+		<include refid="proxy_list" />
+		from merchant_account_info mai left join merchant_recharge_order mro on mai.uuid = mro.merchant_id
+		 
+		where 1=1
+and mai.proxy_id = #{proxyId}
+		<if test="merchantId != null">
+			and mro.merchant_id = #{merchantId,jdbcType=INTEGER}
+		</if>
+
+		<if test="status != null">
+			and mro.status = #{status,jdbcType=INTEGER}
+		</if>
+
+		<if test="orderNumber != null">
+			<bind name="orderNumber" value="'%'+orderNumber+'%'" />
+			and mro.order_number like #{orderNumber}
+		</if>
+
+		<if test="cBeginTime != null">
+			and mro.create_time <![CDATA[>=]]>
+			#{cBeginTime}
+		</if>
+
+		<if test="cEndTime != null">
+			and mro.create_time <![CDATA[<=]]>
+			#{cEndTime}
+		</if>
+
+		<if test="sBeginTime != null">
+			and mro.success_time <![CDATA[>=]]>
+			#{sBeginTime}
+		</if>
+
+		<if test="sEndTime != null">
+			and mro.success_time <![CDATA[<=]]>
+			#{sEndTime}
+		</if>
+
+		order by mro.create_time desc
+	</select>
 
 
 

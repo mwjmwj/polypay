@@ -176,4 +176,14 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 		}
 	}
 
+	@Override
+	public PageList<MerchantRechargeOrderVO> listProxyMerchantRechargeOrder(PageBounds pageBounds,
+			MerchantRechargeOrderVO merchantRechargeOrderVO) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.listProxyMerchantRechargeOrder(pageBounds,merchantRechargeOrderVO);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

@@ -23,4 +23,7 @@ public interface IMerchantSettleOrderService extends IBaseService<MerchantSettle
 
 	List<MerchantSettleOrder> listHandleOrder();
 
+	PageList<MerchantSettleOrderVO> listProxyMerchantSettleOrder(PageBounds pageBounds,
+			MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException;
+
 }

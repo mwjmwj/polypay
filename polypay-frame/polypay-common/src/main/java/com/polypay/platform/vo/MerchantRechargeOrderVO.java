@@ -58,6 +58,8 @@ public class MerchantRechargeOrderVO extends VO {
 	private String accountBankNumber;
 
 	private String accountName;
+	
+	private String proxyId;
 
 	public String getTradeType() {
 		return tradeType;
@@ -257,5 +259,13 @@ public class MerchantRechargeOrderVO extends VO {
 
 	public void setsEndTime(Date sEndTime) {
 		this.sEndTime = sEndTime;
+	}
+
+	public String getProxyId() {
+		return proxyId;
+	}
+
+	public void setProxyId(String proxyId) {
+		this.proxyId = proxyId;
 	}
 }

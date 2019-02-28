@@ -13,7 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>商户后台管理</title>
+<title>源盛丰支付</title>
 
 <link rel="shortcut icon" href="./static/favicon.ico"/>
 <link rel="stylesheet" href="./static/css/font.css">
@@ -27,8 +27,8 @@
 <body>
 	<!-- 顶部开始 -->
 	<div class="container">
-		<div class="logo">
-			<a href="./view/toAdminIndex">源盛丰支付</a>
+		<div class="logo" >
+			<a href="./view/toAdminIndex"><img src="./static/images/logo.png" style="width:200px;height:46px;"></img></a>
 		</div>
 		<div class="left_open">
 			<i title="展开左侧栏" class="iconfont">&#xe668;</i>
@@ -53,7 +53,10 @@
 					</dd>
 				</dl></li>
 		</ul>
+		</c:if>
+		
 		<ul class="layui-nav right" lay-filter="">
+			<c:if test="${sessionScope.merchant_user.roleId == '1' }">
 			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;">${sessionScope.merchant_user.mobileNumber }</a>
 				<dl class="layui-nav-child">
 					<!-- 二级菜单 -->
@@ -63,11 +66,14 @@
 					<dd>
 						<a class="loginout" href="merchant/exit" style="margin-top: 0px">退出</a>
 					</dd>
-				</dl></li>
+				</dl>
+			</li>
+			</c:if>
 			<li class="layui-nav-item to-index"><a href="merchant/exit" style="line-height:46px;">退出账号</a>
 			</li>
 		</ul>
-		</c:if>
+
+		
 		
 		
 		

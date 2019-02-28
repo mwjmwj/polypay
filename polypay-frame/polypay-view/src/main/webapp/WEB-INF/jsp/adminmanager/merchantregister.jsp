@@ -27,7 +27,7 @@
 
 <blockquote class="layui-elem-quote layui-text">
 		商户注册
-		<p style="color: red;">提示：默认密码：111111，支付密码666888</p>
+		<p style="color: red;">提示：默认密码：123456，支付密码123456</p>
 	</blockquote>
 
 	<fieldset class="layui-elem-field layui-field-title"
@@ -87,6 +87,17 @@
 				<input type="checkbox" name="switch" lay-skin="switch">
 			</div>
 		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">支付通道</label>
+			<div class="layui-input-block">
+				<select name="payChannel">
+					<option value="1" >熊猫代币</option>
+					<option value="2" >新网支付</option>
+				</select>
+			</div>
+		</div>
+
 
 		<div class="layui-form-item">
 			<div class="layui-input-block">
@@ -97,6 +108,9 @@
 	</form>
 
 	<script type="text/javascript">
+		
+		
+	
 		layui.use([ 'form', 'layer' ], function() {
 			var form = layui.form;
 			//监听提交

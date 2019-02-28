@@ -26,7 +26,7 @@
 <body>
 	<div class='login'>
 		<div class='login_title'>
-			<span>商户后台登录</span>
+			<span>源盛丰支付</span>
 		</div>
 		<div class='login_fields'>
 			<div class='login_fields__user'>
@@ -62,9 +62,7 @@
 			<div class='login_fields__submit'>
 			
 				<input type='button' value='登录' />
-				<div class='validation' style="font-color: white;opacity: 1; right: 30px; top: 10px;">
-				<a href='view/register' >注册</a>
-				</div>
+				
 			</div>
 		</div>
 		<div class='success'></div>

@@ -172,10 +172,30 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 				}
 
 				BigDecimal blanceAmount = merchantFinance.getBlanceAmount();
-				if (blanceAmount.compareTo(settleAmount) < 0) {
-					ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
-					return response;
+				
+				Integer channelId = merchant.getChannelId();
+				BigDecimal serviceAmount;
+				
+				// 新网支付
+				if(channelId == 2)
+				{
+					SystemConsts consts = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT);
+					serviceAmount = new BigDecimal(consts.getConstsValue());
+					
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantSettleOrderVO.setSettleAmount(settleAmount);
+				}else
+				{
+					if (blanceAmount.compareTo(settleAmount) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
 				}
+				
 
 				Integer merchantBindBankId = merchantSettleOrderVO.getMerchantBindBankId();
 				if (null == merchantBindBankId) {
@@ -190,6 +210,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 					return response;
 				}
 				merchantSettleOrderVO.setMerchantId(merchant.getUuid());
+				
 				merchantSettleOrder = generatorSettleOrder(merchantSettleOrderVO,merchantAccountBindbank);
 				// 扣除余额
 				merchantFinance.setBlanceAmount(blanceAmount.subtract(settleAmount));
@@ -214,7 +235,6 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		return response;
 
 	}
-	
 	
 	@RequestMapping("merchant/settle/order/pre")
 	public String preSettleOrder(Map<String,Object>result) throws ServiceException

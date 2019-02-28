@@ -216,18 +216,18 @@ public class OpenApiController {
 	// 
 //	@SuppressWarnings("unused")
 //	public static void main(String[] args) {
-//		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=3&pay_amount=1.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=abc&sign=1ecd9ae423ce16805577721b3c19ef26";
+//		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=10&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74&sign=7f9f2720b36dad73d903008225f70a58";
 //
 //		System.out.println(MD5.encryption(
-//				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=3&pay_amount=1.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=abc"));
+//				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=10&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74"));
 //	}
 	
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=3&pay_amount=1.00&time=5522541&pay_channel=100050&notify_url=www.baidu.com&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74&sign=b22c4ddf3b29d5a42b5145f2ffb12273";
+		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=9&pay_amount=10.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74&sign=1d886b8f133aed2b4258fd515973f3b8";
 
 		System.out.println(MD5.encryption(
-				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=3&pay_amount=1.00&time=5522541&pay_channel=100050&notify_url=www.baidu.com&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74"));
+				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=9&pay_amount=10.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74"));
 	}
 	
 

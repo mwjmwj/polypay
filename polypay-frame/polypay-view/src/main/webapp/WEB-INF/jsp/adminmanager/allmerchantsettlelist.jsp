@@ -163,8 +163,8 @@
 							return '<span style="color: orange;">审核中</span>';
 						}
 						else if (row.status == 2) {
-								return '<span style="color: #00FF00;">处理</span>';
-							}
+								return '<span style="color: #00FF00;">已处理</span>';
+						}
 					}
 				}, {
 					field : 'postalAmount',

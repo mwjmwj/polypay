@@ -192,6 +192,7 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 
 	private void submitSettleOrder(MerchantSettleOrder merchantSettleOrder) {
 
+		Object status = null;
 		try {
 
 			MerchantSettleOrder selectByPrimaryKey;
@@ -224,7 +225,8 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 				selectByPrimaryKey.setServiceAmount(new BigDecimal(settleAmount));
 				Map<String, Object> result = paychannel.settleOrder(selectByPrimaryKey);
 
-				Object status = result.get("status");
+				status = result.get("status");
+	
 
 				// 返回结果失败 回滚订单
 				if (null == status || status.toString().equals("0")) {
@@ -240,17 +242,18 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 				// 成功修改订单状态
 				merchantSettleOrder.setStatus(OrderStatusConsts.HANDLE);
 				
-				MerchantAccountInfo merchant = MerchantUtils.getMerchant();
-				if(null!=merchant)
-				{
-					merchantSettleOrder.setHandlePeople(merchant.getAccountName());
-				}
+				merchantSettleOrder.setHandlePeople("admin");
+
 				merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
 			}
 
 		} catch (Exception e) {
 			// 回滚
 			try {
+				if(null!=status&&"1".equals(status.toString()))
+				{
+					return;
+				}
 				rollBackSettlerOrder(merchantSettleOrder);
 			} catch (ServiceException e1) {
 				log.error(" settle order fail: " + merchantSettleOrder.getMerchantId() + " - "

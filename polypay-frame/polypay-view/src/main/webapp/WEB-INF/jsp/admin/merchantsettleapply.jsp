@@ -83,7 +83,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行卡号</label>
 			<div class="layui-input-block">
-				<select name="merchantBindBankId" lay-filter="aihao">
+				<select name="merchantBindBankId">
 					<c:forEach items="${bank}" var="b">
 					<option value="${b.id }" >${b.accountName}|${b.bankName }|${b.accountNumber }</option>
 					<c:if test="${b.defaultStatus == 0 }">

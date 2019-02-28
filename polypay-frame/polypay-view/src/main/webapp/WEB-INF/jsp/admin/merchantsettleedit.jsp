@@ -31,8 +31,6 @@
 			</div>
 		</div>
 		
-		
-		
 		<div class="layui-form-item">
 			<label class="layui-form-label">类型</label>
 			<div class="layui-input-block">
@@ -108,14 +106,6 @@
 			</div>
 		</div>
 	
-		
-		<div class="layui-form-item">
-			<label class="layui-form-label">描述</label>
-			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${settleorder.descreption }" class="layui-input"> 
-			</div>
-		</div>
-		
 		
 	</form>
 

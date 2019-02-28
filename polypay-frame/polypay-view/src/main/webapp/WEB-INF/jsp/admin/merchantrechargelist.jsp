@@ -201,17 +201,19 @@
 				}, {
 					field : 'payChannel',
 					title : '通道',
-					width : 65
+					width : 100,
+					align : 'center'
 				}, {
 					field : 'payBank',
 					title : '银行',
-					width : 70,
-					style : 'align'
+					width : 100,
+					align : 'center'
 				}, {
 					fixed : 'right',
 					title : '操作',
 					toolbar : '#barDemo',
-					width : 120
+					width : 120,
+					align : 'center'
 				} ] ],
 				page : true,
 				id : "rechargeReload"

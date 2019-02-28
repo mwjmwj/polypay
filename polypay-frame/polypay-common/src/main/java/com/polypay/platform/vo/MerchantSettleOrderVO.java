@@ -29,7 +29,7 @@ public class MerchantSettleOrderVO extends VO {
 
     private Integer type;
 
-    private Integer descreption;
+    private String descreption;
 
     private String handlePeople;
 
@@ -68,6 +68,8 @@ public class MerchantSettleOrderVO extends VO {
     private String branchBankName;
     
     private Integer merchantBindBankId;
+    
+    private String proxyId;
     
 	public String getAccountName() {
 		return accountName;
@@ -245,11 +247,11 @@ public class MerchantSettleOrderVO extends VO {
 		this.type = type;
 	}
 
-	public Integer getDescreption() {
+	public String getDescreption() {
 		return descreption;
 	}
 
-	public void setDescreption(Integer descreption) {
+	public void setDescreption(String descreption) {
 		this.descreption = descreption;
 	}
 
@@ -307,5 +309,13 @@ public class MerchantSettleOrderVO extends VO {
 
 	public void setMerchantBindBankId(Integer merchantBindBankId) {
 		this.merchantBindBankId = merchantBindBankId;
+	}
+
+	public String getProxyId() {
+		return proxyId;
+	}
+
+	public void setProxyId(String proxyId) {
+		this.proxyId = proxyId;
 	}
 }

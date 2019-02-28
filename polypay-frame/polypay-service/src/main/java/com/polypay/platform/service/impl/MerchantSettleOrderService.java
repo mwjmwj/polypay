@@ -141,8 +141,17 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 
 	@Override
 	public List<MerchantSettleOrder> listHandleOrder() {
-		// TODO Auto-generated method stub
 		return merchantSettleOrderMapper.listHandleOrder();
+	}
+
+	@Override
+	public PageList<MerchantSettleOrderVO> listProxyMerchantSettleOrder(PageBounds pageBounds,
+			MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException {
+		try {
+			return merchantSettleOrderMapper.listProxyMerchantSettleOrder(pageBounds,merchantSettleOrderVO);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
 	}
 
 }

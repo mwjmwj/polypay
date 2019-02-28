@@ -50,6 +50,10 @@ public class MerchantAccountInfoVO extends VO{
     
     private Integer rate;
     
+    private String payChannel;
+    
+    private String channelId;
+    
     
     public String getNewPayPassword() {
 		return newPayPassword;
@@ -209,6 +213,22 @@ public class MerchantAccountInfoVO extends VO{
 
 	public void setRate(Integer rate) {
 		this.rate = rate;
+	}
+
+	public String getPayChannel() {
+		return payChannel;
+	}
+
+	public void setPayChannel(String payChannel) {
+		this.payChannel = payChannel;
+	}
+
+	public String getChannelId() {
+		return channelId;
+	}
+
+	public void setChannelId(String channelId) {
+		this.channelId = channelId;
 	}
 
 }

@@ -103,6 +103,11 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 		try {
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 			if (RoleConsts.MERCHANT.equals(merchant.getRoleId())) {
+				MerchantAccountInfo merchant2 = MerchantUtils.getMerchant();
+				if(null == merchant2)
+				{
+					return null;
+				}
 				merchantPlaceOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
 				result = merchantPlaceOrderMapper.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
 			} else if (RoleConsts.MANAGER.equals(merchant.getRoleId())) {
@@ -146,8 +151,17 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 
 	@Override
 	public List<MerchantPlaceOrder> listHandleOrder() {
-		// TODO Auto-generated method stub
 		return merchantPlaceOrderMapper.listHandleOrder();
+	}
+
+	@Override
+	public PageList<MerchantPlaceOrderVO> listProxyMerchantPlaceOrder(PageBounds pageBounds,
+			MerchantPlaceOrderVO merchantPlaceOrderVO) throws ServiceException {
+		try {
+			return merchantPlaceOrderMapper.listProxyMerchantPlaceOrder(pageBounds,merchantPlaceOrderVO);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
 	}
 
 }

@@ -43,6 +43,12 @@ public class MerchantAccountInfoController {
 			uMerchant.setHelppayStatus(MerchantHelpPayConsts.CLOSE_HELP_PAY);
 		}
 
+		MerchantAccountInfo updateBean = new MerchantAccountInfo();
+		updateBean.setHelppayStatus(uMerchant.getHelppayStatus());
+		updateBean.setPassWord(uMerchant.getPassWord());
+		updateBean.setAccountName(uMerchant.getAccountName());
+		
+		
 		merchantAccountInfoService.updateByPrimaryKeySelective(uMerchant);
 
 		return "success";

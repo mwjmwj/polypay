@@ -29,4 +29,7 @@ public interface MerchantRechargeOrderMapper extends BaseMapper<MerchantRecharge
 
 	List<MerchantRechargeOrder> listHandleOrder();
 
+	PageList<MerchantRechargeOrderVO> listProxyMerchantRechargeOrder(PageBounds pageBounds,
+			MerchantRechargeOrderVO merchantRechargeOrderVO);
+
 }

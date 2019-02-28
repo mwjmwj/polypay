@@ -30,4 +30,7 @@ public interface IMerchantRechargeOrderService extends IBaseService<MerchantRech
 
 	List<MerchantRechargeOrder> listHandleOrder() throws ServiceException;
 
+	PageList<MerchantRechargeOrderVO> listProxyMerchantRechargeOrder(PageBounds pageBounds,
+			MerchantRechargeOrderVO merchantRechargeOrderVO) throws ServiceException;
+
 }

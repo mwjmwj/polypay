@@ -33,26 +33,28 @@
 <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">秘钥</label>
     <div class="layui-input-block">
-      <textarea placeholder="请输入内容" class="layui-textarea">${merchantapi.secretKey }</textarea>
-    </div>
-  </div>
-  
-  
-  <div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">加密私钥</label>
-    <div class="layui-input-block">
-      <textarea placeholder="请输入内容" class="layui-textarea">${merchantapi.md5Key }</textarea>
+      <textarea placeholder="请输入内容" id="apikey" readonly="readonly" class="layui-textarea">${merchantapi.secretKey }</textarea>
     </div>
   </div>
 
   
-  </div>
-  
-  <div class="layui-form-item">
+  <div class="layui-form-item" style="margin-left: -100px;">
     <div class="layui-input-block">
+      <button class="layui-btn layui-btn-normal" onclick="copy()">复制APIkey</button>
 		  <button class="layui-btn layui-btn-normal" onclick="upload()">下载API文档</button>
     </div>
   </div>
+  
+  </div>
+  <script type="text/javascript">
+function copy()
+{
+var Url2=document.getElementById("apikey");
+Url2.select(); // 选择对象
+document.execCommand("Copy"); // 执行浏览器复制命令
+}
+</script>
+
   
   <script type="text/javascript">
   function upload()

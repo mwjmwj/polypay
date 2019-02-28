@@ -65,4 +65,27 @@ public class ManagerViewController {
 	{
 		return "adminmanager/addproxyaccount";
 	}
+	
+	@RequestMapping("proxy/rechargeorder")
+	public String toProxyRecharge()
+	{
+		return "proxymanager/allmerchantrechargelist";
+	}
+	
+	
+	@RequestMapping("proxy/settleorder")
+	public String toProxySettle()
+	{
+		return "proxymanager/allmerchantsettlelist";
+	}
+	
+	
+	@RequestMapping("proxy/placeorder")
+	public String toProxyPlace()
+	{
+		return "proxymanager/allmerchantplacelist";
+	}
+	
+	
+	
 }

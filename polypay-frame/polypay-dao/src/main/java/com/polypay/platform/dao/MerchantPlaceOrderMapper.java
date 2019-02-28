@@ -23,4 +23,7 @@ public interface MerchantPlaceOrderMapper extends BaseMapper<MerchantPlaceOrder>
 
 	List<MerchantPlaceOrder> listHandleOrder();
 
+	PageList<MerchantPlaceOrderVO> listProxyMerchantPlaceOrder(PageBounds pageBounds,
+			MerchantPlaceOrderVO merchantPlaceOrderVO);
+
 }

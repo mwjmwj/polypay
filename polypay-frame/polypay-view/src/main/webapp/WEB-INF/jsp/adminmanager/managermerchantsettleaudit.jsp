@@ -69,8 +69,13 @@
 				</c:if>
 				
 				<c:if test="${settleorder.status ==1 }">
-				<input type="text" readonly="readonly" value="待审核" class="layui-input" style="color:red"> 
+				<input type="text" readonly="readonly" value="待审核" class="layui-input" style="color:orange"> 
 				</c:if>
+				
+				<c:if test="${settleorder.status ==2 }">
+				<input type="text" readonly="readonly" value="已处理" class="layui-input" style="color:#00FF00"> 
+				</c:if>
+				
 				
 			</div>
 		</div>
@@ -133,29 +138,6 @@
 			</div>
 		</div>
 		
-		<div class="layui-form-item">
-			<label class="layui-form-label">状态</label>
-			<div class="layui-input-block">
-			
-				<c:if test="${settleorder.status ==0 }">
-				<input type="text" readonly="readonly" value="成功" class="layui-input" style="color:green"> 
-				</c:if>
-				
-				<c:if test="${settleorder.status ==-1 }">
-				<input type="text" readonly="readonly" value="失败" class="layui-input" style="color:red"> 
-				</c:if>
-				
-				<c:if test="${settleorder.status ==1 }">
-				<input type="text" readonly="readonly" value="审核中" class="layui-input" style="color:orange"> 
-				</c:if>
-				
-				<c:if test="${settleorder.status ==2 }">
-				<input type="text" readonly="readonly" value="已处理" class="layui-input" style="color:#00FF00"> 
-				</c:if>
-				
-			</div>
-		</div>
-	
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">描述</label>
