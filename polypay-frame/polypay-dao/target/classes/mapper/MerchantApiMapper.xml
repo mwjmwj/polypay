@@ -138,6 +138,21 @@
       </if>
     </set>
     where merchant_id = #{merchantId}
-    
   </update>
+  
+  <select id="listMerchantApi" parameterType="com.polypay.platform.bean.MerchantApi" resultMap="BaseResultMap">
+  
+    
+   select 
+    <include refid="Base_Column_List" />
+    from merchant_api
+    where  
+    1=1 
+     <if test="merchantId != null" >
+        and   merchant_id = #{merchantId}
+      </if>
+  
+  </select>
+  
+  
 </mapper>

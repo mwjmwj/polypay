@@ -17,53 +17,26 @@
 <link rel="stylesheet" href="../static/js/css/layui.css">
 <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 
-
+<style type="text/css">
+.searchtable {
+	
+}
+</style>
 </head>
-<script type="text/javascript" src="../static/js/layui.js"></script>
-<script type="text/javascript" src="../static/js/jquery.min.js"></script>
+<script type="text/javascript" src="../static/js/layui.all.js"></script>
 <body>
-
-<div class="layui-form">
 	<div class="layui-row" style="margin-top: 10px" >
  	<div class="layui-inline">		
- 		<input class="layui-input" name="id" id="mobileNumber" autocomplete="off" placeholder="商户手机号" />
+ 		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户号" />
 		</div>
-		 <div class="layui-inline">
-		<input class="layui-input" type="text" id="begintime" name="begintime" id="begintime" placeholder="商户申请时间" />
-		</div>
-		<div class="layui-inline">
-		<input class="layui-input"type="text" id="endtime" name="endtime" id="endtime"  placeholder="商户审核时间" />
-		</div>
-		
-		 <div class="layui-inline">
-      <div class="layui-input-inline">
-        <select id="status" name="status" lay-verify=" lay-search="">
-          <option value="">选择商户状态</option>
-          <option value="1">待审核</option>
-          <option value="0">审核通过</option>
-          <option value="-1">审核不通过</option>
-        </select>
-      </div>
-    </div>
 		<button id="search" class="layui-btn" data-type="reload">搜索</button>
 		<button id="clear" class="layui-btn" data-type="reload">清空</button>
-		
 		</div>
-		
-</div>
-	<table class="layui-hide" id="merchantaccountlist" lay-filter="merchantaccountlist"></table>
 
+	<table class="layui-hide" id="apilist" lay-filter="apilist"></table>
 
-
-	<script type="text/html" id="accountBar">
-		{{#  if(d.status == '1'){ }}
- 		 <a class="layui-btn layui-btn-xs" lay-event="audit">审核</a>
-		{{#  } }}
-
-		{{#  if(d.status != '1'){ }}
- 		 <a class="layui-btn layui-btn-xs  layui-btn-normal" lay-event="edit">查看</a>
-		{{#  } }}
-
+	<script type="text/html" id="barDemo">
+ 		 <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
@@ -77,9 +50,9 @@
 		layui.use('table', function() {
 			var table = layui.table;
 			table.render({
-				elem : '#merchantaccountlist',
-				url : '../merchantmanager/account/list',
-				toolbar : 's',
+				elem : '#apilist',
+				url : '../merchantmanager/api/list',
+				toolbar  : '#search',
 				title : '用户数据表',
 				response : {
 					statusName : 'status' //规定数据状态的字段名称，默认：code
@@ -92,105 +65,57 @@
 					,
 					dataName : 'data' //规定数据列表的字段名称，默认：data
 				},
-				cols : [ [{
+				cols : [ [ {
+					type : 'checkbox',
+					fixed : 'left'
+				}, {
 					field : 'zizeng',
 					title : '序号',
 					width : 60,
 					align : 'center',
 					fixed : 'left',
 					templet : '#zizeng'
-				},{
-					field : 'uuid',
-					title : '商户ID',
-					width : 80,
+				}, {
+					field : 'merchantId',
+					title : '商户号',
+					width : 200,
 					align : 'center',
 					fixed : 'left',
 					style : 'color:red'
 				}, {
-					field : 'proxyId',
-					title : '代理ID',
+					field : 'secretKey',
+					title : '商户秘钥',
 					align : 'center',
-					width : 80,
-					sort : true
-				}, {
-					field : 'mobileNumber',
-					title : '手机号码',
-					width : 200,
-					align : 'center'
-					
+					width : 312
 				}
-				, {
-					field : 'passWord',
-					title : '登录密码',
-					width : 300,
+				,  {
+					field : 'apiDocUrl',
+					title : '文档',
+					width : 580,
 					align : 'center'
-					
-				}
-				, {
-					field : 'status',
-					title : '状态',
-					width : 100,
-					align : 'center',
-					templet : function(row) {
-						if (row.status == 1) {
-							return '<span style="color: orange;">待审核</span>';
-						} else if (row.status == 0) {
-							return '<span style="color: green;">通过审核</span>';
-						}
-						else if (row.status == -1) {
-							return '<span style="color: red;">审核不通过</span>';
-						}
-					}
 				}, {
-					field : 'helppayStatus',
-					title : '代付功能',
-					width : 100,
-					style : 'color: red',
-					align : 'center',
-					templet : function(row) {
-						if (row.helppayStatus == 1) {
-							return '<span style="color: red;">关闭</span>';
-						} else if (row.helppayStatus == 0) {
-							return '<span style="color: green;">开通</span>';
-						}
-					}
-				}, {
-					field : 'payLevel',
-					title : '支付等级',
-					width : 100,
-					align : 'center'
-					}
-				, {
 					fixed : 'right',
 					title : '操作',
-					toolbar : '#accountBar',
+					toolbar : '#barDemo',
 					width : 120
-				}
-				] ],
+				} ] ],
 				page : true,
-				id : "accountReload"
+				id : "apiReload"
 
 			});
-			
-	
+
 			var $ = layui.$, active = {
 				reload : function() {
-					var mobileNumber = $('#mobileNumber').val();
-					var begintime = $('#begintime').val();
-					var endtime = $('#endtime').val();
-					
-					var status = $("#status").val();
+					var merchantId = $('#merchantId');
+					var status = $('#status');
 					//执行重载
-					table.reload('accountReload', {
+					table.reload('apiReload', {
 						page : {
 							curr : 1
 						//重新从第 1 页开始
 						},
 						where : {
-							mobileNumber : mobileNumber,
-							beginTime:begintime,
-							endTime:endtime,
-							status:status
+							merchantId : merchantId.val()
 						}
 					});
 				}
@@ -209,7 +134,7 @@
 			
 			
 			//监听工具条
-			table.on('tool(merchantaccountlist)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+			table.on('tool(apilist)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
 			  var data = obj.data; //获得当前行数据
 			  var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 			  var tr = obj.tr; //获得当前行 tr 的DOM对象
@@ -217,13 +142,10 @@
 			  if(layEvent === 'edit'){ //查看
 			    //do somehing
 				  layer.open({
-					  area:['500px','700px'],
+					  area:['500px','600px'],
 					  type: 2,
-					  icon:1,
-						anim:5,
-						maxmin: true,
-					  title:'商户详细信息',
-					  content: '../merchantmanager/account/query?id='+data.uuid
+					  title:'api详情',
+					  content: '../merchantmanager/api/query?apiId='+data.id
 					}); 
 			  } else if(layEvent === 'del'){ //删除
 			    layer.confirm('真的删除行么', function(index){
@@ -231,17 +153,14 @@
 			      layer.close(index);
 			      //向服务端发送删除指令
 			    });
-			  } else if(layEvent === 'audit'){ //编辑
-				  
-				  layer.open({
-					  area:['500px','700px'],
-					  type: 2,
-						icon:1,
-						anim:5,
-						maxmin: true,
-					  title:'商户审核信息',
-					  content: '../merchantmanager/account/query?id='+data.uuid
-					}); 
+			  } else if(layEvent === 'edit'){ //编辑
+			    //do something
+			    
+			    //同步更新缓存对应的值
+			    obj.update({
+			      username: '123'
+			      ,title: 'xxx'
+			    });
 			  }
 			});
 			
@@ -282,6 +201,9 @@
 		}
 	</script>
 	<script type="text/javascript">
+	
+	
+	
 	function done(res, curr, count){
 	    $('#div').find('.layui-table-body').find("table" ).find("tbody").children("tr").on('dblclick',function(){
 	        var id = JSON.stringify($('#div').find('.layui-table-body').find("table" ).find("tbody").find(".layui-table-hover").data('index'));
@@ -289,6 +211,7 @@
 	        fun.openLayer(obj);
 	    })
 	}
+	
 	</script>
 
 

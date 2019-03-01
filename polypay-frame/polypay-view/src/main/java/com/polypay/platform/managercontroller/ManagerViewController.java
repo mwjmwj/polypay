@@ -86,6 +86,18 @@ public class ManagerViewController {
 		return "proxymanager/allmerchantplacelist";
 	}
 	
+	@RequestMapping("merchantapilist")
+	public String toMerchantApiList()
+	{
+		return "adminmanager/merchantapilist";
+	}
+	
+	
+	@RequestMapping("merchantfinancelist")
+	public String toMerchantFinanceList()
+	{
+		return "adminmanager/merchantfinancelist";
+	}
 	
 	
 }

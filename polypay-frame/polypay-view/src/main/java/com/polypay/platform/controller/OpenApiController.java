@@ -153,8 +153,7 @@ public class OpenApiController {
 				return result;
 			}
 			keys.add("notify_url");
-			
-			
+
 			// 如果是sichuan 银行卡号
 			String bank_no = getParameter(request, "bank_no");
 			if (!StringUtils.isEmpty(bank_no)) {
@@ -212,8 +211,7 @@ public class OpenApiController {
 		return result;
 	}
 
-	
-	// 
+	//
 //	@SuppressWarnings("unused")
 //	public static void main(String[] args) {
 //		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=10&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74&sign=7f9f2720b36dad73d903008225f70a58";
@@ -221,15 +219,14 @@ public class OpenApiController {
 //		System.out.println(MD5.encryption(
 //				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=10&pay_amount=10.00&time=5522541&pay_channel=usdt&notify_url=www.baidu.com&api_key=1a280dcd6d354a3b80dffad647100c74"));
 //	}
-	
+
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=9&pay_amount=10.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74&sign=1d886b8f133aed2b4258fd515973f3b8";
+		String url = "http://47.104.181.26/open/api/recharge?merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=10&pay_amount=70.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74&sign=dd047aee1728d14a5da20c39d5331111";
 
 		System.out.println(MD5.encryption(
-				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=9&pay_amount=10.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74"));
+				"merchant_id=141b6ccb8bde4b10b1d0c4a5db91cf52&order_number=10&pay_amount=70.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=1a280dcd6d354a3b80dffad647100c74"));
 	}
-	
 
 	/**
 	 * smartPay CallBack
@@ -340,8 +337,16 @@ public class OpenApiController {
 			MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchantId);
 
 			// 冻结费率
-			SystemConsts frezzRate = systemConstsService.getConsts(FREZZ_RATE);
-			String frezzrate = frezzRate.getConstsValue();
+			MerchantAccountInfoVO merchantAccountInfoVO = new MerchantAccountInfoVO();
+			merchantAccountInfoVO.setUuid(merchantId);
+			MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService
+					.getMerchantInfoByUUID(merchantAccountInfoVO);
+
+			Integer frezz = merchantInfoByUUID.getPayLevel();
+			if (frezz < 0 || frezz > 100) {
+				frezz = 20;
+			}
+			Double frezzrate = frezz / 100.0;
 
 			if (null == merchantFinance) {
 				return "fail";
@@ -467,8 +472,17 @@ public class OpenApiController {
 			MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchantId);
 
 			// 冻结费率
-			SystemConsts frezzRate = systemConstsService.getConsts(FREZZ_RATE);
-			String frezzrate = frezzRate.getConstsValue();
+			// 冻结费率
+			MerchantAccountInfoVO merchantAccountInfoVO = new MerchantAccountInfoVO();
+			merchantAccountInfoVO.setUuid(merchantId);
+			MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService
+					.getMerchantInfoByUUID(merchantAccountInfoVO);
+
+			Integer frezz = merchantInfoByUUID.getPayLevel();
+			if (frezz < 0 || frezz > 100) {
+				frezz = 20;
+			}
+			Double frezzrate = frezz / 100.0;
 
 			if (null == merchantFinance) {
 				return "fail";
@@ -593,18 +607,20 @@ public class OpenApiController {
 			// 修改订单入库
 			saveRechargeOrder(orderByMerchantOrderNumber, poundage, arrivalAmount);
 
-			MerchantFrezzon merchantFrezzon = new MerchantFrezzon();
-			merchantFrezzon.setAmount(frezzAmount);
-			merchantFrezzon.setFrezzTime(new Date());
-			merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
-			merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
-			merchantFrezzon.setMerchantId(orderByMerchantOrderNumber.getMerchantId());
-			merchantFrezzon.setOrderNumber(orderByMerchantOrderNumber.getOrderNumber());
+			if (frezzAmount.compareTo(new BigDecimal(0)) > 0) {
+				MerchantFrezzon merchantFrezzon = new MerchantFrezzon();
+				merchantFrezzon.setAmount(frezzAmount);
+				merchantFrezzon.setFrezzTime(new Date());
+				merchantFrezzon.setArrivalTime(DateUtils.getAfterDayDate("1"));
+				merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
+				merchantFrezzon.setMerchantId(orderByMerchantOrderNumber.getMerchantId());
+				merchantFrezzon.setOrderNumber(orderByMerchantOrderNumber.getOrderNumber());
 
-			merchantFrezzService.insertSelective(merchantFrezzon);
-			merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
-			merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
-			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+				merchantFrezzService.insertSelective(merchantFrezzon);
+				merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
+				merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
+				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+			}
 		} catch (Exception e) {
 			log.error("save order back error");
 		}
@@ -701,7 +717,10 @@ public class OpenApiController {
 		order.setPayBank(getValue(signMap, "bank_code"));
 		order.setPayAmount(new BigDecimal(getValue(signMap, "pay_amount")));
 		order.setCreateTime(new Date());
-		order.setPayChannel(getValue(signMap, "pay_channel"));
+
+		Channel channel = channelService.selectChannelByMerchantId(merchantUUID);
+		order.setPayChannel(channel.getName());
+
 		order.setStatus(OrderStatusConsts.SUBMIT);
 		order.setType(MerchantOrderTypeConsts.RECHARGE_ORDER);
 
@@ -711,6 +730,12 @@ public class OpenApiController {
 		order.setMerchantOrderNumber(getValue(signMap, "order_number"));
 		signMap.put("we_order_number", orderNumber);
 
+		MerchantAccountInfoVO merchantAccountInfoVO = new MerchantAccountInfoVO();
+		merchantAccountInfoVO.setUuid(merchantUUID);
+		MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService
+				.getMerchantInfoByUUID(merchantAccountInfoVO);
+		Integer payLevel = merchantInfoByUUID.getPayLevel();
+		order.setTradeType(payLevel == 0 ? "D0" : "D1");
 		merchantRechargeOrderService.insertSelective(order);
 		return order;
 	}

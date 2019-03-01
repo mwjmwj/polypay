@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.bean.MerchantApi;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.dao.MerchantApiMapper;
@@ -90,6 +92,16 @@ public class MerchantApiService implements IMerchantApiService {
 	public void updateMerchantApi(MerchantApi merchantApi) throws ServiceException {
 		try {
 			merchantApiMapper.updateMerchantApi(merchantApi);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public PageList<MerchantApi> listMerchantApi(PageBounds pageBounds, MerchantApi merchantApi)
+			throws ServiceException {
+		try {
+			return merchantApiMapper.listMerchantApi(pageBounds,merchantApi);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

@@ -86,7 +86,7 @@
 				},{
 					field : 'uuid',
 					title : '商户ID',
-					width : 278,
+					width : 80,
 					align : 'center',
 					fixed : 'left',
 					style : 'color:red'

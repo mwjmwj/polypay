@@ -1,5 +1,7 @@
 package com.polypay.platform.dao;
 
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.bean.MerchantFinance;
 
 public interface MerchantFinanceMapper {
@@ -16,4 +18,6 @@ public interface MerchantFinanceMapper {
     int updateByPrimaryKey(MerchantFinance record);
 
 	MerchantFinance getMerchantFinanceByUUID(String merchantUUID);
+
+	PageList<MerchantFinance> listMerchantFinance(PageBounds pageBounds, MerchantFinance merchantFinance);
 }

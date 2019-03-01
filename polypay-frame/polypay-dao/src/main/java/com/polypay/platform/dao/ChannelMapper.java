@@ -14,4 +14,6 @@ public interface ChannelMapper extends BaseMapper<Channel>{
     int updateByPrimaryKeySelective(Channel record);
 
     int updateByPrimaryKey(Channel record);
+
+	Channel selectChannelByMerchantId(String merchantUUID);
 }

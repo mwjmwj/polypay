@@ -88,13 +88,12 @@
 		</c:if>
 	
 		<div class="layui-form-item layui-form-pane">
-			<label class="layui-form-label">商户号等级</label>
+			<label class="layui-form-label">冻结费率</label>
 			<div class="layui-input-block">
 			<div class="layui-inline">
-			
 				<input type="text" name="" autocomplete="off" value="${merchantAccount.payLevel}"
 					class="layui-input" style="width: 200px" disabled="disabled">
-					</div>
+			</div>
 			</div>
 		</div>
 		

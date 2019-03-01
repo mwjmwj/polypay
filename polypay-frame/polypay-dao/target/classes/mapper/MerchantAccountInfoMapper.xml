@@ -70,7 +70,7 @@
       #{helppayStatus,jdbcType=INTEGER}, #{payLevel,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, 
       #{channelId,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantAccountInfo" >
+  <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantAccountInfo" useGeneratedKeys="true" keyProperty="id" >
     insert into merchant_account_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

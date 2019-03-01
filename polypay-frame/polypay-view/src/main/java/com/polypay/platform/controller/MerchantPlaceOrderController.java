@@ -24,6 +24,7 @@ import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.bean.SystemConsts;
+import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
@@ -147,6 +148,12 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 
 				if (null == merchantFinance) {
 					ResponseUtils.exception(response, "未有財務信息", RequestStatus.FAILED.getStatus());
+					return response;
+				}
+				
+				
+				if (merchantFinance.getStatus().equals(MerchantFinanceStatusConsts.FREEZE)) {
+					ResponseUtils.exception(response, "财务已冻结", RequestStatus.FAILED.getStatus());
 					return response;
 				}
 

@@ -80,6 +80,18 @@
 			</div>
 			<div class="layui-form-mid layui-word-aux">以千分位为计数单位</div>
 		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">冻结率
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="payLevel" id="payLevel"
+					lay-verify="number" placeholder="冻结率"
+					class="layui-input">
+			</div>
+			<div class="layui-form-mid layui-word-aux">0 代表D+0, 数字代表 D+1 以及冻结率 比如 30 表示  D+1 冻结30%</div>
+		</div>
+		
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">开通代付</label>

@@ -113,7 +113,7 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 				PayType payType = new PayType();
 				payType.setMerchantId(requestMerchantInfo.getUuid());
 				payType.setRate(requestMerchantInfo.getRate());
-				payType.setName("支付宝");
+				payType.setName("WY");
 				payType.setStatus(0);
 				payTypeService.insertSelective(payType);
 				response.setMessage("注册成功!");

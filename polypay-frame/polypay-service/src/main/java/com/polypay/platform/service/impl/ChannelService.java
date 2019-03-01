@@ -76,6 +76,15 @@ public class ChannelService implements IChannelService{
 		}
 		return 0;
 	}
+
+	@Override
+	public Channel selectChannelByMerchantId(String merchantUUID) throws ServiceException {
+		try {
+			return channelMapper.selectChannelByMerchantId(merchantUUID);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
 	
 	
 

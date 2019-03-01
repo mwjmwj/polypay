@@ -98,7 +98,7 @@
 				}, {
 					field : 'uuid',
 					title : '代理商ID',
-					width : 278,
+					width : 80,
 					align : 'center',
 					fixed : 'left',
 					style : 'color:red'

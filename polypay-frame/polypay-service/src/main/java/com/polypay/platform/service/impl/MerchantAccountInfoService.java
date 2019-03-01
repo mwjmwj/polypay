@@ -134,10 +134,11 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 
 			// 保存基础信息
 			MerchantAccountInfo merchantAccountInfo = new MerchantAccountInfo();
+
 			BeanUtils.copyProperties(requestMerchantInfo, merchantAccountInfo);
-			String uuid = UUIDUtils.get32UUID();
-			merchantAccountInfo.setUuid(uuid);
-			requestMerchantInfo.setUuid(uuid);
+
+//			String uuid = UUIDUtils.get32UUID();
+
 			merchantAccountInfo.setStatus(MerchantAccountInfoStatusConsts.PRE_AUDIT);
 			String passWord = requestMerchantInfo.getPassWord();
 			String md5Password = MD5.md5(passWord);
@@ -148,12 +149,16 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			merchantAccountInfo.setPayLevel(MerchantPayLevelConsts.VIP_SLIVE);
 			merchantAccountInfo.setRoleId(RoleConsts.MERCHANT);
 			merchantAccountInfo.setCreateTime(new Date());
-			
-			merchantAccountInfoMapper.insertSelective(merchantAccountInfo);
 
+			merchantAccountInfoMapper.insertSelective(merchantAccountInfo);
+			Integer merchant_uuid = 13350 + merchantAccountInfo.getId();
+			merchantAccountInfo.setUuid(merchant_uuid.toString());
+			requestMerchantInfo.setUuid(merchant_uuid.toString());
+			merchantAccountInfoMapper.updateByPrimaryKeySelective(merchantAccountInfo);
+			
 			// 保存财务信息
 			MerchantFinance merchantFinance = new MerchantFinance();
-			merchantFinance.setMerchantId(uuid);
+			merchantFinance.setMerchantId(merchant_uuid.toString());
 			merchantFinance.setCreateTime(new Date());
 			merchantFinance.setBlanceAmount(new BigDecimal(0.0));
 			String payPassWord = requestMerchantInfo.getPayPassword();
@@ -165,7 +170,7 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 
 			// 保存用户Api信息
 			MerchantApi merchantApi = new MerchantApi();
-			merchantApi.setMerchantId(uuid);
+			merchantApi.setMerchantId(merchant_uuid.toString());
 			merchantApi.setCreateTime(new Date());
 			String secretKey = UUIDUtils.get32UUID();
 			merchantApi.setSecretKey(secretKey);
@@ -190,7 +195,6 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
 	}
-
 
 	@Override
 	public List<Menu> getMerchantMenu(Integer roleId) throws ServiceException {
@@ -223,11 +227,11 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 	}
 
 	@Override
-	public PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param) throws ServiceException {
+	public PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param)
+			throws ServiceException {
 		try {
-			
-			
-			return merchantAccountInfoMapper.listMerchantAccountInfo(pageBounds,param);
+
+			return merchantAccountInfoMapper.listMerchantAccountInfo(pageBounds, param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

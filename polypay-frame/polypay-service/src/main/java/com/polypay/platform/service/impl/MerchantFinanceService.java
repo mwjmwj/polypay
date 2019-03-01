@@ -226,5 +226,15 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 		return new PageBounds(defalutPage, defaultRows, true);
 	}
 
+	@Override
+	public PageList<MerchantFinance> listMerchantFinance(PageBounds pageBounds, MerchantFinance merchantFinance)
+			throws ServiceException {
+		try {
+			return merchantFinanceMapper.listMerchantFinance(pageBounds, merchantFinance);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 
 }

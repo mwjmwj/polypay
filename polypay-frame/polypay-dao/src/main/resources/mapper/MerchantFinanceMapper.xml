@@ -123,4 +123,21 @@
     where merchant_id = #{merchantUUID}
   
   </select>
+  
+	<select id="listMerchantFinance"
+		parameterType="com.polypay.platform.bean.MerchantFinance"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_finance
+		where
+		1=1
+		<if test="merchantId != null">
+			and merchant_id = #{merchantId}
+		</if>
+
+	</select>
+  
+  
+  
 </mapper>

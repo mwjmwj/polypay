@@ -113,7 +113,7 @@
 					fixed : 'left',
 					style : 'color:red',
 					templet : function(row) {
-						return "T+1"
+						return row.tradeType
 					}
 				}, {
 					field : 'orderNumber',
