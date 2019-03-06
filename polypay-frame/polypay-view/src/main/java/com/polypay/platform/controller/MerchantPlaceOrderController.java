@@ -24,7 +24,9 @@ import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.bean.SystemConsts;
+import com.polypay.platform.consts.MerchantAccountInfoStatusConsts;
 import com.polypay.platform.consts.MerchantFinanceStatusConsts;
+import com.polypay.platform.consts.MerchantHelpPayConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
@@ -152,10 +154,23 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 				}
 				
 				
-				if (merchantFinance.getStatus().equals(MerchantFinanceStatusConsts.FREEZE)) {
-					ResponseUtils.exception(response, "财务已冻结", RequestStatus.FAILED.getStatus());
+				if (!merchantFinance.getStatus().equals(MerchantFinanceStatusConsts.USABLE)) {
+					ResponseUtils.exception(response, "网络异常", RequestStatus.FAILED.getStatus());
 					return response;
 				}
+				
+				if(!merchant.getStatus().equals(MerchantAccountInfoStatusConsts.SUCCESS))
+				{
+					ResponseUtils.exception(response, "网络异常", RequestStatus.FAILED.getStatus());
+					return response;
+				}
+				
+				if(!merchant.getHelppayStatus().equals(MerchantHelpPayConsts.OPEN_HELP_PAY))
+				{
+					ResponseUtils.exception(response, "网络异常", RequestStatus.FAILED.getStatus());
+					return response;
+				}
+				
 
 				// 结算必须有结算金额
 				BigDecimal settleAmount = merchantPlaceOrderVO.getPayAmount();
@@ -221,8 +236,7 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 		return response;
 
 	}
-	
-	
+
 	
 	@GetMapping("merchant/place/query")
 	public String queryMerchantPlaceOrder(@RequestParam(name="id") Integer id,Map<String,Object> result) throws ServiceException

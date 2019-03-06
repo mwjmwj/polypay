@@ -35,38 +35,38 @@ public class MainMenuController {
 	public String getMainDate(Map<String,Object> result) throws ServiceException{
 		
 		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
-		
-		// 图标数据
-		List<MerchantMainDateVO> echarData = merchantRechargeOrderService.allTimeMerchantOrder(merchant.getUuid());
-		
-		String[] ehtimes = new String[echarData.size()];
-		String[] ehOrderNumber = new String[echarData.size()];
-		BigDecimal[] ehOrderAmount = new BigDecimal[echarData.size()];
-		
-		int index = 0;
-		
-		// 图标数据赋值
-		for (MerchantMainDateVO merchantMainDateVO : echarData) {
-			ehtimes[index] = merchantMainDateVO.getCreateTime();
-			ehOrderNumber[index] = merchantMainDateVO.getMerchantAllOrderNumber();
-			ehOrderAmount[index] = merchantMainDateVO.getMerchantAllRechargeAmount();
-			index++;
-		}
-		
-		result.put("ehtimes", JSON.toJSON(ehtimes));
-		result.put("ehOrderNumbers", JSON.toJSON(ehOrderNumber));
-		result.put("ehOrderAmounts", JSON.toJSON(ehOrderAmount));
-		
-		
-		// 个人总冻结金额
-		String allFrezzAmount = merchantFrezzService.allMerchantFrezzAmount(merchant.getUuid());
-		
-		//个人可用金额
+//		
+//		// 图标数据
+//		List<MerchantMainDateVO> echarData = merchantRechargeOrderService.allTimeMerchantOrder(merchant.getUuid());
+//		
+//		String[] ehtimes = new String[echarData.size()];
+//		String[] ehOrderNumber = new String[echarData.size()];
+//		BigDecimal[] ehOrderAmount = new BigDecimal[echarData.size()];
+//		
+//		int index = 0;
+//		
+//		// 图标数据赋值
+//		for (MerchantMainDateVO merchantMainDateVO : echarData) {
+//			ehtimes[index] = merchantMainDateVO.getCreateTime();
+//			ehOrderNumber[index] = merchantMainDateVO.getMerchantAllOrderNumber();
+//			ehOrderAmount[index] = merchantMainDateVO.getMerchantAllRechargeAmount();
+//			index++;
+//		}
+//		
+//		result.put("ehtimes", JSON.toJSON(ehtimes));
+//		result.put("ehOrderNumbers", JSON.toJSON(ehOrderNumber));
+//		result.put("ehOrderAmounts", JSON.toJSON(ehOrderAmount));
+//		
+//		
+//		// 个人总冻结金额
+//		String allFrezzAmount = merchantFrezzService.allMerchantFrezzAmount(merchant.getUuid());
+//		
+//		//个人可用金额
 		MerchantFinance merchantFinance = merchantFinanceService.getMerchantFinanceByUUID(merchant.getUuid());
-		
-		result.put("allfrezzamount", allFrezzAmount);
+//		
+//		result.put("allfrezzamount", allFrezzAmount);
 		result.put("merchantFinance", merchantFinance);
-		
+//		
 		
 		
 		return "admin/indexmenu";

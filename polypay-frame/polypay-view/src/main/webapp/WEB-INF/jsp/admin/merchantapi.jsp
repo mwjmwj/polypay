@@ -31,6 +31,15 @@
 
 
 <div class="layui-form-item layui-form-text">
+    <label class="layui-form-label">商户号</label>
+    <div class="layui-input-block">
+      <input placeholder="商户号" id="merchantId" readonly="readonly" class="layui-input">${merchantapi.merchantId }</textarea>
+    </div>
+  </div>
+  
+  
+
+<div class="layui-form-item layui-form-text">
     <label class="layui-form-label">秘钥</label>
     <div class="layui-input-block">
       <textarea placeholder="请输入内容" id="apikey" readonly="readonly" class="layui-textarea">${merchantapi.secretKey }</textarea>

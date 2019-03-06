@@ -229,12 +229,14 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 	
 
 				// 返回结果失败 回滚订单
-				if (null == status || status.toString().equals("0")) {
+				if (status.toString().equals("0")) {
 
 					// 回滚
 					rollBackSettlerOrder(merchantSettleOrder);
 					return;
 				}
+				
+				// 未支付状态返回
 				if (status.toString().equals("2")) {
 					return;
 				}

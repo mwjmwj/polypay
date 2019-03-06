@@ -20,7 +20,8 @@
 <link rel="stylesheet" href="../static/css/finance.css">
 
 </head>
-<script type="text/javascript" src="../static/js/layui.all.js"></script>
+<script type="text/javascript" src="../static/js/layui.js"></script>
+<script src="../static/js/jquery.min.js" type="text/javascript"></script>
 <body style="background-color: white;">
 
 	<script type="text/html" id="financeedit">

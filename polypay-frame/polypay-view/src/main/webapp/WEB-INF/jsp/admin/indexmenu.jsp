@@ -10,7 +10,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>poly-pay</title>
+<title>源盛丰支付</title>
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
@@ -18,10 +18,8 @@
 	<link rel="stylesheet" href="../static/js/css/layui.css">
 	<link href="../static/js/maincss/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 	<link href="../static/js/maincss/font-awesome.css?v=4.4.0" rel="stylesheet">
-
     <!-- Morris -->
     <link href="../static/js/maincss/morris-0.4.3.min.css" rel="stylesheet">
-
     <!-- Gritter -->
     <link href="../static/js/maincss/jquery.gritter.css" rel="stylesheet">
 
@@ -40,8 +38,7 @@
 
     <!-- jQuery UI -->
     <script src="../static/js/jquery-ui.min.js"></script>
-    
-     <script src='../static/js/echarts.js'></script>
+
     
 <body class="gray-bg">
 
@@ -97,13 +94,13 @@
         </div>
         </div>
         
-        <div>
+        <!-- <div>
        	 <div id='ordernumbermain' style='width:50%;height:400px;float:left'></div>
        	 <div id='orderamountmain' style='width:50%;height:400px;float:left'></div>
-    	</div>
+    	</div> -->
     
 	
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		function createTime(v) {
 			var date = new Date(v);
 			var y = date.getFullYear();
@@ -188,6 +185,6 @@
             //使用刚指定的配置项和数据显示图表
             orderNumberChart.setOption(option);
             orderAmountChart.setOption(option1);
-        </script>
+        </script> -->
 </body>
 </html>

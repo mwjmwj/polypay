@@ -26,6 +26,6 @@
 		style="margin-top: 50px;">
 		<legend>认证信息</legend>
 	</fieldset>
-
+	待开发...
 </body>
 </html>

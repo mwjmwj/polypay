@@ -88,7 +88,7 @@
 		</c:if>
 	
 		<div class="layui-form-item layui-form-pane">
-			<label class="layui-form-label">冻结费率</label>
+			<label class="layui-form-label">冻结比例</label>
 			<div class="layui-input-block">
 			<div class="layui-inline">
 				<input type="text" name="" autocomplete="off" value="${merchantAccount.payLevel}"
@@ -99,8 +99,7 @@
 		
 		<div class="layui-form-item">
     	<div class="layui-input-block">
-      <button class="layui-btn" lay-submit lay-filter="save">保存</button>
-      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+ 
    	 </div>
   </div>
 	

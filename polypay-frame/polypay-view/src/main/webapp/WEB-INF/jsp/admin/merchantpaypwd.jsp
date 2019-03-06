@@ -100,20 +100,20 @@
 				var mobileNumber = $("#mobileNumber").val();
 				var newPayPassword = MD5($("#pwd").val());
 				var verifyCode = $("#code").val();
-				var data = {mobileNumber:mobileNumber,newPassword:newPassword,verifyCode:verifyCode,verifyType:"UPDATE_PAY_PWD"};
+				var data = {mobileNumber:mobileNumber,newPayPassword:newPayPassword,verifyCode:verifyCode,verifyType:"UPDATE_PAY_PWD"};
 				$.post("../merchant/password/update", 
 						data, function(data) {
 					if (data.status == 0) {
-						layer.msg("注册成功！即将转向登陆页面！", {
+						layer.msg("修改成功！", {
 							icon : 1,
 							anim : 4,
-							time : 2000
+							time : 1000
 						});
 					} else {
-						layer.msg("注册失败！请重试！" + data.message, {
+						layer.msg("修改失败！请重试！" + data.message, {
 							icon : 5,
 							anim : 6,
-							time : 2000
+							time : 1000
 						});
 					}
 				});

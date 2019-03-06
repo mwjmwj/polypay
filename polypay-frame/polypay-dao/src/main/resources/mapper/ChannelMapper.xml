@@ -83,7 +83,7 @@
 	<select id="selectChannelByMerchantId"
 		parameterType="java.lang.String" resultMap="BaseResultMap">
 		select c.* from merchant_account_info mai left join channel c on
-		mai.channle_id = c.id where mai.merchant_id = #{merchant_id}
+		mai.channel_id = c.id where mai.uuid = #{merchant_id}
 	</select>
   
 </mapper>

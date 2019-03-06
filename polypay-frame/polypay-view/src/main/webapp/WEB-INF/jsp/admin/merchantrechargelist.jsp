@@ -68,7 +68,6 @@
 
 	<script type="text/html" id="barDemo">
  		 <a class="layui-btn layui-btn-xs" lay-event="edit">查看</a>
-  		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
@@ -115,6 +114,13 @@
 					templet : function(row) {
 						return row.tradeType
 					}
+				}
+				, {
+					field : 'merchantOrderNumber',
+					title : '商户订单号',
+					align : 'center',
+					width : 230,
+					sort : true
 				}, {
 					field : 'orderNumber',
 					title : '订单号',

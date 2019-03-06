@@ -204,25 +204,9 @@ public class SiChuanPayChannel implements IPayChannel {
 		return StringUtils.isEmpty(parameter) ? "" : parameter;
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Map<String, Object> getOrder(String channelOrderNumber) {
-
-		String baseUrl = "http://api.yundesun.com/apiorderquery?";
-		StringBuffer signParam = new StringBuffer();
-		signParam.append("customerid=10990").append("&sdorderno=" + channelOrderNumber)
-				.append("&reqtime=" + DateUtils.getOrderTime()).append("&025aa2a5204cc469e3bd34a5d1836cea9a11defa");
-		String sign = MD5.md5(signParam.toString());
-
-		baseUrl += signParam.toString() + "&sign=" + sign;
-
-		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(baseUrl);
-
-		Map result = (Map) JSONUtils.parse(httpGet.getResultAsString());
-		// {"status":1,"msg":"成功订单","sdorderno":"商户订单号","total_fee":"订单金额","sdpayno":"平台订单号"}
-		// {"status":0,"msg":"失败订单"}
-
-		return result;
+		return null;
 	}
 
 	/**
@@ -310,9 +294,9 @@ public class SiChuanPayChannel implements IPayChannel {
 
 		if ("200".equals(status)) {
 			result.put("status", "1");
-		} else {
+		} else{
 			result.put("status", "0");
-		}
+		} 
 
 		return result;
 	}
@@ -484,14 +468,19 @@ public class SiChuanPayChannel implements IPayChannel {
 		
 		String bxcode = result.get("bxcode").toString();
 		
-		if("200".equals(bxcode))
+		if("200".equals(bxcode))   // 成功
 		{
 			String bxstatus = result.get("bxstatus").toString();
 			if("SUCCESS".equals(bxstatus))
 			{
 				result.put("status", "1");
 			}
-		}else
+		}
+		else if("400".equals(bxcode))  // 待支付
+		{
+			result.put("status", "2");
+		}
+		else if("401".equals(bxcode))  // 失败
 		{
 			result.put("status", "0");
 		}

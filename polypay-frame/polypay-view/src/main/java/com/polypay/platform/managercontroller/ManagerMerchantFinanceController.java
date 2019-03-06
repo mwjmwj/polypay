@@ -17,6 +17,7 @@ import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantApi;
 import com.polypay.platform.bean.MerchantFinance;
+import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
@@ -69,7 +70,7 @@ public class ManagerMerchantFinanceController extends BaseController<MerchantFin
 	public String getMerchantFinance(Integer financeId,Map<String,Object> result) throws ServiceException {
 		try {
 			MerchantFinance selectByPrimaryKey = merchantFinanceService.selectByPrimaryKey(financeId);
-			result.put("merchantapi", selectByPrimaryKey);
+			result.put("merchantfinance", selectByPrimaryKey);
 		} catch (ServiceException e) {
 			log.error(e.getMessage());
 			throw new ServiceException(e.getMessage(), RequestStatus.FAILED.getStatus());
@@ -77,5 +78,44 @@ public class ManagerMerchantFinanceController extends BaseController<MerchantFin
 
 		return "adminmanager/merchantfinance";
 	}
+	
+	@RequestMapping("/merchantmanager/merchantfinance/update")
+	@ResponseBody
+	public String updateMerchantFinance(MerchantFinance merchantFinance) throws ServiceException {
+		try {
+			MerchantFinance updateFinance = new MerchantFinance();
+			if(null == merchantFinance.getId())
+			{
+				return "not found finance msg";
+			}
+			updateFinance.setId(merchantFinance.getId());
+			
+			if(null!=merchantFinance.getStatus())
+			{
+				if(MerchantFinanceStatusConsts.FREEZE == merchantFinance.getStatus())
+				{
+					updateFinance.setStatus(MerchantFinanceStatusConsts.FREEZE);
+					
+				}else if(MerchantFinanceStatusConsts.USABLE == merchantFinance.getStatus())
+				{
+					updateFinance.setStatus(MerchantFinanceStatusConsts.USABLE);
+				}
+			}
+			
+			if(!StringUtils.isEmpty(merchantFinance.getPayPassword()))
+			{
+				updateFinance.setPayPassword(merchantFinance.getPayPassword());
+			}
+			
+			merchantFinanceService.updateByPrimaryKeySelective(updateFinance);
+		} catch (ServiceException e) {
+			log.error(e.getMessage());
+			throw new ServiceException(e.getMessage(), RequestStatus.FAILED.getStatus());
+		}
+
+		return "success";
+	}
+	
+	
 	
 }

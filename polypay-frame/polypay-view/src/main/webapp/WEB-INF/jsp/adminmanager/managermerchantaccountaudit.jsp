@@ -59,13 +59,12 @@
 		<div class="layui-form-item layui-form-pane">
 			<label class="layui-form-label">商戶密码</label>
 			<div class="layui-input-inline">
-				<input type="text" name="pas" lay-verify="required" id="passWord" placeholder="请输入" autocomplete="off" value="${merchantAccount.passWord }"
+				<input type="text" name="passWord" lay-verify="required" id="passWord" placeholder="请输入" autocomplete="off" value="${merchantAccount.passWord }"
 					class="layui-input" style="width: 212px" lay-filter="password" onchange="securityPas()">
 			</div>
 			<div class="layui-form-mid layui-word-aux" style="margin-left: 20px">密码显示为加密密码。</div>
 		</div>
 		
-		<input type="hidden" id="pass" name="passWord" />
 		<div class="layui-form-item layui-form-pane">
 			<label class="layui-form-label">创建时间</label>
 			<div class="layui-input-block">
@@ -96,7 +95,7 @@
 		</c:if>
 	
 		<div class="layui-form-item layui-form-pane">
-			<label class="layui-form-label">商户号等级</label>
+			<label class="layui-form-label">冻结费率</label>
 			
 			<div class="layui-input-inline">
 				<input type="text" lay-verify="required" name="payLevel" autocomplete="off" value="${merchantAccount.payLevel}"
@@ -107,7 +106,7 @@
 		
 		
 		<div class="layui-form-item layui-form-pane">
-			<label class="layui-form-label">商户号等级</label>
+			<label class="layui-form-label">审核状态</label>
 		 <div class="layui-input-block">
      		 <div class="layui-inline">
       		  <select name="status" style="width: 212px">
@@ -115,14 +114,17 @@
 	          
 	          	<c:if test="${merchantAccount.status ==0}">
 	          	<option value="0" selected="selected">审核通过</option>
+	          	<option value="1">待审核</option>
 	          	<option value="-1">审核不通过</option>
      	 		</c:if>
      	 		<c:if test="${merchantAccount.status ==-1}">
 	         	 <option value="0" >审核通过</option>
 	          	<option value="-1" selected="selected">审核不通过</option>
+	          	<option value="1">待审核</option>
      	 		</c:if>
      	 	
      	 		<c:if test="${merchantAccount.status ==1}">
+     	 		<option value="1" selected="selected">待审核</option>
 	         	 <option value="0" >审核通过</option>
 	          	<option value="-1" >审核不通过</option>
      	 		</c:if>
@@ -191,7 +193,7 @@
 	
 	function securityPas()
 	{
-		$("#pass").val(MD5($("#passWord").val()));
+		$("#passWord").val(MD5($("#passWord").val()));
 	}
 
 </script>

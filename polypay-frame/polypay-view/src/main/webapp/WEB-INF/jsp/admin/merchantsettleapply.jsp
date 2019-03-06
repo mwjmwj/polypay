@@ -29,7 +29,7 @@
 		<p style="color: red;">1. 结算申请流程需后台审批，注意查看订单状态。</p>
 		<p style="color: red;">2. 结算申请，后台审核通过后，2个工作日内到账,节假日顺延。</p>
 		<p style="color: red;">3. 结算金额 单笔 最高49999元. 当日最高 单卡 20万</p>
-		<p style="color: red;">4.最低提现金额 20元.</p>
+		<p style="color: red;">4.最低提现金额 10元.</p>
 	</blockquote>
 
 	<fieldset class="layui-elem-field layui-field-title"
@@ -54,7 +54,7 @@
 				<div class="layui-input-inline">
 					<input type="text" lay-verify="required"
 						placeholder="${merchantfinance.blanceAmount }元 "
-						autocomplete="off" class="layui-input" id="postamount" onblur="textamount(this)"="textamount()" name="settleAmount">
+						autocomplete="off" class="layui-input" id="postamount" onblur="textamount()" name="settleAmount">
 				</div>
 				
 			</div>

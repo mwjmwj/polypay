@@ -111,7 +111,7 @@
 		<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip"
 			lay-allowclose="true">
 			<ul class="layui-tab-title" id="tabName">
-				 <li>控制面板</li>
+				 <li>首页</li>
 			</ul>
 			<div class="layui-tab-content" style="background-color: #F5F5F5;margin-left: 10px;margin-top: 10px">
 				 <div class="layui-tab-item layui-show">

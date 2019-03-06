@@ -24,6 +24,7 @@ import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantSettleOrder;
 import com.polypay.platform.bean.SystemConsts;
+import com.polypay.platform.consts.MerchantAccountInfoStatusConsts;
 import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantOrderTypeConsts;
 import com.polypay.platform.consts.OrderStatusConsts;
@@ -31,6 +32,7 @@ import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountBindbankService;
+import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
 import com.polypay.platform.service.ISystemConstsService;
@@ -39,6 +41,7 @@ import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
 import com.polypay.platform.vo.MerchantAccountBindbankVO;
+import com.polypay.platform.vo.MerchantAccountInfoVO;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantSettleOrderVO;
 
@@ -55,6 +58,9 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 
 	@Autowired
 	private IMerchantAccountBindbankService merchantAccountBindbankService;
+	
+	@Autowired
+	private IMerchantAccountInfoService merchantAccountInfoService;
 	
 	@Autowired
 	private ISystemConstsService systemConstsService;
@@ -138,11 +144,20 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 					return response;
 				}
 				
-				if (merchantFinance.getStatus().equals(MerchantFinanceStatusConsts.FREEZE)) {
-					ResponseUtils.exception(response, "财务已冻结", RequestStatus.FAILED.getStatus());
+				if (!merchantFinance.getStatus().equals(MerchantFinanceStatusConsts.USABLE)) {
+					ResponseUtils.exception(response, "网络异常", RequestStatus.FAILED.getStatus());
 					return response;
 				}
-
+				
+				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
+				merchantInfo.setUuid(merchant.getUuid());
+				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
+			
+				if(!merchantInfoByUUID.getStatus().equals(MerchantAccountInfoStatusConsts.SUCCESS))
+				{
+					ResponseUtils.exception(response, "网络异常", RequestStatus.FAILED.getStatus());
+					return response;
+				}
 
 				// 结算必须有结算金额
 				BigDecimal settleAmount = merchantSettleOrderVO.getSettleAmount();
@@ -235,7 +250,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		return response;
 
 	}
-	
+
 	@RequestMapping("merchant/settle/order/pre")
 	public String preSettleOrder(Map<String,Object>result) throws ServiceException
 	{

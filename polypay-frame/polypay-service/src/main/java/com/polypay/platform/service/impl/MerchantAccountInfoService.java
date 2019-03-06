@@ -146,9 +146,10 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			merchantAccountInfo.setHelppayStatus(
 					merchantAccountInfo.getHelppayStatus() == null ? MerchantHelpPayConsts.CLOSE_HELP_PAY
 							: merchantAccountInfo.getHelppayStatus());
-			merchantAccountInfo.setPayLevel(MerchantPayLevelConsts.VIP_SLIVE);
+			merchantAccountInfo.setPayLevel(requestMerchantInfo.getPayLevel());
 			merchantAccountInfo.setRoleId(RoleConsts.MERCHANT);
 			merchantAccountInfo.setCreateTime(new Date());
+			merchantAccountInfo.setChannelId(Integer.parseInt(requestMerchantInfo.getPayChannel()));
 
 			merchantAccountInfoMapper.insertSelective(merchantAccountInfo);
 			Integer merchant_uuid = 13350 + merchantAccountInfo.getId();
