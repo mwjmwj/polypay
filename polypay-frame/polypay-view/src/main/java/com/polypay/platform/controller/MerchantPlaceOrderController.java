@@ -194,11 +194,29 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 				}
 
 				BigDecimal blanceAmount = merchantFinance.getBlanceAmount();
-				if (blanceAmount.compareTo(settleAmount) < 0) {
-					ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
-					return response;
+				Integer channelId = merchant.getChannelId();
+				BigDecimal serviceAmount;
+				
+				// 新网支付
+				if(channelId == 2)
+				{
+					SystemConsts consts = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT);
+					serviceAmount = new BigDecimal(consts.getConstsValue());
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantPlaceOrderVO.setPayAmount(settleAmount);
+				}else
+				{
+					if (blanceAmount.compareTo(settleAmount) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
 				}
 
+				
 				Integer merchantBindBankId = merchantPlaceOrderVO.getMerchantPlaceBindBankId();
 				if (null == merchantBindBankId) {
 					ResponseUtils.exception(response, "请选择提现银行卡", RequestStatus.FAILED.getStatus());

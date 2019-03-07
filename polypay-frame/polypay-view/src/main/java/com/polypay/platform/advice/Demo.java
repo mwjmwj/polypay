@@ -2,6 +2,7 @@ package com.polypay.platform.advice;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 
 public class Demo {
 
@@ -85,6 +86,13 @@ public class Demo {
 ////		HttpClientUtil.httpGet(sendPath);
 //
 //	}
+	public static void main(String[] args) {
+		
+//			frezzAmount = arrivalAmount.multiply(new BigDecimal(frezzrate)).setScale(4, BigDecimal.ROUND_HALF_UP);
+			BigDecimal bigDecimal = new BigDecimal(0);
+			BigDecimal setScale = new BigDecimal(10).multiply(bigDecimal).setScale(4, BigDecimal.ROUND_HALF_UP);
+			System.out.println(setScale);
+	}
 
 	
 }

@@ -45,6 +45,8 @@
           <option value="">选择订单状态</option>
           <option value="-1">失败</option>
           <option value="0">成功</option>
+          <option value="1">付款中</option>
+           <option value="2">处理中</option>
         </select>
       </div>
     </div>
@@ -148,7 +150,7 @@
 							return '<span style="color: red;">失败</span>';
 						}
 						else if (row.status == 1) {
-							return '<span style="color: orange;">审核中</span>';
+							return '<span style="color: orange;">付款中</span>';
 						}
 						else if (row.status == 2) {
 								return '<span style="color: #00FF00;">处理中</span>';

@@ -65,6 +65,11 @@ public class ManagerMerchantRechargeOrderController extends BaseController<Merch
 				merchantRechargeOrderVO.setsBeginTime(datas[0]);
 				merchantRechargeOrderVO.setsEndTime(datas[1]);
 			}
+			
+			String merchantId = getRequest().getParameter("merchantId");
+			if (!StringUtils.isEmpty(merchantId)) {
+				merchantRechargeOrderVO.setMerchantId(merchantId);;
+			}
 
 			PageBounds pageBounds = this.getPageBounds();
 			PageList<MerchantRechargeOrderVO> pageList = null;

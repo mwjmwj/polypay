@@ -144,7 +144,7 @@
 										.getFrameIndex(window.name); //获取当前窗口的name
 								parent.layer.close(index);
 								window.location.reload();
-
+								window.parent.location.reload();
 							});
 						}
 						else{

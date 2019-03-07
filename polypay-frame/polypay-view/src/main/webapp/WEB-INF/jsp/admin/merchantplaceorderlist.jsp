@@ -45,6 +45,7 @@
           <option value="-1">失败</option>
           <option value="0">成功</option>
           <option value="1">审核中</option>
+          <option value="2">已处理</option>
         </select>
       </div>
    		</div>
@@ -159,7 +160,7 @@
 							return '<span style="color: orange;">审核中</span>';
 						}
 						else if (row.status == 2) {
-								return '<span style="color: #00FF00;">处理</span>';
+								return '<span style="color: #00FF00;">已处理</span>';
 							}
 					}
 				}, {

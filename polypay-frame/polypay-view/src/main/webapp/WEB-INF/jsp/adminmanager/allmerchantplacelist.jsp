@@ -293,14 +293,16 @@
 			      layer.close(index);
 			      //向服务端发送删除指令
 			    });
-			  } else if(layEvent === 'edit'){ //编辑
-			    //do something
-			    
-			    //同步更新缓存对应的值
-			    obj.update({
-			      username: '123'
-			      ,title: 'xxx'
-			    });
+			  } else if(layEvent === 'audit'){ //编辑
+				  layer.open({
+					  area:['500px','700px'],
+					  type: 2,
+					  title:'结算订单详细',
+					  icon:1,
+						anim:5,
+						maxmin: true,
+					  content: '../merchantmanager/place/query?id='+data.id
+					}); 
 			  }
 			});
 			

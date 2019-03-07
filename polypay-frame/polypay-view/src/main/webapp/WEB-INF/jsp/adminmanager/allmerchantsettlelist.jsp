@@ -28,7 +28,10 @@
 <body>
 <div class="layui-form">
 	<div class="layui-row"style="margin-top: 10px" >
- 	<div class="layui-inline">		
+	<div class="layui-inline">	
+ 		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户号" />
+		</div>
+ 		<div class="layui-inline">	
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
 		 <div class="layui-inline">
@@ -244,6 +247,7 @@
 						var begintime = $('#begintime').val();
 						var endtime = $('#endtime').val();
 						var status = $('#status').val();
+						var merchantId = $('#merchantId').val();
 						//执行重载
 						table.reload('settleReload', {
 							page : {
@@ -254,7 +258,8 @@
 								orderNumber : ordernumber,
 								beginTime:begintime,
 								endTime:endtime,
-								status:status
+								status:status,
+								merchantId:merchantId
 							}
 						});
 					}

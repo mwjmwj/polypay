@@ -156,7 +156,7 @@
 					}
 				}, {
 					field : 'payLevel',
-					title : '支付等级',
+					title : '冻结费率',
 					width : 100,
 					align : 'center'
 					}

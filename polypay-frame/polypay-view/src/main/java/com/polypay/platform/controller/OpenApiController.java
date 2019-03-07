@@ -528,6 +528,7 @@ public class OpenApiController {
 		return "success";
 	}
 
+
 	@RequestMapping("/getway/order/query")
 	public Map<String, Object> getOrder(HttpServletRequest request) throws ServiceException {
 
@@ -630,12 +631,11 @@ public class OpenApiController {
 				merchantFrezzon.setStatus(MerchantFinanceStatusConsts.FREEZE);
 				merchantFrezzon.setMerchantId(orderByMerchantOrderNumber.getMerchantId());
 				merchantFrezzon.setOrderNumber(orderByMerchantOrderNumber.getOrderNumber());
-
 				merchantFrezzService.insertSelective(merchantFrezzon);
-				merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
-				merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
-				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 			}
+			merchantFinance.setBlanceAmount(resourceAmount.add(arrivalAmount.subtract(frezzAmount)));
+			merchantFinance.setFronzeAmount(resourceFrezzAmount.add(frezzAmount));
+			merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
 		} catch (Exception e) {
 			log.error("save order back error");
 		}

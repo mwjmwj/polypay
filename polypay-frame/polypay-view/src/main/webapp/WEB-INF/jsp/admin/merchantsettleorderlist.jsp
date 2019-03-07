@@ -45,6 +45,8 @@
           <option value="">选择订单状态</option>
           <option value="-1">失败</option>
           <option value="0">成功</option>
+          <option value="1">审核中</option>
+          <option value="2">已处理</option>
         </select>
       </div>
     </div>

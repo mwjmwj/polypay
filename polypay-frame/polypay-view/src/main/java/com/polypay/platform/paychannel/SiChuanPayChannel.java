@@ -317,12 +317,11 @@ public class SiChuanPayChannel implements IPayChannel {
 		sParam.put("paytype", paytype);
 
 		// 异步通知回调
-		String notify_url = "www.baidu.com";
+		String notify_url = "www.xxx.com";
 		sParam.put("notify_url", notify_url);
 
 		// 支付金额
-		String total_amount = settleOrder.getPayAmount().subtract(settleOrder.getServiceAmount()).add(new BigDecimal(3))
-				.toString();
+		String total_amount = settleOrder.getPayAmount().subtract(settleOrder.getServiceAmount()).setScale(2,BigDecimal.ROUND_HALF_DOWN).toString();
 		sParam.put("total_amount", total_amount);
 
 		// 订单编号
@@ -346,7 +345,7 @@ public class SiChuanPayChannel implements IPayChannel {
 		sParam.put("sendbankcode", sendbankcode);
 
 		// 充值账户：100000，支付宝：100010
-		String cashtype = "100000";
+		String cashtype = "100050";
 		sParam.put("cashtype", cashtype);
 
 		// 省

@@ -72,20 +72,24 @@
 				<input type="text" readonly="readonly" value="待审核" class="layui-input" style="color:red"> 
 				</c:if>
 				
+				<c:if test="${placeorder.status ==2 }">
+				<input type="text" readonly="readonly" value="已处理" class="layui-input" style="color:red"> 
+				</c:if>
+				
 			</div>
 		</div>
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">结算金额</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.postalAmount }" class="layui-input"> 
+				<input type="text" readonly="readonly" value="${placeorder.payAmount }" class="layui-input"> 
 			</div>
 		</div>
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行卡号</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.merchantBindBank }" class="layui-input"> 
+				<input type="text" readonly="readonly" value="${placeorder.bankNumber }" class="layui-input"> 
 			</div>
 		</div>
 		
@@ -115,7 +119,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">到账金额</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.arrivalAmount }" class="layui-input"> 
+				<input type="text" readonly="readonly" value="${placeorder.arriveAmount }" class="layui-input"> 
 			</div>
 		</div>
 		
@@ -129,7 +133,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">处理时间</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" class="layui-input" value="<fmt:formatDate value='${placeorder.payTime}' type='date' pattern='yyyy-MM-dd HH:mm:ss'/>"> 
+				<input type="text" readonly="readonly" class="layui-input" value="<fmt:formatDate value='${placeorder.handlerTime}' type='date' pattern='yyyy-MM-dd HH:mm:ss'/>"> 
 			</div>
 		</div>
 	

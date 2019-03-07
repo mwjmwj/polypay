@@ -60,7 +60,7 @@
 				<label class="layui-form-label">代付手续费</label>
 				<div class="layui-input-inline">
 					<input type="text" id="serviceamount"
-						autocomplete="off" class="layui-input" readonly="readonly">
+						autocomplete="off" class="layui-input" readonly="readonly" value="3">
 				</div>
 			</div>
 		</div>

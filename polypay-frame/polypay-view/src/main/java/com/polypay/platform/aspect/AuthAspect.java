@@ -48,7 +48,8 @@ public class AuthAspect {
 		Object user = request.getSession().getAttribute(MerchantGlobaKeyConsts.USER);
 
 		if (null == user) {
-			response.sendRedirect("admin");
+			
+            ((HttpServletResponse)response).sendRedirect(((HttpServletRequest)request).getContextPath()+"/view/admin");
 		}
 	
 

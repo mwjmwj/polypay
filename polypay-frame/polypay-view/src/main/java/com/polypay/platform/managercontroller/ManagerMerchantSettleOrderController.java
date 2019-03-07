@@ -99,6 +99,11 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 			if (!StringUtils.isEmpty(status)) {
 				merchantSettleOrderVO.setStatus(Integer.parseInt(status));
 			}
+			
+			String merchantId = getRequest().getParameter("merchantId");
+			if (!StringUtils.isEmpty(merchantId)) {
+				merchantSettleOrderVO.setMerchantId(merchantId);;
+			}
 
 			pageList = merchantSettleOrderService.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
 			Page<MerchantSettleOrderVO> pageData = getPageData(pageList);

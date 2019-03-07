@@ -117,10 +117,7 @@
 					title : '支付密码',
 					align : 'center',
 					width : 350,
-					style : 'color:red',
-					templet : function(row) {
-						return Number(row.fronzeAmount).toFixed(4) + "元";
-					}
+					style : 'color:red'
 				}
 				, {
 					field : 'status',
