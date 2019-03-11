@@ -51,7 +51,7 @@ public class RegexUtil {
         "166", "167", "168", "169",
         "175", "176",
         "185", "186", 
-        "197", "198", "199",
+        "197", "198", "199","171",
         
         // 电信
         "133", 
@@ -101,7 +101,7 @@ public class RegexUtil {
     public static boolean isMobile(String phone){
         return Pattern.compile(MOBILE_PATTERN).matcher(phone).matches();
     }
-    
+
     /**
      * 判断是否为虚拟运营商手机号
      * @param phone

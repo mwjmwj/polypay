@@ -20,6 +20,7 @@ import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
+import com.polypay.platform.bean.MerchantAccountBindbank;
 import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.bean.MerchantPlaceAccountBindbank;
 import com.polypay.platform.consts.MerchantBindBankConsts;
@@ -152,6 +153,36 @@ public class MerchantPlaceBindBankController extends BaseController<MerchantPlac
 		return response;
 	}
 
+	
+	@GetMapping("/merchant/placebindbank/delete/{id}")
+	@ResponseBody
+	public ServiceResponse deleteBindBankName(@PathVariable("id")Integer id) throws ServiceException
+	{
+		ServiceResponse response =  new ServiceResponse();
+		
+		MerchantPlaceAccountBindbank selectMerchantBindBankByID = merchantPlaceAccountBindbankService.selectMerchantBindBankByID(id);
+		
+		if(null==selectMerchantBindBankByID)
+		{
+			response.setStatus(RequestStatus.FAILED.getStatus());
+			response.setMessage("该银行卡不存在");
+			return response;
+		}
+		
+		String merchantId = selectMerchantBindBankByID.getMerchantId();
+		
+		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+		
+		if(!merchantId.equals(merchant.getUuid()))
+		{
+			return response;
+		}
+		
+		merchantPlaceAccountBindbankService.deleteByPrimaryKey(id);
+		response.setMessage("删除成功");
+		
+		return response;
+	}
 	
 	
 }

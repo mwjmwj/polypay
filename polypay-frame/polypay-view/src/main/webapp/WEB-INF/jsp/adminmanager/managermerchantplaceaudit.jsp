@@ -1,6 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
 	String path = request.getContextPath();
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
@@ -28,142 +28,165 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">订单号</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.orderNumber }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.orderNumber }" class="layui-input">
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">商户ID</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.merchantId }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.merchantId }" class="layui-input">
 			</div>
 		</div>
-		
-		<input type="hidden"  name="id" value="${placeorder.id }" />
+
+		<input type="hidden" name="id" value="${placeorder.id }" />
 		<div class="layui-form-item">
 			<label class="layui-form-label">类型</label>
 			<div class="layui-input-block">
 				<c:if test="${placeorder.type ==1 }">
-				<input type="text" readonly="readonly" value="充值订单" class="layui-input">
+					<input type="text" readonly="readonly" value="充值订单"
+						class="layui-input">
 				</c:if>
-				
+
 				<c:if test="${placeorder.type ==2 }">
-				<input type="text" readonly="readonly" value="代付订单" class="layui-input">
+					<input type="text" readonly="readonly" value="代付订单"
+						class="layui-input">
 				</c:if>
 				<c:if test="${placeorder.type ==3 }">
-				<input type="text" readonly="readonly" value="结算订单" class="layui-input">
+					<input type="text" readonly="readonly" value="结算订单"
+						class="layui-input">
 				</c:if>
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">状态</label>
 			<div class="layui-input-block">
-			
+
 				<c:if test="${placeorder.status ==0 }">
-				<input type="text" readonly="readonly" value="成功" class="layui-input" style="color:green"> 
+					<input type="text" readonly="readonly" value="成功"
+						class="layui-input" style="color: green">
 				</c:if>
-				
+
 				<c:if test="${placeorder.status ==-1 }">
-				<input type="text" readonly="readonly" value="失败" class="layui-input" style="color:red"> 
+					<input type="text" readonly="readonly" value="失败"
+						class="layui-input" style="color: red">
 				</c:if>
-				
+
 				<c:if test="${placeorder.status ==1 }">
-				<input type="text" readonly="readonly" value="待审核" class="layui-input" style="color:red"> 
+					<input type="text" readonly="readonly" value="待审核"
+						class="layui-input" style="color: red">
 				</c:if>
-				
+
 				<c:if test="${placeorder.status ==2 }">
-				<input type="text" readonly="readonly" value="已处理" class="layui-input" style="color:red"> 
+					<input type="text" readonly="readonly" value="已处理"
+						class="layui-input" style="color: red">
 				</c:if>
-				
+
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">结算金额</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.payAmount }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.payAmount }" class="layui-input">
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行卡号</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.bankNumber }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.bankNumber }" class="layui-input">
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.bankName }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.bankName }" class="layui-input">
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">账户名</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.accountName }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.accountName }" class="layui-input">
 			</div>
 		</div>
-		
-		
+
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">服务费</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.serviceAmount }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.serviceAmount }" class="layui-input">
 			</div>
 		</div>
-		
-		
+
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">到账金额</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.arriveAmount }" class="layui-input"> 
+				<input type="text" readonly="readonly"
+					value="${placeorder.arriveAmount }" class="layui-input">
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">发起时间</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" class="layui-input" value="<fmt:formatDate value='${placeorder.createTime}' type='date' pattern='yyyy-MM-dd HH:mm:ss'/>"></input>
+				<input type="text" readonly="readonly" class="layui-input"
+					value="<fmt:formatDate value='${placeorder.createTime}' type='date' pattern='yyyy-MM-dd HH:mm:ss'/>"></input>
 			</div>
 		</div>
-		
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">处理时间</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" class="layui-input" value="<fmt:formatDate value='${placeorder.handlerTime}' type='date' pattern='yyyy-MM-dd HH:mm:ss'/>"> 
+				<input type="text" readonly="readonly" class="layui-input"
+					value="<fmt:formatDate value='${placeorder.handlerTime}' type='date' pattern='yyyy-MM-dd HH:mm:ss'/>">
 			</div>
 		</div>
-	
-		
+
+
 		<div class="layui-form-item">
 			<label class="layui-form-label">描述</label>
 			<div class="layui-input-block">
-				<input type="text"  name="descreption" value="${placeorder.descreption }" class="layui-input"> 
+				<input type="text" name="descreption"
+					value="${placeorder.descreption }" class="layui-input">
 			</div>
 		</div>
-		
-		
+
+
 		<div class="layui-form-item">
-    		<div class="layui-input-block">
-	      		<button class="layui-btn" lay-submit lay-filter="audit">确认结算</button>
-	      		<button class="layui-btn" lay-submit lay-filter="success">确认成功订单</button>
-	      		<button class="layui-btn" lay-submit lay-filter="fail">取消订单</button>
-	   		 </div>
-  		</div>
-		
+			<div class="layui-input-block">
+				<button class="layui-btn" type="button" lay-submit
+					lay-filter="audit">确认结算</button>
+				<button class="layui-btn" lay-submit lay-filter="fail">取消订单</button>
+			</div>
+		</div>
+
 	</form>
-	
+
 	<script>
 	layui.use('form', function(){
   	var form = layui.form;
   
 	//监听提交
 	  form.on('submit(audit)', function(data){
+		  
+		  
+		  layer.confirm('确定审核通过？', {
+			  btn: ['确定', '按错了']
+			}, function(index, layero){
 				$.ajax({
-					url:"<%= basePath%>merchantmanager/placeorder/audit",
+					url:"<%=basePath%>merchantmanager/placeorder/audit",
 					type:"post",
 					data:$("#placeform").serialize(),
 					dataType:'JSON',
@@ -181,47 +204,58 @@
 					}
 				});
 				return false;
+				
+			},function(index){
+				
+			});
+				
 	  });
 	
 	   form.on('submit(fail)', function(data){
-			$.ajax({
-				url:"<%= basePath%>merchantmanager/placeorder/fail",
-				type:"post",
-				data:$("#placeform").serialize(),
-				datatype:'JSON',
-				success:function(data){
-					if (data == 'success') {
-						layer.alert('修改成功,确定关闭窗口?', {
-							icon : 1
-						}, function() {
-							var index = parent.layer
-									.getFrameIndex(window.name); //获取当前窗口的name
-							parent.layer.close(index);
-							window.parent.location.reload();
-						});
-					}
-					else{
-						layer.confirm('修改失败 '+data.message, {
-							  btn: ['继续修改', '退出修改']
-						,time:2000
-						}, function(index, layero){
-							layer.close(layer.index);
-							
-						}, function(index){
-							var index = parent.layer
-									.getFrameIndex(window.name); //获取当前窗口的name
-							parent.layer.close(index);
-							});
+		   
+		   layer.confirm('确定审核通过？', {
+				  btn: ['确定', '按错了']
+				}, function(index, layero){
 					
-					}
-				}
-			});
-			return false;
-		});
-  //各种基于事件的操作，下面会有进一步介绍
-	});
+					$.ajax({
+						url:"<%=basePath%>merchantmanager/placeorder/fail",
+						type : "post",
+						data : $("#placeform").serialize(),
+						datatype : 'JSON',
+						success : function(data) {
+							if (data == 'success') {
+								layer.alert('修改成功,确定关闭窗口?', {
+									icon : 1
+								}, function() {
+									var index = parent.layer
+											.getFrameIndex(window.name); //获取当前窗口的name
+									parent.layer.close(index);
+									window.parent.location.reload();
+								});
+							} else {
+								layer.confirm('修改失败 ' + data.message, {
+									btn : [ '继续修改', '退出修改' ],
+									time : 2000
+								}, function(index, layero) {
+									layer.close(layer.index);
 
-</script>
+								}, function(index) {
+									var index = parent.layer
+											.getFrameIndex(window.name); //获取当前窗口的name
+									parent.layer.close(index);
+								});
+
+							}
+						}
+					});
+					return false;
+				}, function(index) {
+
+				});
+			});
+			//各种基于事件的操作，下面会有进一步介绍
+		});
+	</script>
 
 
 </body>

@@ -96,6 +96,12 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 			if (!StringUtils.isEmpty(status)) {
 				merchantPlaceOrderVO.setStatus(Integer.parseInt(status));
 			}
+			
+			String merchantId = getRequest().getParameter("merchantId");
+			if (!StringUtils.isEmpty(merchantId)) {
+				merchantPlaceOrderVO.setMerchantId(merchantId);;
+			}
+			
 
 			pageList = merchantPlaceOrderService.listMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
 			Page<MerchantPlaceOrderVO> pageData = getPageData(pageList);

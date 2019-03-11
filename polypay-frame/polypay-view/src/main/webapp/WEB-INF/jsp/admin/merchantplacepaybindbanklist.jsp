@@ -163,6 +163,26 @@
 					obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
 					layer.close(index);
 					//向服务端发送删除指令
+				 	$.ajax({
+			  			type: 'get',
+			  			url: '${pageContext.request.contextPath}/merchant/placebindbank/delete/'+data.id,
+			  			dataType: 'json',
+			  			async:false,
+			  			success: function(data){
+			  				if(data.status=='0'){
+			  					layer.msg('删除成功!',{icon:1,time:1000});
+			  					location.reload();
+			  				}else{
+			  					layer.msg('程序异常!'+data.message,{icon:5,time:1000});
+			  				}
+			  				
+			  			},
+			  			error:function(msg) {
+			  				layer.msg('程序异常!',{icon:5,time:1000});
+			  			}
+			  			});	
+					
+					
 				});
 			} else if (layEvent === 'edit') { //编辑
 				//do something

@@ -13,7 +13,10 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>源盛丰支付</title>
+	<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+<title>鑫源盛支付</title>
 
 <link rel="shortcut icon" href="./static/favicon.ico"/>
 <link rel="stylesheet" href="./static/css/font.css">

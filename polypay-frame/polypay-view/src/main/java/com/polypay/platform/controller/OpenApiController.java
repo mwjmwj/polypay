@@ -124,7 +124,20 @@ public class OpenApiController {
 			}
 			keys.add("pay_amount");
 			try {
-				Double.parseDouble(orderAmount);
+				double parseDouble = Double.parseDouble(orderAmount);
+				
+				if(parseDouble<1.0)
+				{
+					ResponseUtils.exception(result, "支付金额必须大于1元！", RequestStatus.FAILED.getStatus());
+					return result;
+				}
+				
+				if(parseDouble>100000.0)
+				{
+					ResponseUtils.exception(result, "支付金额上限 10万元！", RequestStatus.FAILED.getStatus());
+					return result;
+				}
+				
 			} catch (Exception e) {
 				ResponseUtils.exception(result, "支付金额填写错误！", RequestStatus.FAILED.getStatus());
 				return result;
@@ -222,10 +235,10 @@ public class OpenApiController {
 
 	@SuppressWarnings("unused")
 	public static void main(String[] args) {
-		String url = "http://www.ysfpolypay.cn/open/api/recharge?merchant_id=13379&order_number=3&pay_amount=10.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=4d329d7a81e24696ad6b96e60e3ca8b9&sign=4aabe574cfc1b357022336258e0ef16e";
+		String url = "http://www.ysfpolypay.cn/open/api/recharge?merchant_id=13379&order_number=21&pay_amount=50000.00&time=5522541&pay_channel=100050&notify_url=http://www.xx.com&bank_no=6214837217964539&api_key=4d329d7a81e24696ad6b96e60e3ca8b9&sign=a1185ff7c3e2a012073a5fe72106a2a2";
 
 		System.out.println(MD5.encryption(
-				"merchant_id=13379&order_number=3&pay_amount=10.00&time=5522541&pay_channel=100050&notify_url=http://47.104.181.26/getway/recharge/back&bank_no=6214837217964539&api_key=4d329d7a81e24696ad6b96e60e3ca8b9"));
+				"merchant_id=13379&order_number=21&pay_amount=50000.00&time=5522541&pay_channel=100050&notify_url=http://www.xx.com&bank_no=6214837217964539&api_key=4d329d7a81e24696ad6b96e60e3ca8b9"));
 	}
 
 	/**

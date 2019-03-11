@@ -10,11 +10,15 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>poly-pay</title>
+<title>鑫源盛支付</title>
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
 	<link rel="stylesheet" href="../static/js/css/layui.css">
 	<link href="../static/js/maincss/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 	<link href="../static/js/maincss/font-awesome.css?v=4.4.0" rel="stylesheet">
@@ -70,7 +74,15 @@
                         <h5>冻结金额</h5>
                     </div>
                     <div class="ibox-content">
-                        <h1 class="no-margins">${merchantFinance.fronzeAmount }</h1>
+                        <h1 class="no-margins">
+                        <c:if test="${merchantFinance.fronzeAmount != null }">
+                        ${merchantFinance.fronzeAmount }
+                        </c:if>
+                        
+                         <c:if test="${merchantFinance.fronzeAmount == null }">
+                       		0
+                        </c:if>
+                        </h1>
                      <!--     <div class="stat-percent font-bold text-info">笔<i class="fa fa-level-up"></i>
                          </div> -->
                         <small>元</small>
@@ -86,7 +98,14 @@
                     </div>
                     <div class="ibox-content">
                         <h1 class="no-margins">
-                        ${ merchantFinance.blanceAmount}
+                        
+                         <c:if test="${merchantFinance.blanceAmount != null }">
+                        ${merchantFinance.blanceAmount }
+                        </c:if>
+                        
+                         <c:if test="${merchantFinance.blanceAmount == null }">
+                       		0
+                        </c:if>
                         </h1>
                         <!-- <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i>
                         </div> -->
@@ -122,7 +141,7 @@
 		}
 	</script>
         
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
         
         var orderNumberChart = echarts.init(document.getElementById('ordernumbermain'));
         var orderAmountChart = echarts.init(document.getElementById('orderamountmain'));
@@ -188,6 +207,6 @@
             //使用刚指定的配置项和数据显示图表
             orderNumberChart.setOption(option);
             orderAmountChart.setOption(option1);
-        </script>
+        </script> -->
 </body>
 </html>

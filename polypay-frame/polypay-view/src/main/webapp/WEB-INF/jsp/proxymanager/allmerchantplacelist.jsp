@@ -29,7 +29,7 @@
 <div class="layui-form">
 	<div class="layui-row" style="margin-top: 10px">
 		<div class="layui-inline">		
- 		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户ID" />
+ 		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户号" />
 		</div>
  		<div class="layui-inline">		
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />

@@ -13,7 +13,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>源盛丰支付</title>
+<title>鑫源盛支付</title>
 
 <link rel="shortcut icon" href="./static/favicon.ico" />
 <!--必要样式-->
@@ -26,7 +26,7 @@
 <body>
 	<div class='login'>
 		<div class='login_title'>
-			<span>源盛丰支付</span>
+			<span>鑫源盛支付</span>
 		</div>
 		<div class='login_fields'>
 			<div class='login_fields__user'>

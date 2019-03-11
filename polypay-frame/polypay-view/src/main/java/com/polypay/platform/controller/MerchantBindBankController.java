@@ -128,6 +128,36 @@ public class MerchantBindBankController extends BaseController<MerchantAccountBi
 		
 		return response;
 	}
+	
+	@GetMapping("/merchant/bindbank/delete/{id}")
+	@ResponseBody
+	public ServiceResponse deleteBindBankName(@PathVariable("id")Integer id) throws ServiceException
+	{
+		ServiceResponse response =  new ServiceResponse();
+		
+		MerchantAccountBindbank selectMerchantBindBankByID = merchantAccountBindbankService.selectMerchantBindBankByID(id);
+		
+		if(null==selectMerchantBindBankByID)
+		{
+			response.setStatus(RequestStatus.FAILED.getStatus());
+			response.setMessage("该银行卡不存在");
+			return response;
+		}
+		
+		String merchantId = selectMerchantBindBankByID.getMerchantId();
+		
+		MerchantAccountInfo merchant = MerchantUtils.getMerchant();
+		
+		if(!merchantId.equals(merchant.getUuid()))
+		{
+			return response;
+		}
+		
+		merchantAccountBindbankService.deleteByPrimaryKey(id);
+		response.setMessage("删除成功");
+		
+		return response;
+	}
 
 	
 	@RequestMapping("/merchant/bindbank/list")

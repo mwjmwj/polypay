@@ -99,5 +99,11 @@ public class ManagerViewController {
 		return "adminmanager/merchantfinancelist";
 	}
 	
+	@RequestMapping("updateproxyloginpwd")
+	public String updateProxyPwd()
+	{
+		return "proxymanager/proxymerchantloginpwd";
+	}
+	
 	
 }

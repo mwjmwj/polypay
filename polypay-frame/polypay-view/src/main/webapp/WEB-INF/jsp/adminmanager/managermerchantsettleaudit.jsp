@@ -149,9 +149,8 @@
 		
 		<div class="layui-form-item">
     		<div class="layui-input-block">
-	      		<button class="layui-btn" lay-submit lay-filter="audit">结算订单</button>
-	      		<button class="layui-btn" lay-submit lay-filter="success">确认成功订单</button>
-	      		<button class="layui-btn" lay-submit lay-filter="fail">取消订单</button>
+	      		<button class="layui-btn" type = "button" lay-submit lay-filter="audit">结算订单</button>
+	      		<button class="layui-btn" type = "button" lay-submit lay-filter="fail">取消订单</button>
 	   		 </div>
   		</div>
 		
@@ -160,9 +159,13 @@
 	<script>
 	layui.use('form', function(){
   	var form = layui.form;
-  
+  	
 	//监听提交
 	  form.on('submit(audit)', function(data){
+
+		  layer.confirm('确定审核通过？', {
+			  btn: ['确定', '按错了']
+			}, function(index, layero){
 				$.ajax({
 					url:"<%= basePath%>merchantmanager/settleorder/audit",
 					type:"post",
@@ -196,28 +199,42 @@
 					}
 				});
 				return false;
-	  });
-	
-	   form.on('submit(fail)', function(data){
-			$.ajax({
-				url:"<%= basePath%>merchantmanager/settleorder/fail",
-				type:"post",
-				data:$("#settleform").serialize(),
-				dataType:'JSON',
-				success:function(data){
-					 if(data.status == '0'){
-						layer.msg('提交成功,2秒后关闭', {
-							  icon: 1,
-							  time: 2000 //2秒关闭（如果不配置，默认是3秒）
-							}, function(){
-							  //do something
-							});   
-					}else{
-						layer.msg('提交异常!', {icon: 5});
-					} 
-				}
+			}, function(index){
+			
 			});
-			return false;
+				
+			});
+			
+			
+	   form.on('submit(fail)', function(data){
+		   
+		   layer.confirm('确定审核通过？', {
+				  btn: ['确定', '按错了']
+				}, function(index, layero){
+					$.ajax({
+						url:"<%= basePath%>merchantmanager/settleorder/fail",
+						type:"post",
+						data:$("#settleform").serialize(),
+						dataType:'JSON',
+						success:function(data){
+							 if(data.status == '0'){
+								layer.msg('提交成功,2秒后关闭', {
+									  icon: 1,
+									  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+									}, function(){
+									  //do something
+									});   
+							}else{
+								layer.msg('提交异常!', {icon: 5});
+							} 
+						}
+					});
+					return false;
+				}, function(index){
+					
+				});
+					
+		
 		});
   //各种基于事件的操作，下面会有进一步介绍
 	});

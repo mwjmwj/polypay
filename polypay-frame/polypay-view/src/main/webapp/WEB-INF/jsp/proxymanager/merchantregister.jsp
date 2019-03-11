@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%-- <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%
@@ -83,6 +83,16 @@
 			<label class="layui-form-label">开通代付</label>
 			<div class="layui-input-block">
 				<input type="checkbox" name="switch" lay-skin="switch">
+			</div>
+		</div>
+		
+			<div class="layui-form-item">
+			<label class="layui-form-label">支付通道</label>
+			<div class="layui-input-block">
+				<select name="payChannel">
+					<option value="1" >熊猫代币</option>
+					<option value="2" >新网支付</option>
+				</select>
 			</div>
 		</div>
 
@@ -277,4 +287,4 @@
 	</script>
 
 </body>
-</html>
+</html> --%>

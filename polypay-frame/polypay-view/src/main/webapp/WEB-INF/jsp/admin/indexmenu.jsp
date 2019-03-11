@@ -10,11 +10,16 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>源盛丰支付</title>
+<title>鑫源盛支付</title>
 <meta name="renderer" content="webkit">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1">
+	
+	<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+<meta HTTP-EQUIV="expires" CONTENT="0">
+
 	<link rel="stylesheet" href="../static/js/css/layui.css">
 	<link href="../static/js/maincss/bootstrap.min.css?v=3.3.6" rel="stylesheet">
 	<link href="../static/js/maincss/font-awesome.css?v=4.4.0" rel="stylesheet">

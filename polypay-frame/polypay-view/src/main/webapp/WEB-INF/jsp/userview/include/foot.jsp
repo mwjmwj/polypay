@@ -12,7 +12,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>源盛丰支付</title>
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+	<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+	<meta HTTP-EQUIV="expires" CONTENT="0">
+    <title>鑫源盛支付</title>
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/style.css" rel="stylesheet">
     <script src="static/js/bootstrap.min.js"></script>
@@ -21,9 +24,9 @@
     <!-- 尾部 -->
     <hr/>
     <div class="foot-style">
-      	Copyright © 2018 - 2019  ysfzf.com 版权所有|消费者维权热线：xxxxxxxx
+      	Copyright © 2018 - 2019  ysfpolypay.cn 版权所有
         <br/>
-         源丰盛支付
+        	 鑫源盛支付
     </div>
     <!-- 结束啦 -->
 

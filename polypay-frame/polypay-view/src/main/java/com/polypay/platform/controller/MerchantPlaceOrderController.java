@@ -32,6 +32,7 @@ import com.polypay.platform.consts.OrderStatusConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.SystemConstans;
 import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.service.IMerchantAccountInfoService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantPlaceAccountBindbankService;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
@@ -40,6 +41,7 @@ import com.polypay.platform.utils.DateUtil;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.utils.RandomUtils;
+import com.polypay.platform.vo.MerchantAccountInfoVO;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantPlaceAccountBindbankVO;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
@@ -60,6 +62,9 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 	
 	@Autowired
 	private ISystemConstsService systemConstsService;
+	
+	@Autowired
+	private IMerchantAccountInfoService merchantAccountInfoService;
 	
 	@RequestMapping("/merchant/place/order/list")
 	@ResponseBody
@@ -192,7 +197,22 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 					ResponseUtils.exception(response, "支付密码错误", RequestStatus.FAILED.getStatus());
 					return response;
 				}
-
+				
+				
+				String uuid = merchant.getUuid();
+				
+				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
+				merchantInfo.setUuid(uuid);
+				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
+				
+				Integer helppayStatus = merchantInfoByUUID.getHelppayStatus();
+				
+				if(MerchantHelpPayConsts.CLOSE_HELP_PAY == helppayStatus)
+				{
+					ResponseUtils.exception(response, "代付关闭", RequestStatus.FAILED.getStatus());
+					return response;
+				}
+				
 				BigDecimal blanceAmount = merchantFinance.getBlanceAmount();
 				Integer channelId = merchant.getChannelId();
 				BigDecimal serviceAmount;

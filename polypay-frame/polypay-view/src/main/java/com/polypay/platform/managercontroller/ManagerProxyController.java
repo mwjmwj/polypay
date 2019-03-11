@@ -21,13 +21,9 @@ import com.polypay.platform.bean.MerchantAccountInfo;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
-import com.polypay.platform.service.IMerchantAccountInfoService;
-import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.service.IMerchantSettleOrderService;
-import com.polypay.platform.service.IMerchantVerifyService;
-import com.polypay.platform.service.IPayTypeService;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
@@ -85,6 +81,11 @@ public class ManagerProxyController extends BaseController{
 			}
 			
 			
+			String merchantId = getRequest().getParameter("merchantId");
+			if (!StringUtils.isEmpty(merchantId)) {
+				merchantPlaceOrderVO.setMerchantId(merchantId);;
+			}
+			
 
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 			
@@ -92,7 +93,7 @@ public class ManagerProxyController extends BaseController{
 			{
 				return null;
 			}
-			merchantPlaceOrderVO.setProxyId(merchant.getProxyId());
+			merchantPlaceOrderVO.setProxyId(merchant.getUuid());
 			
 
 			pageList = merchantPlaceOrderService.listProxyMerchantPlaceOrder(pageBounds, merchantPlaceOrderVO);
@@ -141,13 +142,20 @@ public class ManagerProxyController extends BaseController{
 				merchantRechargeOrderVO.setsEndTime(datas[1]);
 			}
 			
+			String merchantId = getRequest().getParameter("merchantId");
+			if (!StringUtils.isEmpty(merchantId)) {
+				merchantRechargeOrderVO.setMerchantId(merchantId);;
+			}
+			
+			
+			
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 			
 			if(null == merchant)
 			{
 				return null;
 			}
-			merchantRechargeOrderVO.setProxyId(merchant.getProxyId());
+			merchantRechargeOrderVO.setProxyId(merchant.getUuid());
 
 			PageBounds pageBounds = this.getPageBounds();
 			PageList<MerchantRechargeOrderVO> pageList = null;
@@ -205,6 +213,12 @@ public class ManagerProxyController extends BaseController{
 				
 				merchantSettleOrderVO.setsEndTime(datas[1]);
 			}
+			
+			String merchantId = getRequest().getParameter("merchantId");
+			if (!StringUtils.isEmpty(merchantId)) {
+				merchantSettleOrderVO.setMerchantId(merchantId);;
+			}
+			
 
 			MerchantAccountInfo merchant = MerchantUtils.getMerchant();
 			
@@ -212,7 +226,7 @@ public class ManagerProxyController extends BaseController{
 			{
 				return null;
 			}
-			merchantSettleOrderVO.setProxyId(merchant.getProxyId());
+			merchantSettleOrderVO.setProxyId(merchant.getUuid());
 			
 			String status = getRequest().getParameter("status");
 
