@@ -164,4 +164,13 @@ public class MerchantPlaceOrderService implements IMerchantPlaceOrderService {
 		}
 	}
 
+	@Override
+	public MerchantPlaceOrder getPlaceOrderByOrderNo(String orderNo) throws ServiceException {
+		try {
+			return merchantPlaceOrderMapper.getPlaceOrderByOrderNo(orderNo);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

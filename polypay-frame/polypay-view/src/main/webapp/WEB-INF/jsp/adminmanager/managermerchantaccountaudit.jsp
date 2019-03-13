@@ -106,6 +106,18 @@
 		
 		
 		<div class="layui-form-item layui-form-pane">
+			<label class="layui-form-label">代付手续费</label>
+			
+			<div class="layui-input-inline">
+				<input type="text" lay-verify="required" name="handAmount" autocomplete="off" value="${merchantAccount.handAmount}"
+					class="layui-input" style="width: 212px">
+			</div>
+			<div class="layui-form-mid layui-word-aux" style="margin-left: 20px">单位： 元</div>
+		</div>
+		
+		
+		
+		<div class="layui-form-item layui-form-pane">
 			<label class="layui-form-label">审核状态</label>
 		 <div class="layui-input-block">
      		 <div class="layui-inline">

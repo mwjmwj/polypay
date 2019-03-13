@@ -23,6 +23,7 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="descreption" property="descreption" jdbcType="VARCHAR" />
     <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
   </resultMap>
   
 	<resultMap id="listResult"
@@ -47,17 +48,18 @@
     <result column="type" property="type" jdbcType="INTEGER" />
     <result column="descreption" property="descreption" jdbcType="VARCHAR" />
     <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List" >
     id, order_number, merchant_id, pay_amount, service_amount, arrive_amount, bank_code, 
     bank_name, branch_bank_name, bank_number, account_provice, account_name, account_city, 
-    create_time, handler_time, handler_name, status, type, descreption, trade_type
+    create_time, handler_time, handler_name, status, type, descreption, trade_type,bank_no
   </sql>
   
   	<sql id="proxy_list" >
     mpo.id, mpo.order_number, mpo.merchant_id, mpo.pay_amount, mpo.service_amount, mpo.arrive_amount, mpo.bank_code, 
     mpo.bank_name, mpo.branch_bank_name, mpo.bank_number, mpo.account_provice, mpo.account_name, mpo.account_city, 
-    mpo.create_time, mpo.handler_time, mpo.handler_name, mpo.status, mpo.type, mpo.descreption, mpo.trade_type
+    mpo.create_time, mpo.handler_time, mpo.handler_name, mpo.status, mpo.type, mpo.descreption, mpo.trade_type,mpo.bank_no
   </sql>
   
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -79,14 +81,14 @@
       bank_number, account_provice, account_name, 
       account_city, create_time, handler_time, 
       handler_name, status, type, 
-      descreption, trade_type)
+      descreption, trade_type,bank_no)
     values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{merchantId,jdbcType=CHAR}, 
       #{payAmount,jdbcType=DECIMAL}, #{serviceAmount,jdbcType=DECIMAL}, #{arriveAmount,jdbcType=DECIMAL}, 
       #{bankCode,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, 
       #{bankNumber,jdbcType=VARCHAR}, #{accountProvice,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
       #{accountCity,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{handlerTime,jdbcType=TIMESTAMP}, 
       #{handlerName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
-      #{descreption,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR})
+      #{descreption,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR},#{bankNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantPlaceOrder" >
     insert into merchant_place_order
@@ -151,6 +153,9 @@
       <if test="tradeType != null" >
         trade_type,
       </if>
+      <if test="bankNo != null" >
+        bank_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -212,6 +217,9 @@
       </if>
       <if test="tradeType != null" >
         #{tradeType,jdbcType=VARCHAR},
+      </if>
+      <if test="bankNo != null" >
+        #{bankNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -275,6 +283,9 @@
       <if test="tradeType != null" >
         trade_type = #{tradeType,jdbcType=VARCHAR},
       </if>
+       <if test="bankNo != null" >
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -298,7 +309,8 @@
       status = #{status,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
       descreption = #{descreption,jdbcType=VARCHAR},
-      trade_type = #{tradeType,jdbcType=VARCHAR}
+      trade_type = #{tradeType,jdbcType=VARCHAR},
+      bank_no = #{bankNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -448,6 +460,14 @@
 		order by mpo.create_time desc
 	</select>
 	
+	<select id="getPlaceOrderByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+	
+	select 
+	<include refid="Base_Column_List" />
+	from merchant_place_order
+	where order_number = #{placeNo}
+	
+	</select>
 
 
 </mapper>

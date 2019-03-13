@@ -92,6 +92,15 @@
 			<div class="layui-form-mid layui-word-aux">0 代表D+0, 数字代表 D+1 以及冻结率 比如 30 表示  D+1 冻结30%</div>
 		</div>
 		
+		<div class="layui-form-item">
+			<label class="layui-form-label">代付手续费</label>
+			<div class="layui-input-block">
+				<input type="text" name="handAmount" class="layui-input" >
+			</div>
+			<div class="layui-form-mid layui-word-aux">单位 ： 元</div>
+		</div>
+		
+		
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">开通代付</label>
@@ -106,6 +115,8 @@
 				<select name="payChannel">
 					<option value="1" >熊猫代币</option>
 					<option value="2" >新网支付</option>
+					<option value="3" >合付宝支付</option>
+					<option value="4" >快捷支付</option>
 				</select>
 			</div>
 		</div>

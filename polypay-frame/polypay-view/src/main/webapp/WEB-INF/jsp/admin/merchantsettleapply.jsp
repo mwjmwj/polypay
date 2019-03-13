@@ -62,7 +62,7 @@
 				<label class="layui-form-label">手续费</label>
 				<div class="layui-input-inline">
 					<input type="text" id="serviceamount"
-						autocomplete="off" class="layui-input" readonly="readonly" value="3">
+						autocomplete="off" class="layui-input" readonly="readonly" value="${sessionScope.merchant_user.handAmount}元">
 				</div>
 			</div>
 		</div>

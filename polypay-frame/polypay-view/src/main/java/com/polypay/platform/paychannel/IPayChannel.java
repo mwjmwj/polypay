@@ -1,5 +1,6 @@
 package com.polypay.platform.paychannel;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,7 @@ import com.polypay.platform.bean.MerchantSettleOrder;
 
 public interface IPayChannel {
 
-	public void sendRedirect(Map<String, Object> param, HttpServletResponse response);
+	public void sendRedirect(Map<String, Object> param, HttpServletResponse response,HttpServletRequest request);
 
 	public Map<String, Object> checkOrder(HttpServletRequest request);
 
@@ -20,6 +21,6 @@ public interface IPayChannel {
 
 	public Map<String, Object> placeOrder(MerchantPlaceOrder selectByPrimaryKey);
 
-	public Map<String, Object> taskPayOrderNumber(String orderNumber);
+	public Map<String, Object> taskPayOrderNumber(String orderNumber, Date date);
 
 }

@@ -150,7 +150,9 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 			merchantAccountInfo.setRoleId(RoleConsts.MERCHANT);
 			merchantAccountInfo.setCreateTime(new Date());
 			merchantAccountInfo.setChannelId(Integer.parseInt(requestMerchantInfo.getPayChannel()));
-
+			
+			merchantAccountInfo.setHandAmount(requestMerchantInfo.getHandAmount());
+			
 			merchantAccountInfoMapper.insertSelective(merchantAccountInfo);
 			Integer merchant_uuid = 13350 + merchantAccountInfo.getId();
 			merchantAccountInfo.setUuid(merchant_uuid.toString());

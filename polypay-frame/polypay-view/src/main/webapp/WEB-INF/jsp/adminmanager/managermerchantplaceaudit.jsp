@@ -103,6 +103,13 @@
 					value="${placeorder.bankNumber }" class="layui-input">
 			</div>
 		</div>
+		
+			<div class="layui-form-item">
+			<label class="layui-form-label">银联号</label>
+			<div class="layui-input-block">
+				<input type="text" readonly="readonly" value="${placeorder.bankNo }" class="layui-input"> 
+			</div>
+		</div>
 
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行</label>

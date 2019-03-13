@@ -2,6 +2,7 @@ package com.polypay.platform.paychannel;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ import com.polypay.platform.utils.MD5;
 public class SmartPayChannel implements IPayChannel {
 
 	@Override
-	public void sendRedirect(Map<String, Object> param, HttpServletResponse response) {
+	public void sendRedirect(Map<String, Object> param, HttpServletResponse response,HttpServletRequest request) {
 
 		// 接口路径
 		String basePath = "http://api.yundesun.com/apisubmit?";
@@ -337,7 +338,7 @@ public class SmartPayChannel implements IPayChannel {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Map<String, Object> taskPayOrderNumber(String orderNumber) {
+	public Map<String, Object> taskPayOrderNumber(String orderNumber,Date date) {
 		
 		String baseUrl = "http://api.yundesun.com/apisettlequery?";
 

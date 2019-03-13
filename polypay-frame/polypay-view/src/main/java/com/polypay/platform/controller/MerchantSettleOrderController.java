@@ -194,21 +194,43 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 				// 新网支付
 				if(channelId == 2)
 				{
-					SystemConsts consts = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT);
-					serviceAmount = new BigDecimal(consts.getConstsValue());
-					
+					serviceAmount = merchant.getHandAmount();
 					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
 					settleAmount = settleAmount.add(serviceAmount);
 					merchantSettleOrderVO.setSettleAmount(settleAmount);
-				}else
+				}else if(channelId == 1)  // 熊猫代付
 				{
 					if (blanceAmount.compareTo(settleAmount) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
+				}else if (channelId == 3)// 合付宝支付
+				{
+				
+					serviceAmount = merchant.getHandAmount();
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantSettleOrderVO.setSettleAmount(settleAmount);
+					
+				}
+				
+				else if (channelId == 4)// 快捷支付
+				{
+				
+					serviceAmount = merchant.getHandAmount();
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantSettleOrderVO.setSettleAmount(settleAmount);
+					
 				}
 				
 
@@ -309,6 +331,7 @@ public class MerchantSettleOrderController extends BaseController<MerchantSettle
 		merchantSettleOrder.setAccountName(merchantAccountBindbank.getAccountName());
 		merchantSettleOrder.setAccountProvice(merchantAccountBindbank.getProvice());
 		merchantSettleOrder.setAccountCity(merchantAccountBindbank.getCity());
+		merchantSettleOrder.setBankNo(merchantAccountBindbank.getRemark());
 		
 		merchantSettleOrder.setMerchantId(merchantSettleOrderVO.getMerchantId());
 		merchantSettleOrder.setStatus(OrderStatusConsts.SUBMIT);

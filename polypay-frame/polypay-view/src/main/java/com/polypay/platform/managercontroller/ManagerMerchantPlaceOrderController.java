@@ -235,6 +235,7 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 
 				// 成功修改订单状态
 				merchantPlaceOrder.setStatus(OrderStatusConsts.HANDLE);
+				merchantPlaceOrder.setHandlerTime(new Date());
 				merchantPlaceOrderService.updateByPrimaryKeySelective(merchantPlaceOrder);
 			}
 		} catch (Exception e) {

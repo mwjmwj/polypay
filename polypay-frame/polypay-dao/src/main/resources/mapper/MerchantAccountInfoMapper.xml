@@ -16,6 +16,8 @@
     <result column="pay_level" property="payLevel" jdbcType="INTEGER" />
     <result column="role_id" property="roleId" jdbcType="INTEGER" />
     <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+     <result column="hand_amount" property="handAmount" jdbcType="DECIMAL" />
+   
   </resultMap>
   
 	<resultMap id="listResultMap"
@@ -39,11 +41,12 @@
 			jdbcType="INTEGER" />
 		<result column="role_id" property="roleId" jdbcType="INTEGER" />
 		  <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+		  <result column="hand_amount" property="handAmount" jdbcType="DECIMAL" />
 	</resultMap>
 
 	<sql id="Base_Column_List" >
     id, uuid, proxy_id, account_name, mobile_number, pass_word, create_time, status, 
-    login_ip, helppay_status, pay_level, role_id, channel_id
+    login_ip, helppay_status, pay_level, role_id, channel_id,hand_amount
   </sql>
   
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -63,12 +66,12 @@
       account_name, mobile_number, pass_word, 
       create_time, status, login_ip, 
       helppay_status, pay_level, role_id, 
-      channel_id)
+      channel_id,hand_amount)
     values (#{id,jdbcType=INTEGER}, #{uuid,jdbcType=VARCHAR}, #{proxyId,jdbcType=VARCHAR}, 
       #{accountName,jdbcType=VARCHAR}, #{mobileNumber,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{loginIp,jdbcType=VARCHAR}, 
       #{helppayStatus,jdbcType=INTEGER}, #{payLevel,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, 
-      #{channelId,jdbcType=INTEGER})
+      #{channelId,jdbcType=INTEGER},#{handAmount,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantAccountInfo" useGeneratedKeys="true" keyProperty="id" >
     insert into merchant_account_info
@@ -112,6 +115,9 @@
       <if test="channelId != null" >
         channel_id,
       </if>
+      <if test="handAmount != null" >
+        hand_amount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -152,6 +158,9 @@
       </if>
       <if test="channelId != null" >
         #{channelId,jdbcType=INTEGER},
+      </if>
+       <if test="handAmount != null" >
+        #{handAmount,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -194,6 +203,9 @@
       <if test="channelId != null" >
         channel_id = #{channelId,jdbcType=INTEGER},
       </if>
+      <if test="handAmount != null" >
+        hand_amount = #{handAmount,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -210,7 +222,8 @@
       helppay_status = #{helppayStatus,jdbcType=INTEGER},
       pay_level = #{payLevel,jdbcType=INTEGER},
       role_id = #{roleId,jdbcType=INTEGER},
-      channel_id = #{channelId,jdbcType=INTEGER}
+      channel_id = #{channelId,jdbcType=INTEGER},
+       hand_amount = #{handAmount,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 	<select id="getMerchantInfo"

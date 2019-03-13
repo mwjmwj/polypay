@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,16 +19,14 @@ import com.alibaba.druid.util.StringUtils;
 import com.google.common.collect.Maps;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.bean.MerchantSettleOrder;
-import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.HttpClientUtil;
 import com.polypay.platform.utils.HttpRequestDetailVo;
-import com.polypay.platform.utils.MD5;
 
 public class SiChuanPayChannel implements IPayChannel {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void sendRedirect(Map<String, Object> param, HttpServletResponse response) {
+	public void sendRedirect(Map<String, Object> param, HttpServletResponse response,HttpServletRequest request) {
 
 		// 接口路径
 		String basePath = "http://39.108.126.141/pay/unifiedorder";
@@ -433,7 +432,7 @@ public class SiChuanPayChannel implements IPayChannel {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Map<String, Object> taskPayOrderNumber(String orderNumber) {
+	public Map<String, Object> taskPayOrderNumber(String orderNumber,Date date) {
 
 		String baseUrl = "http://39.108.126.141/querybill/refund";
 		

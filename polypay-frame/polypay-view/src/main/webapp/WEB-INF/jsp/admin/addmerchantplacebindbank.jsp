@@ -93,6 +93,17 @@
 				</div>
 			</div>
 			
+			<div class="layui-form-item layui-form-pane">
+				<label class="layui-form-label">银联号</label>
+				<div class="layui-input-block">
+					<div class="layui-inline">
+						<input type="text" name="remark" autocomplete="off"
+							id="remark" class="layui-input" style="width: 300px">
+					</div>
+				</div>
+			</div>
+			
+			
 				<div class="layui-form-item layui-form-pane">
 				<label class="layui-form-label">设置为默认</label>
 				<div class="layui-input-block">

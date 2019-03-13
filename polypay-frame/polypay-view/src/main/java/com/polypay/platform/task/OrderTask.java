@@ -82,22 +82,27 @@ public class OrderTask {
 		synchronized (porder.getOrderNumber().intern()) {
 
 			try {
-			MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
-			merchantInfo.setUuid(porder.getMerchantId());
-			MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
+				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
+				merchantInfo.setUuid(porder.getMerchantId());
+				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
 
-			Channel channel = channelService.selectByPrimaryKey(merchantInfoByUUID.getChannelId());
+				Channel channel = channelService.selectByPrimaryKey(merchantInfoByUUID.getChannelId());
 
-			Class<?> payBean = Class.forName(channel.getBean());
-			IPayChannel paychannel = (IPayChannel) payBean.newInstance();
+				Class<?> payBean = Class.forName(channel.getBean());
+				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
 
-			Map<String, Object> result = paychannel.taskPayOrderNumber(porder.getOrderNumber());
+				Map<String, Object> result = paychannel.taskPayOrderNumber(porder.getOrderNumber(),
+						porder.getHandlerTime());
 
-			Object status = result.get("status");
+				if (null == result) {
+					return;
+				}
 
-			if (null == status) {
-				return;
-			}
+				Object status = result.get("status");
+
+				if (null == status) {
+					return;
+				}
 
 				// 失敗
 				if ("0".equals(status)) {
@@ -112,7 +117,7 @@ public class OrderTask {
 					merchantPlaceOrderService.updateByPrimaryKeySelective(porder);
 				}
 			} catch (ServiceException e) {
-			}catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException e) {
 			} catch (InstantiationException e) {
 			} catch (IllegalAccessException e) {
 			}
@@ -133,7 +138,12 @@ public class OrderTask {
 				Class<?> payBean = Class.forName(channel.getBean());
 				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
 
-				Map<String, Object> result = paychannel.taskPayOrderNumber(sorder.getOrderNumber());
+				Map<String, Object> result = paychannel.taskPayOrderNumber(sorder.getOrderNumber(),
+						sorder.getPayTime());
+
+				if (null == result) {
+					return;
+				}
 
 				Object status = result.get("status");
 

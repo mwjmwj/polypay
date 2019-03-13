@@ -49,6 +49,8 @@ public class MerchantPlaceOrderVO extends VO{
     
     private String proxyId;
     
+    private String bankNo;
+    
     public String getBankCode() {
 		return bankCode;
 	}
@@ -297,6 +299,14 @@ public class MerchantPlaceOrderVO extends VO{
 
 	public void setProxyId(String proxyId) {
 		this.proxyId = proxyId;
+	}
+
+	public String getBankNo() {
+		return bankNo;
+	}
+
+	public void setBankNo(String bankNo) {
+		this.bankNo = bankNo;
 	}
   
     

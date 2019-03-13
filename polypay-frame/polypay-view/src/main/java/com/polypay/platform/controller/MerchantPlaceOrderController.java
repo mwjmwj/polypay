@@ -220,20 +220,43 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 				// 新网支付
 				if(channelId == 2)
 				{
-					SystemConsts consts = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT);
-					serviceAmount = new BigDecimal(consts.getConstsValue());
+					serviceAmount = merchant.getHandAmount();
 					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
 					settleAmount = settleAmount.add(serviceAmount);
 					merchantPlaceOrderVO.setPayAmount(settleAmount);
-				}else
+				}else if(channelId == 1)  // 新网支付
 				{
 					if (blanceAmount.compareTo(settleAmount) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
+				}
+				else if (channelId == 3)// 合付宝支付
+				{
+				
+					serviceAmount = merchant.getHandAmount();
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantPlaceOrderVO.setPayAmount(settleAmount);
+					
+				}
+				else if (channelId == 4)//KJ 支付
+				{
+				
+					serviceAmount = merchant.getHandAmount();
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantPlaceOrderVO.setPayAmount(settleAmount);
+					
 				}
 
 				
@@ -316,6 +339,7 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 		merchantPlaceOrder.setAccountName(merchantAccountBindbank.getAccountName());
 		merchantPlaceOrder.setAccountProvice(merchantAccountBindbank.getProvice());
 		merchantPlaceOrder.setAccountCity(merchantAccountBindbank.getCity());
+		merchantPlaceOrder.setBankNo(merchantAccountBindbank.getRemark());
 		
 		merchantPlaceOrder.setMerchantId(merchantPlaceOrderVO.getMerchantId());
 		merchantPlaceOrder.setStatus(OrderStatusConsts.SUBMIT);

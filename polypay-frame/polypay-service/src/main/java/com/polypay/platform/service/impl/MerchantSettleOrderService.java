@@ -154,4 +154,13 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 		}
 	}
 
+	@Override
+	public MerchantSettleOrder getSettleOrderByOrderNo(String orderNo) throws ServiceException {
+		try {
+			return merchantSettleOrderMapper.getSettleOrderByOrderNo(orderNo);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

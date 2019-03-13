@@ -23,6 +23,7 @@
     <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
     <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
     <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
+    <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
   </resultMap>
   
 
@@ -48,19 +49,20 @@
     <result column="bank_code" property="bankCode" jdbcType="VARCHAR" />
     <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
     <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
+     <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<sql id="Base_Column_List" >
     id, order_number, postal_amount, service_amount, arrival_amount, merchant_bind_bank, 
     create_time, pay_time, status, type, descreption, handle_people, merchant_id, bank_name, 
-    account_name, account_city, account_provice, bank_code, trade_type,branch_bank_name
+    account_name, account_city, account_provice, bank_code, trade_type,branch_bank_name,bank_no
   </sql>
   
   
   <sql id="proxy_list" >
     mso.id, mso.order_number, mso.postal_amount, mso.service_amount, mso.arrival_amount, mso.merchant_bind_bank, 
     mso.create_time, mso.pay_time, mso.status, mso.type, mso.descreption, mso.handle_people, mso.merchant_id, mso.bank_name, 
-    mso.account_name, mso.account_city, mso.account_provice, mso.bank_code, mso.trade_type,mso.branch_bank_name
+    mso.account_name, mso.account_city, mso.account_provice, mso.bank_code, mso.trade_type,mso.branch_bank_name,mso.bank_no
   </sql>
   
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
@@ -83,14 +85,14 @@
       type, descreption, handle_people, 
       merchant_id, bank_name, account_name, 
       account_city, branch_bank_name, account_provice, 
-      bank_code, trade_type)
+      bank_code, trade_type,bank_no)
     values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{postalAmount,jdbcType=DECIMAL}, 
       #{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL}, #{merchantBindBank,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
       #{type,jdbcType=INTEGER}, #{descreption,jdbcType=VARCHAR}, #{handlePeople,jdbcType=VARCHAR}, 
       #{merchantId,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
       #{accountCity,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, #{accountProvice,jdbcType=VARCHAR}, 
-      #{bankCode,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR})
+      #{bankCode,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantSettleOrder" >
     insert into merchant_settle_order
@@ -155,6 +157,9 @@
       <if test="tradeType != null" >
         trade_type,
       </if>
+      <if test="bankNo != null" >
+        bank_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -216,6 +221,9 @@
       </if>
       <if test="tradeType != null" >
         #{tradeType,jdbcType=VARCHAR},
+      </if>
+       <if test="bankNo != null" >
+        #{bankNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -279,6 +287,9 @@
       <if test="tradeType != null" >
         trade_type = #{tradeType,jdbcType=VARCHAR},
       </if>
+       <if test="bankNo != null" >
+        bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -302,7 +313,8 @@
       branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
       account_provice = #{accountProvice,jdbcType=VARCHAR},
       bank_code = #{bankCode,jdbcType=VARCHAR},
-      trade_type = #{tradeType,jdbcType=VARCHAR}
+      trade_type = #{tradeType,jdbcType=VARCHAR},
+      bank_no = #{bankNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -455,6 +467,15 @@
 		</if>
 
 		order by mso.create_time desc
+	</select>
+	
+	<select id="getSettleOrderByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+	
+	select 
+	<include refid="Base_Column_List" />
+	from merchant_settle_order
+	where order_number = #{sOrder}
+	
 	</select>
 
 

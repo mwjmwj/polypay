@@ -43,6 +43,8 @@ public class MerchantSettleOrder {
     private String tradeType;
     
     private String branchBankName;
+    
+    private String bankNo;
 
     public Integer getId() {
         return id;
@@ -202,5 +204,13 @@ public class MerchantSettleOrder {
 
 	public void setBranchBankName(String branchBankName) {
 		this.branchBankName = branchBankName;
+	}
+
+	public String getBankNo() {
+		return bankNo;
+	}
+
+	public void setBankNo(String bankNo) {
+		this.bankNo = bankNo;
 	}
 }

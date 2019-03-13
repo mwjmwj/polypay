@@ -1,5 +1,6 @@
 package com.polypay.platform.vo;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.polypay.platform.consts.VerifyTypeEnum;
@@ -54,6 +55,7 @@ public class MerchantAccountInfoVO extends VO{
     
     private String channelId;
     
+    private BigDecimal handAmount;
     
     public String getNewPayPassword() {
 		return newPayPassword;
@@ -229,6 +231,14 @@ public class MerchantAccountInfoVO extends VO{
 
 	public void setChannelId(String channelId) {
 		this.channelId = channelId;
+	}
+
+	public BigDecimal getHandAmount() {
+		return handAmount;
+	}
+
+	public void setHandAmount(BigDecimal handAmount) {
+		this.handAmount = handAmount;
 	}
 
 }

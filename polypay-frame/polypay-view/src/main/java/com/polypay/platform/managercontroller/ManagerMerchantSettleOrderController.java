@@ -56,14 +56,12 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
 	@Autowired
 	private ISystemConstsService systemConstsService;
-	
-	
+
 	@Autowired
 	private IChannelService channelService;
 
 	@Autowired
 	private IMerchantAccountInfoService merchantAccountInfoService;
-	
 
 	@RequestMapping("/merchantmanager/settle/order/list")
 	@ResponseBody
@@ -99,10 +97,11 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 			if (!StringUtils.isEmpty(status)) {
 				merchantSettleOrderVO.setStatus(Integer.parseInt(status));
 			}
-			
+
 			String merchantId = getRequest().getParameter("merchantId");
 			if (!StringUtils.isEmpty(merchantId)) {
-				merchantSettleOrderVO.setMerchantId(merchantId);;
+				merchantSettleOrderVO.setMerchantId(merchantId);
+				;
 			}
 
 			pageList = merchantSettleOrderService.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
@@ -213,13 +212,12 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 					return;
 				}
 
-				
 				MerchantAccountInfoVO merchantInfo = new MerchantAccountInfoVO();
 				merchantInfo.setUuid(merchantSettleOrder.getMerchantId());
 				MerchantAccountInfo merchantInfoByUUID = merchantAccountInfoService.getMerchantInfoByUUID(merchantInfo);
-				
+
 				Channel channel = channelService.selectByPrimaryKey(merchantInfoByUUID.getChannelId());
-				
+
 				Class<?> payBean = Class.forName(channel.getBean());
 				IPayChannel paychannel = (IPayChannel) payBean.newInstance();
 
@@ -231,7 +229,6 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 				Map<String, Object> result = paychannel.settleOrder(selectByPrimaryKey);
 
 				status = result.get("status");
-	
 
 				// 返回结果失败 回滚订单
 				if (status.toString().equals("0")) {
@@ -240,7 +237,7 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 					rollBackSettlerOrder(merchantSettleOrder);
 					return;
 				}
-				
+
 				// 未支付状态返回
 				if (status.toString().equals("2")) {
 					return;
@@ -248,17 +245,16 @@ public class ManagerMerchantSettleOrderController extends BaseController<Merchan
 
 				// 成功修改订单状态
 				merchantSettleOrder.setStatus(OrderStatusConsts.HANDLE);
-				
-				merchantSettleOrder.setHandlePeople("admin");
 
+				merchantSettleOrder.setHandlePeople("admin");
+				merchantSettleOrder.setPayTime(new Date());
 				merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
 			}
 
 		} catch (Exception e) {
 			// 回滚
 			try {
-				if(null!=status&&"1".equals(status.toString()))
-				{
+				if (null != status && "1".equals(status.toString())) {
 					return;
 				}
 				rollBackSettlerOrder(merchantSettleOrder);

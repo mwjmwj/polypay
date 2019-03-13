@@ -1,5 +1,6 @@
 package com.polypay.platform.bean;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class MerchantAccountInfo {
@@ -32,7 +33,9 @@ public class MerchantAccountInfo {
     private Integer channelId;
     
     private String helppayoff;
-
+    
+    private BigDecimal handAmount;
+    
     public Integer getId() {
         return id;
     }
@@ -151,5 +154,13 @@ public class MerchantAccountInfo {
 
 	public void setChannelId(Integer channelId) {
 		this.channelId = channelId;
+	}
+
+	public BigDecimal getHandAmount() {
+		return handAmount;
+	}
+
+	public void setHandAmount(BigDecimal handAmount) {
+		this.handAmount = handAmount;
 	}
 }

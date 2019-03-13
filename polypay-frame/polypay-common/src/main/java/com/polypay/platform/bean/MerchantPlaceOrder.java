@@ -43,6 +43,8 @@ public class MerchantPlaceOrder {
     private String descreption;
 
     private String tradeType;
+    
+    private String bankNo;
 
     public Integer getId() {
         return id;
@@ -203,4 +205,12 @@ public class MerchantPlaceOrder {
     public void setTradeType(String tradeType) {
         this.tradeType = tradeType == null ? null : tradeType.trim();
     }
+
+	public String getBankNo() {
+		return bankNo;
+	}
+
+	public void setBankNo(String bankNo) {
+		this.bankNo = bankNo;
+	}
 }

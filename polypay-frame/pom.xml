@@ -192,6 +192,10 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					
+					 <compilerArguments>
+           			<extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
+     		 		 </compilerArguments>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -202,9 +206,12 @@
 					<include>**/*.properties</include>
 					<include>**/*.xml</include>
 					<include>**/*.tld</include>
+					<include>**/*.pfx</include>
+					<include>**/*.cer</include>
 				</includes>
 				<filtering>false</filtering>
 			</resource>
+			
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
