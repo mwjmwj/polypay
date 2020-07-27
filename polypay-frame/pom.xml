@@ -181,6 +181,7 @@
 
 		<mybatis.paginator.version>1.2.17</mybatis.paginator.version>
 		<druid.version>1.0.29</druid.version>
+		
 	</properties>
 
 	<build>
@@ -198,6 +199,21 @@
      		 		 </compilerArguments>
 				</configuration>
 			</plugin>
+
+
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.4.8.v20171121</version>
+				<configuration>
+					<httpConnector>
+						<port>8888</port>
+						<host>localhost</host>
+					</httpConnector>
+					<scanIntervalSeconds>1</scanIntervalSeconds>
+				</configuration>
+			</plugin>
+
 		</plugins>
 		<resources>
 			<resource>

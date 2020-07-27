@@ -21,4 +21,6 @@ public interface IMerchantAccountInfoService extends IBaseService<MerchantAccoun
 
 	PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param) throws ServiceException;
 
+	List<String> listMerchantAccountInfoByProxy(String proxyId) throws ServiceException;
+
 }

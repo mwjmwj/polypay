@@ -51,6 +51,26 @@ public class MerchantPlaceOrderVO extends VO{
     
     private String bankNo;
     
+    private String callUrl;
+
+    private String merchantOrderNumber;
+
+    public String getCallUrl() {
+		return callUrl;
+	}
+
+	public void setCallUrl(String callUrl) {
+		this.callUrl = callUrl;
+	}
+
+	public String getMerchantOrderNumber() {
+		return merchantOrderNumber;
+	}
+
+	public void setMerchantOrderNumber(String merchantOrderNumber) {
+		this.merchantOrderNumber = merchantOrderNumber;
+	}
+    
     public String getBankCode() {
 		return bankCode;
 	}

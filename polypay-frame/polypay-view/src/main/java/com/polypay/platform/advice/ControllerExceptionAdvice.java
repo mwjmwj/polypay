@@ -19,7 +19,7 @@ import com.polypay.platform.utils.MD5;
  * @author mwj
  *
  */
-@ControllerAdvice
+//@ControllerAdvice
 public class ControllerExceptionAdvice {
 	
 	private Logger log = LoggerFactory.getLogger(ControllerExceptionAdvice.class);

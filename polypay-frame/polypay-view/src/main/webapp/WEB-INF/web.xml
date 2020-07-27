@@ -53,19 +53,19 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   
-   <filter>
+  <!--  <filter>
         <filter-name>NoCacheFilter</filter-name>
         <filter-class>com.polypay.platform.filter.NoCacheFilter</filter-class>
         <init-param>
             <param-name>exclusions</param-name>
-            <!-- 排除统计干扰 -->
+            排除统计干扰
             <param-value>*.gif,*.jpg,*.png,*.css,*.ico</param-value>
         </init-param>
     </filter>
     <filter-mapping>
         <filter-name>NoCacheFilter</filter-name>
          <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping> -->
 
   <servlet>
     <servlet-name>spring-mvc</servlet-name>
@@ -81,7 +81,7 @@
   </servlet-mapping>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/resources/404.jsp</location>
+		<location>/404.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>

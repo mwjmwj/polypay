@@ -51,7 +51,6 @@ public class Httpz extends HttpFacade{
 		return hf.get(url);
 	}
 	
-	
 	/**
 	 * 是否为https地址
 	 * @param url

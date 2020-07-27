@@ -1,10 +1,16 @@
 package com.polypay.platform.task;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.locks.ReentrantLock;
-
+import com.alibaba.druid.util.StringUtils;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.polypay.platform.bean.*;
+import com.polypay.platform.consts.OrderStatusConsts;
+import com.polypay.platform.exception.ServiceException;
+import com.polypay.platform.paychannel.IPayChannel;
+import com.polypay.platform.service.*;
+import com.polypay.platform.utils.HttpClientUtil;
+import com.polypay.platform.utils.MD5;
+import com.polypay.platform.vo.MerchantAccountInfoVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,25 +18,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.polypay.platform.bean.Channel;
-import com.polypay.platform.bean.MerchantAccountInfo;
-import com.polypay.platform.bean.MerchantFinance;
-import com.polypay.platform.bean.MerchantPlaceOrder;
-import com.polypay.platform.bean.MerchantSettleOrder;
-import com.polypay.platform.consts.OrderStatusConsts;
-import com.polypay.platform.exception.ServiceException;
-import com.polypay.platform.paychannel.IPayChannel;
-import com.polypay.platform.service.IChannelService;
-import com.polypay.platform.service.IMerchantAccountInfoService;
-import com.polypay.platform.service.IMerchantFinanceService;
-import com.polypay.platform.service.IMerchantPlaceOrderService;
-import com.polypay.platform.service.IMerchantSettleOrderService;
-import com.polypay.platform.vo.MerchantAccountInfoVO;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Component
 public class OrderTask {
 
-	private Logger log = LoggerFactory.getLogger(MerchantUnFrezzTask.class);
+	private Logger log = LoggerFactory.getLogger(OrderTask.class);
 
 	@Autowired
 	private IMerchantSettleOrderService merchantSettleOrderService;
@@ -45,6 +42,9 @@ public class OrderTask {
 
 	@Autowired
 	private IChannelService channelService;
+	
+	@Autowired
+	private IMerchantApiService merchantApiService;
 
 	@Autowired
 	private IMerchantAccountInfoService merchantAccountInfoService;
@@ -106,7 +106,9 @@ public class OrderTask {
 
 				// 失敗
 				if ("0".equals(status)) {
+					
 					rollBackPlaceOrder(porder);
+					filaPlacePayNotify1(porder);
 					return;
 				}
 
@@ -115,6 +117,7 @@ public class OrderTask {
 					porder.setArriveAmount(porder.getPayAmount().subtract(porder.getServiceAmount()));
 					porder.setHandlerTime(new Date());
 					merchantPlaceOrderService.updateByPrimaryKeySelective(porder);
+					filaPlacePayNotify1(porder);
 				}
 			} catch (ServiceException e) {
 			} catch (ClassNotFoundException e) {
@@ -153,7 +156,10 @@ public class OrderTask {
 
 				// 失敗
 				if ("0".equals(status.toString())) {
+					
 					rollBackSettlerOrder(sorder);
+					filaPlacePayNotify(sorder);
+					
 					return;
 				}
 
@@ -161,6 +167,7 @@ public class OrderTask {
 					sorder.setStatus(OrderStatusConsts.SUCCESS);
 
 					sorder.setPayTime(new Date());
+					filaPlacePayNotify(sorder);
 					sorder.setArrivalAmount(sorder.getPostalAmount().subtract(sorder.getServiceAmount()));
 					merchantSettleOrderService.updateByPrimaryKeySelective(sorder);
 				}
@@ -172,6 +179,115 @@ public class OrderTask {
 			}
 		}
 	}
+	
+	
+	private void filaPlacePayNotify(MerchantSettleOrder merchantSettleOrder) throws ServiceException {
+		
+		
+		Map<String, String> param = Maps.newHashMap();
+		List<String> keys = Lists.newArrayList();
+		
+		param.put("merchant_id", merchantSettleOrder.getMerchantId());
+		keys.add("merchant_id");
+		
+		param.put("order_no", merchantSettleOrder.getMerchantOrderNumber());
+		keys.add("order_no");
+		
+		param.put("amount", merchantSettleOrder.getPostalAmount().toString());
+		keys.add("amount");
+		
+		String status = "";
+		if(merchantSettleOrder.getStatus().equals(OrderStatusConsts.FAIL))
+		{
+			status = "fail";
+		}
+		if(merchantSettleOrder.getStatus().equals(OrderStatusConsts.SUCCESS))
+		{
+			status = "success";
+		}
+		
+		param.put("status", status);
+		keys.add("status");  // 1 支付中   0 成功  -1  失败
+		
+		param.put("time", System.currentTimeMillis()+"");
+		keys.add("time");
+		
+		MerchantApi merchantApiByUUID = merchantApiService.getMerchantApiByUUID(merchantSettleOrder.getMerchantId());
+		
+		String signParam = getUrl(param, keys);
+		signParam += "&api_key="+merchantApiByUUID.getSecretKey();
+		String sign = MD5.md5(signParam);
+		
+		param.put("sign", sign);
+		
+		HttpClientUtil.httpPost(merchantSettleOrder.getCallUrl(), null, param);
+		
+	}
+	
+	/**
+	 *  代付异步
+	 * @param merchantSettleOrder
+	 * @throws ServiceException
+	 */
+	private void filaPlacePayNotify1(MerchantPlaceOrder merchantSettleOrder) throws ServiceException {
+		
+		
+		Map<String, String> param = Maps.newHashMap();
+		List<String> keys = Lists.newArrayList();
+		
+		param.put("merchant_id", merchantSettleOrder.getMerchantId());
+		keys.add("merchant_id");
+		
+		param.put("order_no", merchantSettleOrder.getMerchantOrderNumber());
+		keys.add("order_no");
+		
+		param.put("amount", merchantSettleOrder.getPayAmount().toString());
+		keys.add("amount");
+		
+		String status = "";
+		if(merchantSettleOrder.getStatus().equals(OrderStatusConsts.FAIL))
+		{
+			status = "fail";
+		}
+		if(merchantSettleOrder.getStatus().equals(OrderStatusConsts.SUCCESS))
+		{
+			status = "success";
+		}
+		
+		param.put("status", status);
+		keys.add("status");  // 1 支付中   0 成功  -1  失败
+		
+		param.put("time", System.currentTimeMillis()+"");
+		keys.add("time");
+		
+		MerchantApi merchantApiByUUID = merchantApiService.getMerchantApiByUUID(merchantSettleOrder.getMerchantId());
+		
+		String signParam = getUrl(param, keys);
+		signParam += "&api_key="+merchantApiByUUID.getSecretKey();
+		String sign = MD5.md5(signParam);
+		
+		param.put("sign", sign);
+		
+		HttpClientUtil.httpPost(merchantSettleOrder.getCallUrl(), null, param);
+		
+	}
+
+	
+	private String getUrl(Map<String, String> signMap, List<String> keys)
+	{
+		StringBuffer newSign = new StringBuffer();
+		keys.forEach(key -> {
+			newSign.append(key).append("=").append(signMap.get(key)).append("&");
+		});
+
+		if (StringUtils.isEmpty(newSign.toString())) {
+			return null;
+		}
+		newSign.delete(newSign.length() - 1, newSign.length());
+		return newSign.toString();
+	}
+	
+
 
 	// 同步回滚订单
 	private void rollBackSettlerOrder(MerchantSettleOrder merchantSettleOrder) throws ServiceException {
@@ -188,7 +304,8 @@ public class OrderTask {
 						.setBlanceAmount(merchantFinance.getBlanceAmount().add(merchantSettleOrder.getPostalAmount()));
 				merchantSettleOrder.setStatus(OrderStatusConsts.FAIL);
 				merchantSettleOrderService.updateByPrimaryKeySelective(merchantSettleOrder);
-				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance,merchantSettleOrder.getPostalAmount(),new BigDecimal(0),"add");
+
 			}
 		}
 	}
@@ -212,7 +329,7 @@ public class OrderTask {
 				merchantPlaceOrder.setHandlerName("系统");
 
 				merchantPlaceOrderService.updateByPrimaryKeySelective(merchantPlaceOrder);
-				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance);
+				merchantFinanceService.updateByPrimaryKeySelective(merchantFinance,merchantPlaceOrder.getPayAmount(),new BigDecimal(0),"add");
 			}
 		}
 	}

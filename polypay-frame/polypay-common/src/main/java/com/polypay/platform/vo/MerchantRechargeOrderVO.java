@@ -60,6 +60,12 @@ public class MerchantRechargeOrderVO extends VO {
 	private String accountName;
 	
 	private String proxyId;
+	
+	private String payCode;
+	
+	private Integer count;
+	
+	private String cTime;
 
 	public String getTradeType() {
 		return tradeType;
@@ -267,5 +273,29 @@ public class MerchantRechargeOrderVO extends VO {
 
 	public void setProxyId(String proxyId) {
 		this.proxyId = proxyId;
+	}
+
+	public String getPayCode() {
+		return payCode;
+	}
+
+	public void setPayCode(String payCode) {
+		this.payCode = payCode;
+	}
+
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
+	}
+
+	public String getcTime() {
+		return cTime;
+	}
+
+	public void setcTime(String cTime) {
+		this.cTime = cTime;
 	}
 }

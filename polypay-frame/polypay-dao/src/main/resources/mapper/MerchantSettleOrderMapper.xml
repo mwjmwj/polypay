@@ -24,6 +24,8 @@
     <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
     <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
     <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+    <result column="call_url" property="callUrl" jdbcType="VARCHAR" />
+    <result column="merchant_order_number" property="merchantOrderNumber" jdbcType="VARCHAR" />
   </resultMap>
   
 
@@ -50,49 +52,51 @@
     <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
     <result column="branch_bank_name" property="branchBankName" jdbcType="VARCHAR" />
      <result column="bank_no" property="bankNo" jdbcType="VARCHAR" />
+     <result column="call_url" property="callUrl" jdbcType="VARCHAR" />
+    <result column="merchant_order_number" property="merchantOrderNumber" jdbcType="VARCHAR" />
 	</resultMap>
-
-	<sql id="Base_Column_List" >
+<sql id="Base_Column_List" >
     id, order_number, postal_amount, service_amount, arrival_amount, merchant_bind_bank, 
-    create_time, pay_time, status, type, descreption, handle_people, merchant_id, bank_name, 
-    account_name, account_city, account_provice, bank_code, trade_type,branch_bank_name,bank_no
+    account_provice, account_city, account_name, branch_bank_name, bank_code, bank_name, 
+    create_time, pay_time, status, type, descreption, handle_people, merchant_id, trade_type, 
+    bank_no, call_url, merchant_order_number
   </sql>
   
   
   <sql id="proxy_list" >
     mso.id, mso.order_number, mso.postal_amount, mso.service_amount, mso.arrival_amount, mso.merchant_bind_bank, 
     mso.create_time, mso.pay_time, mso.status, mso.type, mso.descreption, mso.handle_people, mso.merchant_id, mso.bank_name, 
-    mso.account_name, mso.account_city, mso.account_provice, mso.bank_code, mso.trade_type,mso.branch_bank_name,mso.bank_no
+    mso.account_name, mso.account_city, mso.account_provice, mso.bank_code, mso.trade_type,mso.branch_bank_name,mso.bank_no,
+    mso.call_url, mso.merchant_order_number
   </sql>
   
-	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
-		parameterType="java.lang.Integer">
-		select
-		<include refid="Base_Column_List" />
-		from merchant_settle_order
-		where id = #{id,jdbcType=INTEGER}
-	</select>
-	<delete id="deleteByPrimaryKey"
-		parameterType="java.lang.Integer">
-		delete from merchant_settle_order
-		where id =
-		#{id,jdbcType=INTEGER}
-	</delete>
-	 <insert id="insert" parameterType="com.polypay.platform.bean.MerchantSettleOrder" >
+	 <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from merchant_settle_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from merchant_settle_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.polypay.platform.bean.MerchantSettleOrder" >
     insert into merchant_settle_order (id, order_number, postal_amount, 
       service_amount, arrival_amount, merchant_bind_bank, 
+      account_provice, account_city, account_name, 
+      branch_bank_name, bank_code, bank_name, 
       create_time, pay_time, status, 
       type, descreption, handle_people, 
-      merchant_id, bank_name, account_name, 
-      account_city, branch_bank_name, account_provice, 
-      bank_code, trade_type,bank_no)
+      merchant_id, trade_type, bank_no, 
+      call_url, merchant_order_number)
     values (#{id,jdbcType=INTEGER}, #{orderNumber,jdbcType=VARCHAR}, #{postalAmount,jdbcType=DECIMAL}, 
       #{serviceAmount,jdbcType=DECIMAL}, #{arrivalAmount,jdbcType=DECIMAL}, #{merchantBindBank,jdbcType=VARCHAR}, 
+      #{accountProvice,jdbcType=VARCHAR}, #{accountCity,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
+      #{branchBankName,jdbcType=VARCHAR}, #{bankCode,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
       #{type,jdbcType=INTEGER}, #{descreption,jdbcType=VARCHAR}, #{handlePeople,jdbcType=VARCHAR}, 
-      #{merchantId,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{accountName,jdbcType=VARCHAR}, 
-      #{accountCity,jdbcType=VARCHAR}, #{branchBankName,jdbcType=VARCHAR}, #{accountProvice,jdbcType=VARCHAR}, 
-      #{bankCode,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR})
+      #{merchantId,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, #{bankNo,jdbcType=VARCHAR}, 
+      #{callUrl,jdbcType=VARCHAR}, #{merchantOrderNumber,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.polypay.platform.bean.MerchantSettleOrder" >
     insert into merchant_settle_order
@@ -115,6 +119,24 @@
       <if test="merchantBindBank != null" >
         merchant_bind_bank,
       </if>
+      <if test="accountProvice != null" >
+        account_provice,
+      </if>
+      <if test="accountCity != null" >
+        account_city,
+      </if>
+      <if test="accountName != null" >
+        account_name,
+      </if>
+      <if test="branchBankName != null" >
+        branch_bank_name,
+      </if>
+      <if test="bankCode != null" >
+        bank_code,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
       <if test="createTime != null" >
         create_time,
       </if>
@@ -136,29 +158,17 @@
       <if test="merchantId != null" >
         merchant_id,
       </if>
-      <if test="bankName != null" >
-        bank_name,
-      </if>
-      <if test="accountName != null" >
-        account_name,
-      </if>
-      <if test="accountCity != null" >
-        account_city,
-      </if>
-      <if test="branchBankName != null" >
-        branch_bank_name,
-      </if>
-      <if test="accountProvice != null" >
-        account_provice,
-      </if>
-      <if test="bankCode != null" >
-        bank_code,
-      </if>
       <if test="tradeType != null" >
         trade_type,
       </if>
       <if test="bankNo != null" >
         bank_no,
+      </if>
+      <if test="callUrl != null" >
+        call_url,
+      </if>
+      <if test="merchantOrderNumber != null" >
+        merchant_order_number,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -179,6 +189,24 @@
       </if>
       <if test="merchantBindBank != null" >
         #{merchantBindBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvice != null" >
+        #{accountProvice,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCity != null" >
+        #{accountCity,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null" >
+        #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null" >
+        #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -201,29 +229,17 @@
       <if test="merchantId != null" >
         #{merchantId,jdbcType=VARCHAR},
       </if>
-      <if test="bankName != null" >
-        #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountName != null" >
-        #{accountName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountCity != null" >
-        #{accountCity,jdbcType=VARCHAR},
-      </if>
-      <if test="branchBankName != null" >
-        #{branchBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountProvice != null" >
-        #{accountProvice,jdbcType=VARCHAR},
-      </if>
-      <if test="bankCode != null" >
-        #{bankCode,jdbcType=VARCHAR},
-      </if>
       <if test="tradeType != null" >
         #{tradeType,jdbcType=VARCHAR},
       </if>
-       <if test="bankNo != null" >
+      <if test="bankNo != null" >
         #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="callUrl != null" >
+        #{callUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderNumber != null" >
+        #{merchantOrderNumber,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -244,6 +260,24 @@
       </if>
       <if test="merchantBindBank != null" >
         merchant_bind_bank = #{merchantBindBank,jdbcType=VARCHAR},
+      </if>
+      <if test="accountProvice != null" >
+        account_provice = #{accountProvice,jdbcType=VARCHAR},
+      </if>
+      <if test="accountCity != null" >
+        account_city = #{accountCity,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null" >
+        account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="branchBankName != null" >
+        branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankCode != null" >
+        bank_code = #{bankCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -266,29 +300,17 @@
       <if test="merchantId != null" >
         merchant_id = #{merchantId,jdbcType=VARCHAR},
       </if>
-      <if test="bankName != null" >
-        bank_name = #{bankName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountName != null" >
-        account_name = #{accountName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountCity != null" >
-        account_city = #{accountCity,jdbcType=VARCHAR},
-      </if>
-      <if test="branchBankName != null" >
-        branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
-      </if>
-      <if test="accountProvice != null" >
-        account_provice = #{accountProvice,jdbcType=VARCHAR},
-      </if>
-      <if test="bankCode != null" >
-        bank_code = #{bankCode,jdbcType=VARCHAR},
-      </if>
       <if test="tradeType != null" >
         trade_type = #{tradeType,jdbcType=VARCHAR},
       </if>
-       <if test="bankNo != null" >
+      <if test="bankNo != null" >
         bank_no = #{bankNo,jdbcType=VARCHAR},
+      </if>
+      <if test="callUrl != null" >
+        call_url = #{callUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderNumber != null" >
+        merchant_order_number = #{merchantOrderNumber,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -300,6 +322,12 @@
       service_amount = #{serviceAmount,jdbcType=DECIMAL},
       arrival_amount = #{arrivalAmount,jdbcType=DECIMAL},
       merchant_bind_bank = #{merchantBindBank,jdbcType=VARCHAR},
+      account_provice = #{accountProvice,jdbcType=VARCHAR},
+      account_city = #{accountCity,jdbcType=VARCHAR},
+      account_name = #{accountName,jdbcType=VARCHAR},
+      branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
+      bank_code = #{bankCode,jdbcType=VARCHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       pay_time = #{payTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
@@ -307,14 +335,10 @@
       descreption = #{descreption,jdbcType=VARCHAR},
       handle_people = #{handlePeople,jdbcType=VARCHAR},
       merchant_id = #{merchantId,jdbcType=VARCHAR},
-      bank_name = #{bankName,jdbcType=VARCHAR},
-      account_name = #{accountName,jdbcType=VARCHAR},
-      account_city = #{accountCity,jdbcType=VARCHAR},
-      branch_bank_name = #{branchBankName,jdbcType=VARCHAR},
-      account_provice = #{accountProvice,jdbcType=VARCHAR},
-      bank_code = #{bankCode,jdbcType=VARCHAR},
       trade_type = #{tradeType,jdbcType=VARCHAR},
-      bank_no = #{bankNo,jdbcType=VARCHAR}
+      bank_no = #{bankNo,jdbcType=VARCHAR},
+      call_url = #{callUrl,jdbcType=VARCHAR},
+      merchant_order_number = #{merchantOrderNumber,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 
@@ -337,6 +361,11 @@
 		<if test="orderNumber != null">
 			<bind name="orderNumber" value="'%'+orderNumber+'%'" />
 			and order_number like #{orderNumber}
+		</if>
+
+		<if test="merchantOrderNumber != null">
+			<bind name="merchantOrderNumber" value="'%'+merchantOrderNumber+'%'" />
+			and merchant_order_number like #{merchantOrderNumber}
 		</if>
 
 		<if test="cBeginTime != null">
@@ -475,6 +504,35 @@
 	<include refid="Base_Column_List" />
 	from merchant_settle_order
 	where order_number = #{sOrder}
+	
+	</select>
+	
+	<select id="listProxyMerchantSettleOrder1" resultType="com.polypay.platform.vo.MerchantSettleOrderVO"
+	parameterType="com.polypay.platform.vo.MerchantSettleOrderVO">
+	select 
+	substr(create_time,1,10) as cTime,
+	merchant_id as merchantId,
+	sum(postal_amount) as postalAmount,
+	sum(service_amount) as serviceAmount,
+	sum(arrival_amount) as arrivalAmount,
+	count(1) as countN
+	 from 
+	merchant_settle_order 
+	where 1=1
+	
+ 
+		<if test="merchantId != null and merchantId != ''">
+		and merchant_id = #{merchantId}
+		</if>
+		
+			<if test="cTime != null and cTime != ''">
+		and substr(create_time,1,10) = #{cTime}
+		</if>
+		and status >=0
+	
+	
+	group by merchant_id,substr(create_time,1,10)
+		 ORDER BY create_time DESC
 	
 	</select>
 

@@ -14,7 +14,7 @@ public class DateUtil {
 	}
 	
 	public static String getTime(){
-		return new SimpleDateFormat("HHmmss").format(new Date());
+		return new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 	}
 	
 	public static String getTimeMillis(){

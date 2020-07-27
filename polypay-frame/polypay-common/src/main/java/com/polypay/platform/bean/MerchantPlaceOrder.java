@@ -45,8 +45,28 @@ public class MerchantPlaceOrder {
     private String tradeType;
     
     private String bankNo;
+    
+    private String callUrl;
 
-    public Integer getId() {
+    private String merchantOrderNumber;
+
+    public String getCallUrl() {
+		return callUrl;
+	}
+
+	public void setCallUrl(String callUrl) {
+		this.callUrl = callUrl;
+	}
+
+	public String getMerchantOrderNumber() {
+		return merchantOrderNumber;
+	}
+
+	public void setMerchantOrderNumber(String merchantOrderNumber) {
+		this.merchantOrderNumber = merchantOrderNumber;
+	}
+
+	public Integer getId() {
         return id;
     }
 

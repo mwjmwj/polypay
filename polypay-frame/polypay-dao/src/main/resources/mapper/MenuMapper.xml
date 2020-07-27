@@ -11,7 +11,7 @@
   <sql id="Base_Column_List" >
     menu_Id, menu_Name, menu_Url, menu_Pid, menu_Target
   </sql>
-  
+
   <sql id="result_Column_List" >
     m.menu_Id, m.menu_Name, m.menu_Url, m.menu_Pid, m.menu_Target
   </sql>

@@ -212,6 +212,10 @@ public class DateUtil {
         return fomatDate(Calendar.getInstance().getTime(), "yyyyMMddHHmmssSSS");
     }
 
+    public static String getCurrentDate1() {
+        return fomatDate(Calendar.getInstance().getTime(), "yyyyMMddHHmmss");
+    }
+
 
     /**
      * 按照yyyy-MM-dd HH:mm:ss的格式，日期转字符串

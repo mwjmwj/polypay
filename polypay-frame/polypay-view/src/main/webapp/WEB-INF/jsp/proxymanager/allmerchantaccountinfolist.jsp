@@ -147,16 +147,16 @@
 					align : 'center',
 					templet : function(row) {
 						if (row.channelId == 1) {
-							return '<span style="color: green;">熊猫代币</span>';
+							return '<span style="color: green;">KJ网银支付</span>';
 						} else if (row.channelId == 2) {
-							return '<span style="color: green;">新网支付</span>';
-						}
-						else if (row.channelId == 3) {
-							return '<span style="color: green;">合付宝支付</span>';
+							return '<span style="color: green;">微信1支付</span>';
+						}else if (row.channelId == 3) {
+							return '<span style="color: green;">微信2支付</span>';
 						}
 						else if (row.channelId == 4) {
-							return '<span style="color: green;">快捷支付</span>';
+							return '<span style="color: green;">汇友支付</span>';
 						}
+						
 					}
 				}
 				] ],

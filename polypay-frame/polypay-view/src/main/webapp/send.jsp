@@ -21,9 +21,9 @@
 </form>
 
 <script>
-      $(function(){
+       $(function(){
         $("#form").submit();
-    })  
+    })   
 </script>
 </body>
 </html>

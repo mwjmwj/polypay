@@ -71,7 +71,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="layui-form-item layui-form-pane">
 				<label class="layui-form-label">省</label>
 				<div class="layui-input-block">
@@ -81,8 +81,8 @@
 					</div>
 				</div>
 			</div>
-			
-			
+
+
 			<div class="layui-form-item layui-form-pane">
 				<label class="layui-form-label">城市</label>
 				<div class="layui-input-block">
@@ -92,7 +92,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="layui-form-item layui-form-pane">
 				<label class="layui-form-label">银联号</label>
 				<div class="layui-input-block">
@@ -102,15 +102,15 @@
 					</div>
 				</div>
 			</div>
-			
-			
+
+
 				<div class="layui-form-item layui-form-pane">
 				<label class="layui-form-label">设置为默认</label>
 				<div class="layui-input-block">
 					<input type="checkbox" id="defaultStatus" name="defaultFlag" lay-skin="switch">
 				</div>
 			</div>
-			
+
 
 			<div class="layui-form-item">
 				<div class="layui-input-block">
@@ -138,9 +138,9 @@
 
 			//监听提交
 			form.on('submit(save)', function(data) {
-				
-				
-				
+
+
+
 				$.ajax({
 					url : '../merchant/placebindbank/save',
 					type : 'POST',
@@ -164,13 +164,13 @@
 							,time:2000
 							}, function(index, layero){
 								layer.close(layer.index);
-								
+
 							}, function(index){
 								var index = parent.layer
 										.getFrameIndex(window.name); //获取当前窗口的name
 								parent.layer.close(index);
 								});
-						
+
 						}
 					}
 				});

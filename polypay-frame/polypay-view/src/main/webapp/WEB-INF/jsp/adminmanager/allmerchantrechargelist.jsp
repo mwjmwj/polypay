@@ -21,6 +21,7 @@
 .searchtable {
 	
 }
+
 </style>
 </head>
 <script type="text/javascript" src="../static/js/layui.js"></script>
@@ -32,7 +33,9 @@
 		<div class="layui-inline">	
 		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户号" />
 		</div>
- 		
+ 		<div class="layui-inline">	
+		<input class="layui-input" name="merchantOrder" id="merchantOrder" autocomplete="off" placeholder="商户订单号" />
+		</div>
  		<div class="layui-inline">		
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
@@ -73,6 +76,7 @@
 	<script type="text/html" id="barDemo">
  		 <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">查看</a>
   		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		<a class="layui-btn layui-btn-xs layui-btn-xs" lay-event="send">补发通知</a>
 	</script>
 	<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 
@@ -117,14 +121,14 @@
 					fixed : 'left',
 					style : 'color:red',
 					templet : function(row) {
-						return "T+1"
+						return row.tradeType
 					}
 				}
 				, {
 					field : 'merchantId',
 					title : '商户ID',
 					align : 'center',
-					width : 280,
+					width : 90,
 					style : 'color: red',
 					sort : true
 				}, {
@@ -133,7 +137,28 @@
 					align : 'center',
 					width : 230,
 					sort : true
-				}, {
+				}
+				, {
+					field : 'merchantOrderNumber',
+					title : '商户订单号',
+					align : 'center',
+					width : 230,
+					sort : true
+				}
+				, {
+					field : 'payCode',
+					title : '收款码',
+					align : 'center',
+					width : 250,
+					templet : function(row)
+					{
+						var url = '<%= basePath%>/static/img/';
+						url+=row.payCode;
+						return "<div><img src='"+url+"' style='width:200px;height:100px;' /></div>";
+					}
+					
+				}
+				, {
 					field : 'type',
 					title : '类型',
 					width : 100,
@@ -223,10 +248,17 @@
 					fixed : 'right',
 					title : '操作',
 					toolbar : '#barDemo',
-					width : 120
+					width : 200
 				} ] ],
 				page : true,
-				id : "rechargeReload"
+				id : "rechargeReload",
+				done:function(res,curr,count){
+	                hoverOpenImg();//显示大图
+	                $('table tr').on('click',function(){
+	                     $('table tr').css('background','');
+	                     $(this).css('background','white');
+	                 });
+	            }
 
 			});
 			
@@ -238,6 +270,8 @@
 					var endtime = $('#endtime').val();
 					var status = $("#status").val();
 					var merchantId = $('#merchantId').val();
+					
+					var merchantOrder = $('#merchantOrder').val();
 					//执行重载
 					table.reload('rechargeReload', {
 						page : {
@@ -249,7 +283,8 @@
 							beginTime:begintime,
 							endTime:endtime,
 							status:status,
-							merchantId:merchantId
+							merchantId:merchantId,
+							merchantOrder:merchantOrder
 						}
 					});
 				}
@@ -279,7 +314,7 @@
 					  area:['500px','600px'],
 					  type: 2,
 					  title:'订单详细',
-					  content: '../merchant/recharge/query?id='+data.id
+					  content: '../managermerchant/recharge/query?id='+data.id
 					}); 
 			  } else if(layEvent === 'del'){ //删除
 			    layer.confirm('真的删除行么', function(index){
@@ -287,14 +322,30 @@
 			      layer.close(index);
 			      //向服务端发送删除指令
 			    });
-			  } else if(layEvent === 'edit'){ //编辑
+			  } else if(layEvent === 'send'){ //编辑
 			    //do something
 			    
-			    //同步更新缓存对应的值
-			    obj.update({
-			      username: '123'
-			      ,title: 'xxx'
-			    });
+			    $.ajax({
+					url:"<%= basePath%>send/notify/callback",
+					type:"post",
+					data:{orderId:data.id},
+					datatype:'JSON',
+					success:function(data){
+						if (data == 'success') {
+							layer.alert('成功,确定关闭窗口?', {
+								icon : 1
+							}, function() {
+								var index = parent.layer
+										.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+								window.parent.location.reload();
+							});
+						}
+					
+					}
+				});
+			    
+			    
 			  }
 			});
 			
@@ -330,6 +381,22 @@
 	</script>
 
 	<script type="text/javascript">
+
+	function hoverOpenImg(){
+	        var img_show = null; // tips提示
+	        $('td img').hover(function(){
+	            //alert($(this).attr('src'));
+	            var img = "<img class='img_msg' src='"+$(this).attr('src')+"' style='width:200px;' />";
+	            img_show = layer.tips(img, this,{
+	                tips:[2, 'rgba(41,41,41,.5)']
+	                ,area: ['210px']
+	            });
+	        },function(){
+	            layer.close(img_show);
+	        });
+	        $('td img').attr('style','max-width:70px');
+	    }
+	
 		function createTime(v) {
 			var date = new Date(v);
 			var y = date.getFullYear();

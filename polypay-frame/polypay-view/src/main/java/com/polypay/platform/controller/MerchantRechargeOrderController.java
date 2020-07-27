@@ -1,19 +1,5 @@
 package com.polypay.platform.controller;
 
-import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.alibaba.druid.util.StringUtils;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
@@ -28,6 +14,18 @@ import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Map;
 
 @Controller
 public class MerchantRechargeOrderController extends BaseController<MerchantRechargeOrderVO> {
@@ -37,9 +35,6 @@ public class MerchantRechargeOrderController extends BaseController<MerchantRech
 	@Autowired
 	private IMerchantRechargeOrderService merchantRechargeOrderService;
 
-	
-	public static void main(String[] args) {
-	}
 	@RequestMapping("/merchant/recharge/order/list")
 	@ResponseBody
 	public ServiceResponse listMerchantRechargeOrder(HttpServletRequest request) throws ServiceException {
@@ -55,6 +50,8 @@ public class MerchantRechargeOrderController extends BaseController<MerchantRech
 			}
 			
 			merchantRechargeOrderVO.setOrderNumber(getRequest().getParameter("orderNumber"));
+			
+			merchantRechargeOrderVO.setMerchantOrderNumber(getRequest().getParameter("morderNumber"));
 			
 			String createTime = getRequest().getParameter("beginTime");
 			String successTime = getRequest().getParameter("endTime");

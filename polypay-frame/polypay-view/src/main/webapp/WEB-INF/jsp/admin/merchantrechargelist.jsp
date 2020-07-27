@@ -32,6 +32,12 @@
  	<div class="layui-inline">		
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
+		
+		<div class="layui-inline">		
+ 		<input class="layui-input" name="id" id="morderNumber" autocomplete="off" placeholder="商戶订单号" />
+		</div>
+		
+		
 		 <div class="layui-inline">
 		<input class="layui-input" type="text" id="begintime" name="begintime" id="begintime" placeholder="订单提交时间" />
 		</div>
@@ -236,6 +242,7 @@
 					var endtime = $('#endtime').val();
 					
 					var status = $("#status").val();
+					var morderNumber = $("#morderNumber").val();
 					//执行重载
 					table.reload('rechargeReload', {
 						page : {
@@ -246,7 +253,8 @@
 							orderNumber : ordernumber,
 							beginTime:begintime,
 							endTime:endtime,
-							status:status
+							status:status,
+							morderNumber:morderNumber
 						}
 					});
 				}

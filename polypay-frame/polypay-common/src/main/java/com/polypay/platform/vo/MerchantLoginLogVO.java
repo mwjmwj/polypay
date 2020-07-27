@@ -17,6 +17,8 @@ public class MerchantLoginLogVO extends VO{
     private String ip;
 
     private String merchantId;
+    
+    private String merchantName;
 
     public Integer getId() {
         return id;
@@ -57,4 +59,12 @@ public class MerchantLoginLogVO extends VO{
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId == null ? null : merchantId.trim();
     }
+
+	public String getMerchantName() {
+		return merchantName;
+	}
+
+	public void setMerchantName(String merchantName) {
+		this.merchantName = merchantName;
+	}
 }

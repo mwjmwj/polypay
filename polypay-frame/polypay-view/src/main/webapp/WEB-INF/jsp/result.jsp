@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<title>支付-商户demo</title> 
+<title>乾通支付</title> 
 <style type="text/css">
 	body { padding-top: 70px; }
 </style>
@@ -22,7 +22,7 @@
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
   	<a class="navbar-brand" href="index.html"><strong>首页</strong></a>
-  	<a class="navbar-brand"><strong>操作结果（<s>ie1-9</s>）</strong></a>
+  	<a class="navbar-brand"><strong>操作结果（<s>ie1-92</s>）</strong></a>
   </div>
 </nav>
 

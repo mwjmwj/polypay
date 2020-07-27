@@ -1,5 +1,7 @@
 package com.polypay.platform.dao;
 
+import java.util.List;
+
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.bean.MerchantAccountInfo;
@@ -12,6 +14,8 @@ public interface MerchantAccountInfoMapper extends BaseMapper<MerchantAccountInf
 	MerchantAccountInfo getMerchantInfoByUUID(MerchantAccountInfoVO merchantInfo);
 
 	PageList<MerchantAccountInfoVO> listMerchantAccountInfo(PageBounds pageBounds, MerchantAccountInfoVO param);
+
+	List<String> listMerchantAccountInfoByProxy(String proxyId);
 	
 
 }

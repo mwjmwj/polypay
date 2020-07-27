@@ -1,5 +1,9 @@
 package com.polypay.platform.managercontroller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -21,6 +25,11 @@ public class ManagerViewController {
 	public String toMerchantSettleList(){
 		return "adminmanager/allmerchantsettlelist";
 	}
+	@RequestMapping("merchantsettlelist1")
+	public String toMerchantSettleList1(){
+		return "adminmanager/allmerchantsettlelist2";
+	}
+	
 	@RequestMapping("merchant/register")
 	public String toMerchantRegister()
 	{
@@ -31,6 +40,11 @@ public class ManagerViewController {
 	@RequestMapping("merchantrechargelist")
 	public String toMerchantRechargeList(){
 		return "adminmanager/allmerchantrechargelist";
+	}
+
+	@RequestMapping("merchantrechargelist1")
+	public String toMerchantRechargeList1(){
+		return "adminmanager/allmerchantrechargelist2";
 	}
 	
 	/**
@@ -104,6 +118,30 @@ public class ManagerViewController {
 	{
 		return "proxymanager/proxymerchantloginpwd";
 	}
+	@RequestMapping("merchantdetaillist")
+	public String merchantDetail(HttpServletRequest request,Map<String,String> result)
+	{
+		result.put("proxyId", request.getParameter("proxyId"));
+		
+		return "adminmanager/merchantallrechargefinancelist";
+	}
+	
+	@RequestMapping("loginiplist")
+	public String loginiplist(HttpServletRequest request,Map<String,String> result)
+	{
+		
+		return "adminmanager/merchantloginiplist";
+	}
+	@RequestMapping("channellist")
+	public String channel(HttpServletRequest request)
+	{
+
+		return "adminmanager/merchantchannellist";
+	}
+
+
+
+	
 	
 	
 }

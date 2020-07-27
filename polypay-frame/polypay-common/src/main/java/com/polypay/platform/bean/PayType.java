@@ -1,6 +1,7 @@
 package com.polypay.platform.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class PayType implements Serializable{
 	
@@ -10,7 +11,7 @@ public class PayType implements Serializable{
 
     private String name;
 
-    private Integer rate;
+    private BigDecimal rate;
 
     private Integer status;
 
@@ -34,11 +35,11 @@ public class PayType implements Serializable{
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(Integer rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 

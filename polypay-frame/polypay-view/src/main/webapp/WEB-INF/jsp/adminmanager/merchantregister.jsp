@@ -49,6 +49,17 @@
 			</div>
 			<span id="mobilespan" style="display: none"><em></em></span>
 		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label"> <i
+				class="layui-icon layui-icon-username"></i>
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="proxyId" id="proxyId"
+					 placeholder="代理人号" autocomplete="off"
+					class="layui-input">
+			</div>
+		</div>
 
 		<div class="layui-form-item">
 			<label class="layui-form-label"> <i
@@ -94,8 +105,10 @@
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">代付手续费</label>
-			<div class="layui-input-block">
-				<input type="text" name="handAmount" class="layui-input" >
+			<div class="layui-input-inline">
+			<input type="text" name="handAmount" id="handAmount"
+					lay-verify="number" placeholder="手续费"
+					class="layui-input">
 			</div>
 			<div class="layui-form-mid layui-word-aux">单位 ： 元</div>
 		</div>
@@ -113,10 +126,12 @@
 			<label class="layui-form-label">支付通道</label>
 			<div class="layui-input-block">
 				<select name="payChannel">
-					<option value="1" >熊猫代币</option>
-					<option value="2" >新网支付</option>
-					<option value="3" >合付宝支付</option>
-					<option value="4" >快捷支付</option>
+					
+					<option value="1">KJ网银支付</option>
+					<option value="2">微信1支付</option>
+					<option value="3">微信2支付</option>
+					<option value="4">汇友支付</option>
+					<option value="5">亿联支付</option>
 				</select>
 			</div>
 		</div>

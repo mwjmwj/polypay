@@ -4,6 +4,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
 import com.polypay.platform.bean.MerchantFinance;
 
+import java.util.List;
+
 public interface MerchantFinanceMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,4 +22,10 @@ public interface MerchantFinanceMapper {
 	MerchantFinance getMerchantFinanceByUUID(String merchantUUID);
 
 	PageList<MerchantFinance> listMerchantFinance(PageBounds pageBounds, MerchantFinance merchantFinance);
+
+	MerchantFinance managerAllMerchantFinance();
+
+	MerchantFinance allProxyMerchantMerchantFinance(String proxyId);
+
+	List<MerchantFinance> listFindMerchantFinance(List<String> mids);
 }

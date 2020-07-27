@@ -1,5 +1,7 @@
 package com.polypay.platform.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -92,5 +94,16 @@ public class MerchantLoginLogSerivce implements IMerchantLoginLogSerivce {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
 	}
+	
+	@Override
+	public PageList<MerchantLoginLogVO> listManagerMerchantLoginLog(PageBounds pageBounds, MerchantLoginLogVO param) throws ServiceException {
+		try {
+		
+			return merchantLoginLogMapper.listMerchantLoginLog(pageBounds,param);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 
 }

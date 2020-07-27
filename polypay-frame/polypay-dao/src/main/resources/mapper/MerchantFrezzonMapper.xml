@@ -186,7 +186,7 @@
 	 <select id="allMerchantFrezzAmount" parameterType="java.lang.String" resultType="java.lang.String" >
 	 select
 	 sum(amount) from 
-	 merchant_frezzon where status = -1 group by merchant_id
+	 merchant_frezzon where status = -1
 	 </select>
 	 
 	 

@@ -34,6 +34,9 @@
  		<div class="layui-inline">	
  		<input class="layui-input" name="id" id="orderNumber" autocomplete="off" placeholder="订单号" />
 		</div>
+		<div class="layui-inline">	
+ 		<input class="layui-input" name="morder" id="morderNumber" autocomplete="off" placeholder="商戶订单号" />
+		</div>
 		 <div class="layui-inline">
 		<input class="layui-input" type="text" name="begintime" id="begintime" placeholder="订单提交时间" />
 		</div>
@@ -135,7 +138,15 @@
 					width : 280,
 					style : 'color: red',
 					sort : true
-				}, {
+				}, 
+				{
+					field : 'merchantOrderNumber',
+					title : '商户订单号',
+					align : 'center',
+					width : 235,
+					sort : true
+				}
+				,{
 					field : 'orderNumber',
 					title : '订单号',
 					align : 'center',
@@ -248,6 +259,8 @@
 						var endtime = $('#endtime').val();
 						var status = $('#status').val();
 						var merchantId = $('#merchantId').val();
+						var morderNumber = $('#morderNumber').val();
+						
 						//执行重载
 						table.reload('settleReload', {
 							page : {
@@ -259,7 +272,8 @@
 								beginTime:begintime,
 								endTime:endtime,
 								status:status,
-								merchantId:merchantId
+								merchantId:merchantId,
+								morderNumber:morderNumber
 							}
 						});
 					}

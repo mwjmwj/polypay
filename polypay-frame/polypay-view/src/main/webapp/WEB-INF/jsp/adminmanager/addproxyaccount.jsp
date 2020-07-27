@@ -82,6 +82,28 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">代理人费率
+			</label>
+			<div class="layui-input-inline">
+				<input type="text" name="rate" id="rate"
+					lay-verify="required" placeholder="费率"
+					class="layui-input">
+			</div>
+			<div class="layui-form-mid layui-word-aux">以千分位为计数单位</div>
+		</div>
+	
+		<div class="layui-form-item">
+			<label class="layui-form-label">代付手续费</label>
+			<div class="layui-input-inline">
+			<input type="text" name="handAmount" id="handAmount"
+					lay-verify="number" placeholder="手续费"
+					class="layui-input">
+			</div>
+			<div class="layui-form-mid layui-word-aux">单位 ： 元</div>
+		</div>
+		
 
 		<div class="layui-form-item">
 			<div class="layui-input-block">

@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 <script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<title>支付-商户demo</title> 
+<title>支付</title> 
 <style type="text/css">
 	body { padding-top: 70px; }
 </style>

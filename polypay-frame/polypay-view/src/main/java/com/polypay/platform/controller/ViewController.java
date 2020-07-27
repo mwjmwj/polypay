@@ -191,6 +191,16 @@ public class ViewController {
 	{
 		return "admin/merchantproxylist";
 	}
+	
+	@RequestMapping("payresult")
+	public String toPayResult(){
+		return "fail";
+	}
+
+	@RequestMapping("merchat/recharge")
+	public String toPay(){
+		return "admin/addmerchantbsettleorder";
+	}
 
 	
 }

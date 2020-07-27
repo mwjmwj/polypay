@@ -277,5 +277,13 @@
 		order by create_time desc
 
 	</select>
+	
+	
+	<select id="listMerchantAccountInfoByProxy" 
+	parameterType="java.lang.String"
+	resultType="java.lang.String">
+		select uuid from merchant_account_info where proxy_id = #{proxyId} and role_id = 1
+	</select>
+	
 
 </mapper>

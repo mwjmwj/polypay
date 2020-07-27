@@ -448,13 +448,13 @@ public class MerchantLoginController {
 			 * 发送手机验证码 成功直接return
 			 */
 
-			String utf8Str = new String(("【源盛丰】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作,请忽略").getBytes(), "UTF-8");
+			String utf8Str = "【大成支付】您的验证码是 :" + merchantVerify.getCode() + ",有效2分钟。请勿泄露验证码！如不是您本人操作,请忽略";
 			
 			StringBuilder url = new StringBuilder();
-			url.append("http://m.5c.com.cn/api/send/index.php?").append("username=zhang1")
-					.append("&password_md5=1adbb3178591fd5bb0c248518f39bf6d")
-					.append("&apikey=2cd1102e4b32661f0aadee35d9940985").append("&mobile=")
-					.append(merchantVerify.getMobileNumber()).append("&encode=UTF-8").append("&content=")
+			url.append("http://m.5c.com.cn/api/send/index.php?").append("username=sayou")
+					.append("&password_md5=b9e9f233f083012debdecc16027f0389")
+					.append("&apikey=6a6a321aed544626e843e2c3be4a7ae0").append("&mobile=")
+					.append(merchantVerify.getMobileNumber()).append("&encode=GBK").append("&content=")
 					.append(URLEncoder
 							.encode(utf8Str));
 
@@ -473,6 +473,20 @@ public class MerchantLoginController {
 			return;
 		}
 	}
+//	public static void main(String[] args) {
+//		String utf8Str = "【乾通支付】您的验证码是 :" + 123456 + ",有效2分钟。请勿泄露验证码！如不是您本人操作,请忽略";
+//		
+//		StringBuilder url = new StringBuilder();
+//		url.append("http://m.5c.com.cn/api/send/index.php?").append("username=sayou")
+//				.append("&password_md5=b9e9f233f083012debdecc16027f0389")
+//				.append("&apikey=6a6a321aed544626e843e2c3be4a7ae0").append("&mobile=")
+//				.append("17666126557").append("&encode=UTF-8").append("&content=")
+//				.append(URLEncoder
+//						.encode(utf8Str));
+//
+//		HttpRequestDetailVo httpGet = HttpClientUtil.httpGet(url.toString());
+//
+//	}
 
 	private void regex(MerchantAccountInfoVO merchantAccountInfo, ServiceResponse response) {
 		if (StringUtils.isNotBlank(merchantAccountInfo.getMobileNumber())) {

@@ -426,7 +426,7 @@
 
 
 	<select id="getMerchantGroupDate"
-		parameterType="java.lang.String"
+		parameterType="java.util.Map"
 		resultType="com.polypay.platform.vo.MerchantMainDateVO">
 
 		SELECT
@@ -435,12 +435,18 @@
 		sum(mro.`service_amount`) AS
 		merchantAllServiceAmount
 		FROM merchant_recharge_order mro WHERE
-		mro.`merchant_id` = #{merchantUUID}
-		AND mro.`status` = 0
+		mro.`status` = 0
+	
+		<if test="merchantUUID != null and merchantUUID != ''">
+		and mro.`merchant_id` = #{merchantUUID}
 		GROUP BY
 		mro.`merchant_id`
+		</if>
+		
 
 	</select>
+	
+	
 	<select id="allTimeMerchantOrder"
 		parameterType="java.lang.String"
 		resultType="com.polypay.platform.vo.MerchantMainDateVO">
@@ -456,6 +462,27 @@
 		mro.create_time desc )m GROUP BY
 		m.create_time
 	</select>
+	
+	<select id="getTodayMerchantOrder" parameterType="com.polypay.platform.vo.MerchantRechargeOrderVO"
+	resultType="com.polypay.platform.vo.MerchantMainDateVO">
+	
+	SELECT SUM(mro.pay_amount) as
+		merchantTodayRechargeAmount,
+		COUNT(*) AS merchantTodayOrderNumber 
+		FROM merchant_recharge_order mro WHERE
+		1=1
+		
+		<if test="merchantId != null and merchantId != ''">
+		and mro.`merchant_id`=#{merchantId}
+		</if>
+		
+		AND mro.`status` = 0
+		and mro.`create_time` <![CDATA[>=]]> #{beginTime}
+		and mro.`create_time` <![CDATA[<=]]> #{endTime}
+	
+	</select>
+	
+	
 
 
 
@@ -549,5 +576,36 @@ and mai.proxy_id = #{proxyId}
 	</select>
 
 
+	<select id="sumProxyMerchantRechargeOrder" parameterType="java.lang.String" resultType="com.polypay.platform.vo.MerchantMainDateVO">
+		
+		select sum(t.pay_amount) as merchantAllRechargeAmount,
+		count(1) as merchantAllOrderNumber
+		 from (select
+			 mro.pay_amount as pay_amount
+		from merchant_account_info mai left join merchant_recharge_order mro on mai.uuid = mro.merchant_id
+		where 1=1
+		and mai.proxy_id = #{proxyId}
+		AND mro.`status` = 0
+		) t
+		
+	</select>
+	
+	<select id="sumTodayProxyMerchantRechargeOrder" 
+	parameterType="com.polypay.platform.vo.MerchantRechargeOrderVO" 
+	resultType="com.polypay.platform.vo.MerchantMainDateVO">
+		select sum(t.pay_amount) as merchantTodayRechargeAmount,
+		count(1) as merchantTodayOrderNumber
+		 from (select
+			 mro.pay_amount as pay_amount
+		from merchant_account_info mai left join merchant_recharge_order mro on mai.uuid = mro.merchant_id
+		where 1=1
+		and mai.proxy_id = #{proxyId} 
+		AND mro.`status` = 0
+		and mro.`create_time` <![CDATA[>=]]> #{beginTime}
+		and mro.`create_time` <![CDATA[<=]]> #{endTime}
+		) t
+	</select>
+	
+	
 
 </mapper>

@@ -104,14 +104,14 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">银行</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.bankName }" class="layui-input"> 
+				<input type="text" readonly="readonly" value="${settleorder.bankName }" class="layui-input"> 
 			</div>
 		</div>
 		
 		<div class="layui-form-item">
 			<label class="layui-form-label">账户名</label>
 			<div class="layui-input-block">
-				<input type="text" readonly="readonly" value="${placeorder.accountName }" class="layui-input"> 
+				<input type="text" readonly="readonly" value="${settleorder.accountName }" class="layui-input"> 
 			</div>
 		</div>
 		
@@ -158,6 +158,9 @@
     		<div class="layui-input-block">
 	      		<button class="layui-btn" type = "button" lay-submit lay-filter="audit">结算订单</button>
 	      		<button class="layui-btn" type = "button" lay-submit lay-filter="fail">取消订单</button>
+	      		
+	      		<button class="layui-btn" type = "button" lay-submit lay-filter="success">直接成功订单</button>
+	      		
 	   		 </div>
   		</div>
 		
@@ -180,7 +183,7 @@
 					datatype:'JSON',
 					success:function(data){
 						if (data.status == '0') {
-							layer.alert('修改成功,确定关闭窗口?', {
+							layer.alert('审核成功,确定关闭窗口?', {
 								icon : 1
 							}, function() {
 								var index = parent.layer
@@ -195,11 +198,12 @@
 							,time:2000
 							}, function(index, layero){
 								layer.close(layer.index);
-								
+								window.parent.location.reload();
 							}, function(index){
 								var index = parent.layer
 										.getFrameIndex(window.name); //获取当前窗口的name
 								parent.layer.close(index);
+								window.parent.location.reload();
 								});
 						
 						}
@@ -230,9 +234,12 @@
 									  time: 2000 //2秒关闭（如果不配置，默认是3秒）
 									}, function(){
 									  //do something
-									});   
+									});
+								window.parent.location.reload();
 							}else{
 								layer.msg('提交异常!', {icon: 5});
+								
+								window.parent.location.reload();
 							} 
 						}
 					});
@@ -243,6 +250,40 @@
 					
 		
 		});
+	   
+form.on('submit(success)', function(data){
+		   
+		   layer.confirm('确定直接将订单设为成功？', {
+				  btn: ['确定', '按错了']
+				}, function(index, layero){
+					$.ajax({
+						url:"<%= basePath%>merchantmanager/settleorder/success",
+						type:"post",
+						data:$("#settleform").serialize(),
+						dataType:'JSON',
+						success:function(data){
+							 if(data.status == '0'){
+								layer.msg('提交成功,2秒后关闭', {
+									  icon: 1,
+									  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+									}, function(){
+									  //do something
+									});  
+								window.parent.location.reload();
+							}else{
+								layer.msg('提交异常!', {icon: 5});
+								window.parent.location.reload();
+							} 
+						}
+					});
+					return false;
+				}, function(index){
+					
+				});
+					
+		
+		});
+		
   //各种基于事件的操作，下面会有进一步介绍
 	});
 

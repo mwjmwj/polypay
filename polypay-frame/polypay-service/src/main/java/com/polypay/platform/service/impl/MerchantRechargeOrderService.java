@@ -20,6 +20,7 @@ import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantRechargeOrderService;
 import com.polypay.platform.utils.DateUtils;
 import com.polypay.platform.utils.MerchantUtils;
+import com.polypay.platform.vo.MerchantAllRechargeVO;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantRechargeOrderVO;
 
@@ -130,7 +131,9 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 	@Override
 	public MerchantMainDateVO getMerchantGroupDate(String merchantUUID) throws ServiceException {
 		try {
-			return merchantRechargeOrderMapper.getMerchantGroupDate(merchantUUID);
+			Map<String,Object> param = Maps.newHashMap();
+			param.put("merchantUUID", merchantUUID);
+			return merchantRechargeOrderMapper.getMerchantGroupDate(param);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
@@ -181,6 +184,44 @@ public class MerchantRechargeOrderService implements IMerchantRechargeOrderServi
 			MerchantRechargeOrderVO merchantRechargeOrderVO) throws ServiceException {
 		try {
 			return merchantRechargeOrderMapper.listProxyMerchantRechargeOrder(pageBounds,merchantRechargeOrderVO);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public MerchantMainDateVO getTodayMerchantOrder(MerchantRechargeOrderVO param) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.getTodayMerchantOrder(param);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public MerchantMainDateVO sumProxyMerchantRechargeOrder(String uuid) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.sumProxyMerchantRechargeOrder(uuid);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+		
+	}
+
+	@Override
+	public MerchantMainDateVO sumTodayProxyMerchantRechargeOrder(MerchantRechargeOrderVO param) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.sumTodayProxyMerchantRechargeOrder(param);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public PageList<MerchantAllRechargeVO> listMerchantrechargeall(PageBounds pageBounds,
+			MerchantRechargeOrderVO merchantRechargeOrderVO) throws ServiceException {
+		try {
+			return merchantRechargeOrderMapper.listMerchantrechargeall(pageBounds,merchantRechargeOrderVO);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

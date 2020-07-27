@@ -91,10 +91,21 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   
-  <select id="listMerchantLoginLog" parameterType="com.polypay.platform.vo.MerchantLoginLogVO" resultMap="BaseResultMap">
+  <select id="listMerchantLoginLog" parameterType="com.polypay.platform.vo.MerchantLoginLogVO" resultType="com.polypay.platform.vo.MerchantLoginLogVO">
       select 
-    <include refid="Base_Column_List" />
-    from merchant_login_log
-    where merchant_id = #{merchantId,jdbcType=VARCHAR} order by login_time desc
+   mll.id as id,
+   mll.merchant_id as merchantId,
+   mll.login_time as loginTime,
+   mll.login_address as loginAddress,
+   mll.ip as ip,
+   mai.account_name as merchantName
+    from merchant_login_log mll left join merchant_account_info mai on mll.merchant_id = mai.uuid
+    where 
+    1=1
+    <if test="merchantId != null and merchantId != ''">
+    
+   and merchant_id = #{merchantId,jdbcType=VARCHAR} 
+    </if>
+    order by login_time desc
   </select>
 </mapper>

@@ -26,7 +26,7 @@
 <script type="text/javascript" src="../static/js/layui.js"></script>
 <script type="text/javascript" src="../static/js/jquery.min.js"></script>
 <body>
-<div class="layui-form">
+	<div class="layui-form">
 	<div class="layui-row" style="margin-top: 10px">
 		<div class="layui-inline">		
  		<input class="layui-input" name="merchantId" id="merchantId" autocomplete="off" placeholder="商户ID" />

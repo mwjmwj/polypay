@@ -215,48 +215,49 @@ public class MerchantPlaceOrderController extends BaseController<MerchantPlaceOr
 				
 				BigDecimal blanceAmount = merchantFinance.getBlanceAmount();
 				Integer channelId = merchant.getChannelId();
-				BigDecimal serviceAmount;
+				BigDecimal serviceAmount = merchant.getHandAmount();
 				
-				// 新网支付
-				if(channelId == 2)
+				// 双乾支付
+				if(channelId == 1)
 				{
-					serviceAmount = merchant.getHandAmount();
 					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
 					settleAmount = settleAmount.add(serviceAmount);
 					merchantPlaceOrderVO.setPayAmount(settleAmount);
-				}else if(channelId == 1)  // 新网支付
-				{
-					if (blanceAmount.compareTo(settleAmount) < 0) {
-						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
-						return response;
-					}
 				}
-				else if (channelId == 3)// 合付宝支付
+				else if(channelId == 2)
 				{
-				
-					serviceAmount = merchant.getHandAmount();
 					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
 					settleAmount = settleAmount.add(serviceAmount);
 					merchantPlaceOrderVO.setPayAmount(settleAmount);
-					
 				}
-				else if (channelId == 4)//KJ 支付
+				else if(channelId == 3)
 				{
-				
-					serviceAmount = merchant.getHandAmount();
 					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
 						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
 						return response;
 					}
 					settleAmount = settleAmount.add(serviceAmount);
 					merchantPlaceOrderVO.setPayAmount(settleAmount);
-					
+				}
+				else if(channelId == 4)
+				{
+					if (blanceAmount.compareTo(settleAmount.add(serviceAmount)) < 0) {
+						ResponseUtils.exception(response, "余额不足", RequestStatus.FAILED.getStatus());
+						return response;
+					}
+					settleAmount = settleAmount.add(serviceAmount);
+					merchantPlaceOrderVO.setPayAmount(settleAmount);
+				}
+				else
+				{
+					ResponseUtils.exception(response, "通道不存在", RequestStatus.FAILED.getStatus());
+					return response;
 				}
 
 				

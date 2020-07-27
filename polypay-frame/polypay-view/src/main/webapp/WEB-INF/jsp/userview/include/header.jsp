@@ -16,7 +16,7 @@
 <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
 <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
 <meta HTTP-EQUIV="expires" CONTENT="0">
-<title>源盛丰支付</title>
+<title>大成支付</title>
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <link href="static/css/style.css" rel="stylesheet">
 <script type="text/javascript" src="static/js/jquery.1.12.4.min.js"></script>
@@ -34,7 +34,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="view/admin">源丰盛支付</a>
+				<a class="navbar-brand" href="view/admin">乾通支付</a>
 			</div>
 
 			<div class="collapse navbar-collapse"

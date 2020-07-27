@@ -126,4 +126,37 @@ public class DateUtils {
 		return result;
 	}
 
+	
+	public static Date[] getTodayTime() {
+		
+		Date[] result = new Date[2];
+		
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 59);
+		c.set(Calendar.SECOND, 59);
+		
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(new Date());
+		c1.set(Calendar.HOUR_OF_DAY, 0);
+		c1.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+		
+		result[0] = c1.getTime();
+		result[1] = c.getTime();
+		
+		return result;
+		
+	}
+	
+	public static String getTimeStr()
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		return sdf.format(new Date());
+		
+	}
+
 }

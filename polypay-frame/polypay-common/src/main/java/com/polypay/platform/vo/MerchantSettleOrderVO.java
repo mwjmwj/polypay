@@ -73,6 +73,31 @@ public class MerchantSettleOrderVO extends VO {
     
     private String bankNo;
     
+    
+    private String callUrl;
+
+    private String merchantOrderNumber;
+    
+    private String cTime;
+    
+    private Long countN;
+
+    public String getCallUrl() {
+		return callUrl;
+	}
+
+	public void setCallUrl(String callUrl) {
+		this.callUrl = callUrl;
+	}
+
+	public String getMerchantOrderNumber() {
+		return merchantOrderNumber;
+	}
+
+	public void setMerchantOrderNumber(String merchantOrderNumber) {
+		this.merchantOrderNumber = merchantOrderNumber;
+	}
+	
 	public String getAccountName() {
 		return accountName;
 	}
@@ -327,5 +352,21 @@ public class MerchantSettleOrderVO extends VO {
 
 	public void setBankNo(String bankNo) {
 		this.bankNo = bankNo;
+	}
+
+	public String getcTime() {
+		return cTime;
+	}
+
+	public void setcTime(String cTime) {
+		this.cTime = cTime;
+	}
+
+	public Long getCountN() {
+		return countN;
+	}
+
+	public void setCountN(Long countN) {
+		this.countN = countN;
 	}
 }

@@ -13,7 +13,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>鑫源盛支付</title>
+<title>大成支付</title>
 
 <link rel="shortcut icon" href="./static/favicon.ico" />
 <!--必要样式-->
@@ -26,7 +26,7 @@
 <body>
 	<div class='login'>
 		<div class='login_title'>
-			<span>鑫源盛支付</span>
+			<span>大成支付</span>
 		</div>
 		<div class='login_fields'>
 			<div class='login_fields__user'>
@@ -130,10 +130,10 @@
 	        }
 	    });
 	    //粒子背景特效
-	    $('body').particleground({
+	  /*   $('body').particleground({
 	        dotColor: '#E8DFE8',
 	        lineColor: 'orange'
-	    });
+	    }); */
 	    $('input[name="pwd"]').focus(function () {
 	        $(this).attr('type', 'password');
 	    });

@@ -1,5 +1,6 @@
 package com.polypay.platform.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -98,7 +99,11 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 	@Override
 	public int updateByPrimaryKeySelective(MerchantFinance record) throws ServiceException {
 		try {
-			merchantFinanceMapper.updateByPrimaryKeySelective(record);
+			synchronized (record.getMerchantId().intern()) {
+				
+				merchantFinanceMapper.updateByPrimaryKeySelective(record);
+			}
+			
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
@@ -234,6 +239,59 @@ public class MerchantFinanceService implements IMerchantFinanceService {
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}
+	}
+
+	@Override
+	public MerchantFinance allMerchantFinance() throws ServiceException {
+		try {
+			return merchantFinanceMapper.managerAllMerchantFinance();
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public MerchantFinance allProxyMerchantMerchantFinance(String uuid) throws ServiceException {
+		try {
+			return merchantFinanceMapper.allProxyMerchantMerchantFinance(uuid);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public List<MerchantFinance> listFindMerchantFinance(List<String> mids) throws ServiceException {
+		try {
+			return merchantFinanceMapper.listFindMerchantFinance(mids);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+	@Override
+	public int updateByPrimaryKeySelective(MerchantFinance record, BigDecimal arrivalAmount, BigDecimal frezzAmount,String type)
+			throws ServiceException {
+		try {
+			synchronized (record.getMerchantId().intern()) {
+				
+				MerchantFinance selectByPrimaryKey = merchantFinanceMapper.selectByPrimaryKey(record.getId());
+				if("add".equals(type))
+				{
+				selectByPrimaryKey.setBlanceAmount(selectByPrimaryKey.getBlanceAmount().add(arrivalAmount).subtract(frezzAmount));
+				selectByPrimaryKey.setFronzeAmount(selectByPrimaryKey.getFronzeAmount().add(frezzAmount));
+				}
+				else if ("del".equals(type))
+				{
+					selectByPrimaryKey.setBlanceAmount(selectByPrimaryKey.getBlanceAmount().subtract(arrivalAmount));
+					
+				}
+				merchantFinanceMapper.updateByPrimaryKeySelective(selectByPrimaryKey);
+			}
+			
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+		return 0;
 	}
 
 

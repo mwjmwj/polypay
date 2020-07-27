@@ -1,6 +1,7 @@
 package com.polypay.platform.managercontroller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
@@ -22,9 +23,11 @@ import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.MerchantAccountInfo;
+import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantVerify;
 import com.polypay.platform.bean.PayType;
 import com.polypay.platform.consts.MerchantAccountInfoStatusConsts;
+import com.polypay.platform.consts.MerchantFinanceStatusConsts;
 import com.polypay.platform.consts.MerchantHelpPayConsts;
 import com.polypay.platform.consts.RequestStatus;
 import com.polypay.platform.consts.RoleConsts;
@@ -32,6 +35,7 @@ import com.polypay.platform.consts.VerifyTypeEnum;
 import com.polypay.platform.controller.BaseController;
 import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.service.IMerchantAccountInfoService;
+import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantVerifyService;
 import com.polypay.platform.service.IPayTypeService;
 import com.polypay.platform.utils.DateUtils;
@@ -55,6 +59,10 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 	
 	@Autowired
 	private IPayTypeService payTypeService;
+	
+	@Autowired
+	private IMerchantFinanceService merchantFinanceService;
+
 	
 	@RequestMapping("proxy/register/merchant")
 	@ResponseBody
@@ -103,7 +111,7 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 			}
 			requestMerchantInfo.setPassWord("123456");
 			requestMerchantInfo.setPayPassword("123456");
-			requestMerchantInfo.setProxyId(MerchantUtils.getMerchant().getUuid());
+			requestMerchantInfo.setProxyId(StringUtils.isEmpty(requestMerchantInfo.getProxyId())?MerchantUtils.getMerchant().getUuid():requestMerchantInfo.getProxyId());
 			
 			try {
 				// 用户注册
@@ -112,7 +120,7 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 				//新建支付费率
 				PayType payType = new PayType();
 				payType.setMerchantId(requestMerchantInfo.getUuid());
-				payType.setRate(requestMerchantInfo.getRate());
+				payType.setRate(new BigDecimal(requestMerchantInfo.getRate()));
 				payType.setName("WY");
 				payType.setStatus(0);
 				payTypeService.insertSelective(payType);
@@ -194,9 +202,38 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 			merchantAccount.setPassWord(md5Password);
 			merchantAccount.setRoleId(RoleConsts.PROXY);
 			merchantAccount.setCreateTime(new Date());
+			
+			merchantAccount.setHandAmount(requestMerchantInfo.getHandAmount());
 			merchantAccountInfoService.insertSelective(merchantAccount);
 
 			response.setMessage("注册成功!");
+			
+			try {
+				//新建支付费率
+				PayType payType = new PayType();
+				payType.setMerchantId(uuid);
+				payType.setRate(new BigDecimal(requestMerchantInfo.getRate()));
+				payType.setName("WY");
+				payType.setStatus(0);
+				payTypeService.insertSelective(payType);
+				response.setMessage("注册成功!");
+				
+				
+				// 保存财务信息
+				MerchantFinance merchantFinance = new MerchantFinance();
+				merchantFinance.setMerchantId(uuid);
+				merchantFinance.setCreateTime(new Date());
+				merchantFinance.setBlanceAmount(new BigDecimal(0.0));
+				String payPassWord = "asdf@123";
+				String md5PayPassword = MD5.md5(payPassWord);
+				merchantFinance.setPayPassword(md5PayPassword);
+				merchantFinance.setFronzeAmount(new BigDecimal(0.0));
+				merchantFinance.setStatus(MerchantFinanceStatusConsts.FREEZE);
+				merchantFinanceService.insertSelective(merchantFinance);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			// 密码加密返回
 			requestMerchantInfo.setPassWord(null);;
@@ -432,6 +469,8 @@ public class ManagerMerchantAccountController extends BaseController<MerchantAcc
 		}
 		return response;
 	}
+	
+
 
 	@SuppressWarnings("deprecation")
 	private void sendVerifyCode(ServiceResponse response, MerchantVerify merchantVerify)

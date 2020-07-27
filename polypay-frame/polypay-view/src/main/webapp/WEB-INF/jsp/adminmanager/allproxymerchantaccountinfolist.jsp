@@ -98,10 +98,15 @@
 				}, {
 					field : 'uuid',
 					title : '代理商ID',
-					width : 80,
+					width : 200,
 					align : 'center',
 					fixed : 'left',
-					style : 'color:red'
+					style : 'color:red',
+					templet : function(row)
+					{
+						return '<span onclick="detail('+"'"+row.uuid+"'"+')">'+row.uuid+'</span>';
+					}
+					
 				}, {
 					field : 'accountName',
 					title : '账户名',
@@ -286,7 +291,27 @@
 			})
 		}
 	</script>
-
+	
+	
+	<script type="text/javascript">
+	function detail(id)
+	{
+		var w = ($(window).width() * 0.9);
+		var h = ($(window).height() - 50);
+		layer.open({
+			type: 2,
+			area: [w + 'px', h + 'px'],
+			fix: false, //不固定
+			maxmin: true,
+			shadeClose: true,
+			shade: 0.4,
+			title: '代理商商户信息',
+			content: '../managerview/merchantdetaillist?proxyId='+id
+		});
+		
+	}
+	
+	</script>
 
 </body>
 </html>

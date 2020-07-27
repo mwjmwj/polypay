@@ -137,6 +137,38 @@
 		</if>
 
 	</select>
+	
+	
+	<select id="managerAllMerchantFinance" resultMap="BaseResultMap">
+	select 
+	sum(blance_amount) as blanceAmount,
+	sum(fronze_amount) as fronzeAmount
+	from merchant_finance
+	</select>
+	
+	<select id="allProxyMerchantMerchantFinance" resultMap="BaseResultMap" parameterType="java.lang.String">
+	select 
+	sum(blance_amount) as blanceAmount,
+	sum(fronze_amount) as fronzeAmount
+	from merchant_finance mf left join merchant_account_info mai on mf.merchant_id = mai.uuid
+	where mai.proxy_id = #{proxyId}
+		
+	</select>
+	
+		
+	<select id="listFindMerchantFinance"
+		parameterType="java.util.List"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from merchant_finance
+		where merchant_id in 
+		<foreach collection="list" open="(" close=")" item="merchant_id" separator="," >
+		#{merchant_id}
+		</foreach>
+	</select>
+	
+	
   
   
   

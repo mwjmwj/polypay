@@ -100,7 +100,7 @@
 					fixed : 'left',
 					style : 'color:red',
 					templet : function(row) {
-						return Number(row.blanceAmount).toFixed(4) + "元";
+						return Number(row.blanceAmount+row.fronzeAmount).toFixed(4) + "元";
 					}
 				}, {
 					field : 'fronzeAmount',

@@ -1,5 +1,6 @@
 package com.polypay.platform.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
@@ -14,5 +15,5 @@ public interface IMerchantFrezzService extends IBaseService<MerchantFrezzon>{
 	List<MerchantFrezzon> unFrezzMerchantList() throws ServiceException;
 
 	String allMerchantFrezzAmount(String uuid) throws ServiceException;
-
+	
 }

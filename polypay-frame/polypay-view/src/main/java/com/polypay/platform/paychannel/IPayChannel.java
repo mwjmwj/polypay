@@ -1,26 +1,27 @@
 package com.polypay.platform.paychannel;
 
-import java.util.Date;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.polypay.platform.bean.MerchantChannelAmount;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.bean.MerchantSettleOrder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.Map;
+
 public interface IPayChannel {
 
-	public void sendRedirect(Map<String, Object> param, HttpServletResponse response,HttpServletRequest request);
+    void sendRedirect(Map<String, Object> param, HttpServletResponse response, HttpServletRequest request);
 
-	public Map<String, Object> checkOrder(HttpServletRequest request);
+    Map<String, Object> checkOrder(HttpServletRequest request);
 
-	public Map<String, Object> getOrder(String orderNumber);
+    Map<String, Object> checkOrder(MerchantChannelAmount m , HttpServletRequest request);
 
-	public Map<String, Object> settleOrder(MerchantSettleOrder selectByPrimaryKey);
+    Map<String, Object> getOrder(String orderNumber);
 
-	public Map<String, Object> placeOrder(MerchantPlaceOrder selectByPrimaryKey);
+    Map<String, Object> settleOrder(MerchantSettleOrder selectByPrimaryKey) throws Exception;
 
-	public Map<String, Object> taskPayOrderNumber(String orderNumber, Date date);
+    Map<String, Object> placeOrder(MerchantPlaceOrder selectByPrimaryKey);
 
+    Map<String, Object> taskPayOrderNumber(String orderNumber, Date date);
 }

@@ -16,7 +16,7 @@
 	<meta HTTP-EQUIV="pragma" CONTENT="no-cache">
 <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
 <meta HTTP-EQUIV="expires" CONTENT="0">
-<title>鑫源盛支付</title>
+<title>大成支付</title>
 
 <link rel="shortcut icon" href="./static/favicon.ico"/>
 <link rel="stylesheet" href="./static/css/font.css">
@@ -39,7 +39,7 @@
 		
 		<c:if test="${sessionScope.merchant_user.roleId == '1' }">
 		<ul class="layui-nav left fast-add" lay-filter="" >
-			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;">常用功能</a>
+			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;color:black;">常用功能</a>
 				<dl class="layui-nav-child" >
 					<!-- 二级菜单 -->
 					<dd>
@@ -60,7 +60,7 @@
 		
 		<ul class="layui-nav right" lay-filter="">
 			<c:if test="${sessionScope.merchant_user.roleId == '1' }">
-			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;">${sessionScope.merchant_user.mobileNumber }</a>
+			<li class="layui-nav-item"><a href="javascript:;" style="line-height:46px;color:black;">${sessionScope.merchant_user.mobileNumber }</a>
 				<dl class="layui-nav-child">
 					<!-- 二级菜单 -->
 					<dd>
@@ -72,7 +72,7 @@
 				</dl>
 			</li>
 			</c:if>
-			<li class="layui-nav-item to-index"><a href="merchant/exit" style="line-height:46px;">退出账号</a>
+			<li class="layui-nav-item to-index"><a href="merchant/exit" style="line-height:46px;color:black">退出账号</a>
 			</li>
 		</ul>
 
@@ -119,12 +119,20 @@
 			<div class="layui-tab-content" style="background-color: #F5F5F5;margin-left: 10px;margin-top: 10px">
 				 <div class="layui-tab-item layui-show">
 					
-					<c:if test="${sessionScope.merchant_user.roleId == 2 || sessionScope.merchant_user.roleId == 3 }">
+					<c:if test="${sessionScope.merchant_user.roleId == 3 }">
 					
 					<iframe src='./main/mainmenu' frameborder="0" scrolling="yes"
 						class="weIframe"></iframe>
 						
 					</c:if>
+					
+					<c:if test="${sessionScope.merchant_user.roleId == 2}">
+					
+					<iframe src='./proxy/mainmenu' frameborder="0" scrolling="yes"
+						class="weIframe"></iframe>
+						
+					</c:if>
+					
 					
 					<c:if test="${sessionScope.merchant_user.roleId == 1 }">
 					
@@ -142,7 +150,7 @@
 	<!-- 中部结束 -->
 	<!-- 底部开始 -->
 	<div class="footer">
-		<div class="copyright">Copyright ©2018 源盛丰 V1.0</div>
+		<div class="copyright">Copyright ©2018 大成支付V1.0</div>
 	</div>
 	<!-- 底部结束 -->
 	<script type="text/javascript">

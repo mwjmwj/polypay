@@ -27,4 +27,7 @@ public interface MerchantSettleOrderMapper extends BaseMapper<MerchantSettleOrde
 			MerchantSettleOrderVO merchantSettleOrderVO);
 
 	MerchantSettleOrder getSettleOrderByOrderNo(String orderNo);
+
+	PageList<MerchantSettleOrderVO> listProxyMerchantSettleOrder1(PageBounds pageBounds,
+			MerchantSettleOrderVO merchantSettleOrderVO);
 }

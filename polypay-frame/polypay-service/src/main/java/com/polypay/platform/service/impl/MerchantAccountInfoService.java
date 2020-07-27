@@ -240,4 +240,14 @@ public class MerchantAccountInfoService implements IMerchantAccountInfoService {
 		}
 	}
 
+	@Override
+	public List<String> listMerchantAccountInfoByProxy(String proxyId) throws ServiceException {
+		try {
+
+			return merchantAccountInfoMapper.listMerchantAccountInfoByProxy(proxyId);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
 }

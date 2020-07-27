@@ -102,6 +102,10 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 			} else if (RoleConsts.MANAGER.equals(merchant.getRoleId())) {
 				result = merchantSettleOrderMapper.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
 			}
+			else if (RoleConsts.PROXY.equals(merchant.getRoleId())) {
+				merchantSettleOrderVO.setMerchantId(MerchantUtils.getMerchant().getUuid());
+				result = merchantSettleOrderMapper.listMerchantSettleOrder(pageBounds, merchantSettleOrderVO);
+			}
 
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
@@ -158,6 +162,17 @@ public class MerchantSettleOrderService implements IMerchantSettleOrderService {
 	public MerchantSettleOrder getSettleOrderByOrderNo(String orderNo) throws ServiceException {
 		try {
 			return merchantSettleOrderMapper.getSettleOrderByOrderNo(orderNo);
+		} catch (DataAccessException e) {
+			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
+		}
+	}
+
+
+	@Override
+	public PageList<MerchantSettleOrderVO> listMerchantSettleOrder1(PageBounds pageBounds,
+			MerchantSettleOrderVO merchantSettleOrderVO) throws ServiceException {
+		try {
+			return merchantSettleOrderMapper.listProxyMerchantSettleOrder1(pageBounds,merchantSettleOrderVO);
 		} catch (DataAccessException e) {
 			throw new ServiceException(e, RequestStatus.FAILED.getStatus());
 		}

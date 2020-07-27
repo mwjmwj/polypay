@@ -11,6 +11,13 @@
 <![endif]-->
 <script src="http://libs.baidu.com/jquery/1.11.3/jquery.js"></script>
 <body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+  	<a class="navbar-brand"><strong>跳转支付页（<s>ie1-9</s>）</strong></a>
+  </div>
+</nav>
+
 <form name="form" id="form" action="<%=url %>" method="post">
     <% String tmp = "";
         for(Iterator<String> it=data.keySet().iterator(); it.hasNext(); ){

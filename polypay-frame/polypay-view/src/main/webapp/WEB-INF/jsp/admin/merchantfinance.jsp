@@ -31,14 +31,16 @@
 
 
 
+	
 	<blockquote class="layui-elem-quote layui-text">
-		资金管理如有疑问咨询：<a href="#" target="_blank">客服QQ：xxxxxxx</a>
+		资金管理如有疑问咨询：<a href="http://wpa.qq.com/msgrd?v=3&uin=1693752540&site=qq&menu=yes" target="_blank">客服QQ：878785192</a>
 	</blockquote>
 
 	<fieldset class="layui-elem-field layui-field-title"
 		style="margin-top: 20px;">
 		<legend>个人资金</legend>
 	</fieldset>
+
 
 
 	<div class="layui-form" action="">
@@ -81,15 +83,14 @@
 	</div>
 
 
+
+	<c:if test="${sessionScope.merchant_user.roleId ==1 }">
 	<fieldset class="layui-elem-field layui-field-title"
 		style="margin-top: 20px;">
 		<legend>近期明细</legend>
 	</fieldset>
-
-
-
 	<table class="layui-hide" id="merchantfinancelist" lay-filter="merchantfinancelist"></table>
-
+	</c:if>
 
 	<script>
 		layui.use('table',

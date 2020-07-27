@@ -45,8 +45,38 @@ public class MerchantSettleOrder {
     private String branchBankName;
     
     private String bankNo;
+    
+    private String callUrl;
 
-    public Integer getId() {
+    private String merchantOrderNumber;
+
+    private MerchantChannelAmount mm;
+
+    public MerchantChannelAmount getMm() {
+        return mm;
+    }
+
+    public void setMm(MerchantChannelAmount mm) {
+        this.mm = mm;
+    }
+
+    public String getCallUrl() {
+		return callUrl;
+	}
+
+	public void setCallUrl(String callUrl) {
+		this.callUrl = callUrl;
+	}
+
+	public String getMerchantOrderNumber() {
+		return merchantOrderNumber;
+	}
+
+	public void setMerchantOrderNumber(String merchantOrderNumber) {
+		this.merchantOrderNumber = merchantOrderNumber;
+	}
+
+	public Integer getId() {
         return id;
     }
 

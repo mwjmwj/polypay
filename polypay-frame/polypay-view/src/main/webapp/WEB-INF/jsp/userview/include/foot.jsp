@@ -15,7 +15,7 @@
     <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
 	<meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
 	<meta HTTP-EQUIV="expires" CONTENT="0">
-    <title>鑫源盛支付</title>
+    <title>乾通支付</title>
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
     <link href="static/css/style.css" rel="stylesheet">
     <script src="static/js/bootstrap.min.js"></script>
@@ -26,7 +26,7 @@
     <div class="foot-style">
       	Copyright © 2018 - 2019  ysfpolypay.cn 版权所有
         <br/>
-        	 鑫源盛支付
+        	大成支付
     </div>
     <!-- 结束啦 -->
 

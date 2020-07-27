@@ -68,7 +68,7 @@ document.execCommand("Copy"); // 执行浏览器复制命令
   <script type="text/javascript">
   function upload()
   {
-		window.location.href="<%=basePath %>/static/源盛丰支付对接文档.docx";	  
+		window.location.href="<%=basePath %>/static/大成支付对接文档_商户.docx";	  
   }
   </script>
 

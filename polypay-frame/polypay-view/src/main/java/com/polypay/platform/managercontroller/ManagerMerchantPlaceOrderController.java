@@ -2,6 +2,7 @@ package com.polypay.platform.managercontroller;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,11 +19,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.druid.util.StringUtils;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.github.miemiedev.mybatis.paginator.domain.PageList;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.polypay.platform.Page;
 import com.polypay.platform.ResponseUtils;
 import com.polypay.platform.ServiceResponse;
 import com.polypay.platform.bean.Channel;
 import com.polypay.platform.bean.MerchantAccountInfo;
+import com.polypay.platform.bean.MerchantApi;
 import com.polypay.platform.bean.MerchantFinance;
 import com.polypay.platform.bean.MerchantPlaceOrder;
 import com.polypay.platform.consts.OrderStatusConsts;
@@ -33,10 +37,14 @@ import com.polypay.platform.exception.ServiceException;
 import com.polypay.platform.paychannel.IPayChannel;
 import com.polypay.platform.service.IChannelService;
 import com.polypay.platform.service.IMerchantAccountInfoService;
+import com.polypay.platform.service.IMerchantApiService;
 import com.polypay.platform.service.IMerchantFinanceService;
 import com.polypay.platform.service.IMerchantPlaceOrderService;
 import com.polypay.platform.service.ISystemConstsService;
 import com.polypay.platform.utils.DateUtils;
+import com.polypay.platform.utils.HttpClientUtil;
+import com.polypay.platform.utils.HttpRequestDetailVo;
+import com.polypay.platform.utils.MD5;
 import com.polypay.platform.vo.MerchantAccountInfoVO;
 import com.polypay.platform.vo.MerchantMainDateVO;
 import com.polypay.platform.vo.MerchantPlaceOrderVO;
@@ -55,13 +63,14 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
 
 	@Autowired
-	private ISystemConstsService systemConstsService;
-
-	@Autowired
 	private IChannelService channelService;
 
 	@Autowired
 	private IMerchantAccountInfoService merchantAccountInfoService;
+	
+	
+	@Autowired
+	private IMerchantApiService merchantApiService;
 
 	@RequestMapping("/merchantmanager/place/order/list")
 	@ResponseBody
@@ -183,8 +192,10 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 			return response;
 		}
 
+		
 		// 回滚订单
-		rollBackPlaceOrder(selectByPrimaryKey);
+		filaPlacePayNotify(selectByPrimaryKey);
+		placePayNotify1(selectByPrimaryKey);
 
 		response.setMessage("提交成功");
 
@@ -219,8 +230,6 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 
 				// {"status":1,"msg":"代付申请成功，系统处理中","serial":"代付订单号"}
 				// {"status":0,"msg":"代付失败"}
-				String settleAmount = systemConstsService.getConsts(SystemConstans.SETTLE_AMOUNT).getConstsValue();
-				selectByPrimaryKey.setServiceAmount(new BigDecimal(settleAmount));
 				Map<String, Object> result = paychannel.placeOrder(selectByPrimaryKey);
 
 				Object status = result.get("status");
@@ -229,7 +238,9 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 				if (null == status || status.toString().equals("0")) {
 
 					// 回滚
-					rollBackPlaceOrder(merchantPlaceOrder);
+					filaPlacePayNotify(merchantPlaceOrder);
+					
+					placePayNotify1(merchantPlaceOrder);
 					return;
 				}
 
@@ -241,7 +252,9 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 		} catch (Exception e) {
 			// 回滚
 			try {
-				rollBackPlaceOrder(merchantPlaceOrder);
+				filaPlacePayNotify(merchantPlaceOrder);
+				
+				placePayNotify1(merchantPlaceOrder);
 			} catch (ServiceException e1) {
 				log.error(" settle order fail: " + merchantPlaceOrder.getMerchantId() + " - "
 						+ merchantPlaceOrder.getId());
@@ -250,9 +263,63 @@ public class ManagerMerchantPlaceOrderController extends BaseController<Merchant
 
 		}
 	}
+	
+	/**
+	 *  回调给商户代付信息
+	 * @param merchantSettleOrder
+	 * @return
+	 * @throws ServiceException
+	 */
+	private String placePayNotify1(MerchantPlaceOrder merchantSettleOrder) throws ServiceException {
+		
+		Map<String, String> param = Maps.newHashMap();
+		List<String> keys = Lists.newArrayList();
+		
+		param.put("merchant_id", merchantSettleOrder.getMerchantId());
+		keys.add("merchant_id");
+		
+		param.put("order_no", merchantSettleOrder.getOrderNumber());
+		keys.add("order_no");
+		
+		param.put("amount", merchantSettleOrder.getPayAmount().toString());
+		keys.add("amount");
+		
+		param.put("status", "fail");
+		keys.add("status");  // 1 支付中   0 成功  -1  失败
+		
+		param.put("time", System.currentTimeMillis()+"");
+		keys.add("time");
+		
+		
+		MerchantApi merchantApiByUUID = merchantApiService.getMerchantApiByUUID(merchantSettleOrder.getMerchantId());
+		
+		String signParam = getUrl(param, keys);
+		signParam += "&api_key="+merchantApiByUUID.getSecretKey();
+		String sign = MD5.md5(signParam);
+		
+		param.put("sign", sign);
+		
+		HttpRequestDetailVo httpPost = HttpClientUtil.httpPost(merchantSettleOrder.getTradeType(), null, param);
+		return httpPost.getResultAsString();
+	}
+	
+	private String getUrl(Map<String, String> signMap, List<String> keys)
+	{
+		StringBuffer newSign = new StringBuffer();
+		keys.forEach(key -> {
+			newSign.append(key).append("=").append(signMap.get(key)).append("&");
+		});
+
+		if (StringUtils.isEmpty(newSign.toString())) {
+			return null;
+		}
+		newSign.delete(newSign.length() - 1, newSign.length());
+		return newSign.toString();
+	}
+
 
 	// 同步回滚订单
-	private void rollBackPlaceOrder(MerchantPlaceOrder merchantPlaceOrder) throws ServiceException {
+	private void filaPlacePayNotify(MerchantPlaceOrder merchantPlaceOrder) throws ServiceException {
 		synchronized (merchantPlaceOrder.getMerchantId().intern()) {
 
 			MerchantPlaceOrder selectByPrimaryKey = merchantPlaceOrderService
