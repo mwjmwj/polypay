@@ -170,7 +170,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.version>1.0.0</project.version>
-		<spring.version>4.3.5.RELEASE</spring.version>
+		<spring.version>5.3.18</spring.version>
 		<mybatis.version>3.3.1</mybatis.version>
 		<mybatis.spring.version>1.2.5</mybatis.spring.version>
 		<mybatis.ehcache.version>1.0.3</mybatis.ehcache.version>
